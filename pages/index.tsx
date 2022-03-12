@@ -1,5 +1,6 @@
 import Head from "next/head";
-import classes from "../styles/HomePage.module.css";
+import connect from "utils/connectDb";
+import classes from "styles/HomePage.module.css";
 
 function HomePage() {
   return (
@@ -14,6 +15,15 @@ function HomePage() {
       <p>The website is under construction and will be ready in March 2022.</p>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    await connect();
+    return { props: { conn: true } };
+  } catch (error) {
+    return { props: { conn: false } };
+  }
 }
 
 export default HomePage;
