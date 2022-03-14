@@ -258,4 +258,4 @@ DirectorySchema.virtual("averageRating").get(function () {
   return (total / this.reviews.length).toFixed(1);
 });
 
-export default mongoose.model("Directory", DirectorySchema);
+export default mongoose.models.Directory || mongoose.model("Directory", DirectorySchema);

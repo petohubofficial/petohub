@@ -1,5 +1,5 @@
 import { NextApiResponse } from "next";
-import { ProtectedNextApiRequest } from "./withProtect";
+import { ProtectedNextApiRequest } from "middlewares/withProtect";
 
 const withRoles =
   (...roles: string[]) =>
