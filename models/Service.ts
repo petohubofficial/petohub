@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
 
+// Registering dependency models
+if (!mongoose.models.Pet) require("models/Pet");
+if (!mongoose.models.Category) require("models/Category");
+if (!mongoose.models.Directory) require("models/Directory");
+
 const ServiceSchema = new mongoose.Schema(
   {
     name: {

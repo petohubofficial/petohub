@@ -1,6 +1,9 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
+// Registering dependency models
+if (!mongoose.models.Category) require("models/Category");
+
 const PetSchema = new mongoose.Schema(
   {
     name: {

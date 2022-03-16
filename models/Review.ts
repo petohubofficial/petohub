@@ -1,6 +1,9 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
+// Registering dependency models
+if (!mongoose.models.User) require("models/User");
+
 const ReviewSchema = new mongoose.Schema(
   {
     reviewer: {

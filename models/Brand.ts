@@ -1,6 +1,10 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
+// Registering dependency models
+if (!mongoose.models.Directory) require("models/Directory");
+if (!mongoose.models.Product) require("models/Product");
+
 const BrandSchema = new mongoose.Schema(
   {
     name: {
