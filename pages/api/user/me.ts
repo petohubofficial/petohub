@@ -10,17 +10,10 @@ const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
   try {
     // Populating the directrory object
     const user = await User.findById(req.user.id).populate("directory");
-    return res.status(200).json({
-      success: true,
-      user,
-    });
+    return res.status(200).json({ success: true, user });
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 

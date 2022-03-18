@@ -34,18 +34,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     delete _user.password;
 
     // Success response
-    return res.status(200).json({
-      success: true,
-      token: user.getSignedToken(),
-      user: _user,
-    });
+    return res.status(200).json({ success: true, token: user.getSignedToken(), user: _user });
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 

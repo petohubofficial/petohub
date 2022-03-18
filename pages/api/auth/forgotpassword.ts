@@ -33,15 +33,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Sending the email
     try {
-      await sendEmail({
-        to: user.email,
-        subject: "Petohub Password Reset Request",
-        text: message,
-      });
-      res.status(200).json({
-        success: true,
-        data: "Email for password reset has been sent successfully",
-      });
+      await sendEmail({ to: user.email, subject: "Petohub Password Reset Request", text: message });
+      res.status(200).json({ success: true, data: "Email has been sent successfully" });
     } catch (error) {
       // In case of an error, remove the reset password token
       user.resetPasswordToken = undefined;
@@ -51,12 +44,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).json({ success: false, error: "The email couldn't be sent" });
     }
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 

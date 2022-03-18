@@ -31,17 +31,10 @@ const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
     user.password = req.body.newPassword;
     await user.save();
 
-    return res.status(200).json({
-      success: true,
-      user,
-    });
+    return res.status(200).json({ success: true, user });
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 

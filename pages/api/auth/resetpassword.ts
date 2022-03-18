@@ -37,17 +37,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     user.resetPasswordExpire = undefined;
     await user.save();
 
-    return res.status(200).json({
-      success: true,
-      data: "Password resetted successfully",
-    });
+    return res.status(200).json({ success: true, data: "Password resetted successfully" });
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 

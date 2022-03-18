@@ -8,11 +8,7 @@ const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ success: false, error: "Method not allowed" });
 
   // Chceking if user is a client
-  if (req.user.role === "Client")
-    return res.status(200).json({
-      success: true,
-      user: req.user,
-    });
+  if (req.user.role === "Client") return res.status(200).json({ success: true, user: req.user });
 
   await connect();
   try {
@@ -34,17 +30,11 @@ const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
     req.user.role = "Client";
     await req.user.save();
 
-    return res.status(200).json({
-      success: true,
-      user: req.user,
-    });
+    return res.status(200).json({ success: true, user: req.user });
   } catch (error) {
     // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 

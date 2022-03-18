@@ -115,24 +115,13 @@ const handler = async (
       await directory.save();
     }
 
-    return res.status(200).json({
-      success: true,
-      user,
-    });
+    return res.status(200).json({ success: true, user });
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 
-export const config = {
-  api: {
-    bodyParser: false, // Disallow body parsing, since we're using multer
-  },
-};
+export const config = { api: { bodyParser: false } }; // Disallow body parsing, since we're using multer
 
 export default withProtect(withMulter(handler));

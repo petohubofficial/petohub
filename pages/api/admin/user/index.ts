@@ -27,10 +27,7 @@ const handler = async (
       // Get all users
       else {
         const users = await User.find().populate("directory");
-        return res.status(200).json({
-          success: true,
-          users,
-        });
+        return res.status(200).json({ success: true, users });
       }
     }
 
@@ -82,10 +79,7 @@ const handler = async (
           role: req.body?.role,
         });
 
-      res.status(200).json({
-        success: true,
-        user,
-      });
+      res.status(200).json({ success: true, user });
     }
 
     // Updating user
@@ -130,34 +124,20 @@ const handler = async (
 
       // Saving and returning the user
       await user.save();
-      return res.status(200).json({
-        success: true,
-        user,
-      });
+      return res.status(200).json({ success: true, user });
     }
 
     // Deleting a user
     else if (req.method === "DELETE") {
       const user = await User.findByIdAndDelete(req.query.id);
-      return res.status(200).json({
-        success: true,
-        user,
-      });
+      return res.status(200).json({ success: true, user });
     }
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 
-export const config = {
-  api: {
-    bodyParser: false, // Disallow body parsing, since we're using multer
-  },
-};
+export const config = { api: { bodyParser: false } }; // Disallow body parsing, since we're using multer
 
 export default withProtect(withRoles("Admin")(withMulter(handler)));

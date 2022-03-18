@@ -65,28 +65,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Sending the email
     try {
-      await sendEmail({
-        to: user.email,
-        subject: "Petohub Account Verification",
-        text: message,
-      });
-      return res.status(200).json({
-        success: true,
-        data: "Email for account verification has been sent successfully",
-      });
+      await sendEmail({ to: user.email, subject: "Petohub Account Verification", text: message });
+      return res.status(200).json({ success: true, data: "Email has been sent successfully" });
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        error: "Email sending failed",
-      });
+      return res.status(500).json({ success: false, error: "Email sending failed" });
     }
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 

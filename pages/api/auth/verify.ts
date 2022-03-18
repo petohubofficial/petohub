@@ -30,18 +30,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await user.save();
 
     // Returning a success message
-    return res.status(200).json({
-      success: true,
-      token: user.getSignedToken(),
-      user,
-    });
+    return res.status(200).json({ success: true, token: user.getSignedToken(), user });
   } catch (error) {
-    // Handling errors
     console.log(error);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    return res.status(500).json({ success: false, error: "Server error" });
   }
 };
 
