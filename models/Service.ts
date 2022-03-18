@@ -162,4 +162,4 @@ ServiceSchema.pre("remove", async function (next) {
   next();
 });
 
-export default mongoose.model("Service", ServiceSchema);
+export default mongoose.models.Service || mongoose.model("Service", ServiceSchema);

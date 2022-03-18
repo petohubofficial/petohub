@@ -3,11 +3,6 @@ import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
 
-// Registering dependency models
-if (!mongoose.models.User) require("models/User");
-if (!mongoose.models.Review) require("models/Review");
-if (!mongoose.models.Category) require("models/Category");
-
 const DirectorySchema = new mongoose.Schema(
   {
     storeName: {

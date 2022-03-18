@@ -1,9 +1,6 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
-// Registering dependency models
-if (!mongoose.models.User) require("models/User");
-
 const ReviewSchema = new mongoose.Schema(
   {
     reviewer: {
@@ -50,4 +47,4 @@ ReviewSchema.virtual("reviewee", {
   justOne: true,
 });
 
-export default mongoose.model("Review", ReviewSchema);
+export default mongoose.models.Review || mongoose.model("Review", ReviewSchema);

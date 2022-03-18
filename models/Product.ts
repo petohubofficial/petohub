@@ -3,15 +3,6 @@ import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
 
-// Registering dependency models
-if (!mongoose.models.Directory) require("models/Directory");
-if (!mongoose.models.Category) require("models/Category");
-if (!mongoose.models.Brand) require("models/Brand");
-if (!mongoose.models.Pet) require("models/Pet");
-if (!mongoose.models.Edit) require("models/Edit");
-if (!mongoose.models.Question) require("models/Question");
-if (!mongoose.models.Review) require("models/Review");
-
 const ProductSchema = new mongoose.Schema(
   {
     name: {
@@ -226,4 +217,4 @@ ProductSchema.virtual("averageRating").get(function () {
   return (total / this.reviews.length).toFixed(1);
 });
 
-export default mongoose.model("Product", ProductSchema);
+export default mongoose.models.Product || mongoose.model("Product", ProductSchema);

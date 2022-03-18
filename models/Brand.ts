@@ -1,10 +1,6 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
-// Registering dependency models
-if (!mongoose.models.Directory) require("models/Directory");
-if (!mongoose.models.Product) require("models/Product");
-
 const BrandSchema = new mongoose.Schema(
   {
     name: {
@@ -36,4 +32,4 @@ BrandSchema.virtual("products", {
   foreignField: "brand",
 });
 
-export default mongoose.model("Brand", BrandSchema);
+export default mongoose.models.Brand || mongoose.model("Brand", BrandSchema);

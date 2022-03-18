@@ -1,9 +1,6 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
-// Registering dependency models
-if (!mongoose.models.Category) require("models/Category");
-
 const PetSchema = new mongoose.Schema(
   {
     name: {
@@ -26,4 +23,4 @@ PetSchema.virtual("categories", {
   foreignField: "pet",
 });
 
-export default mongoose.model("Pet", PetSchema);
+export default mongoose.models.Pet || mongoose.model("Pet", PetSchema);

@@ -1,10 +1,6 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
-// Registering dependency models
-if (!mongoose.models.Product) require("models/Product");
-if (!mongoose.models.User) require("models/User");
-
 const QuestionSchema = new mongoose.Schema(
   {
     product: {
@@ -52,4 +48,4 @@ const QuestionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Question", QuestionSchema);
+export default mongoose.models.Question || mongoose.model("Question", QuestionSchema);

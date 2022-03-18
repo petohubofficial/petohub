@@ -6,9 +6,9 @@ import connect from "utils/connectDb";
 const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET")
     return res.status(405).json({ success: false, error: "Method not allowed" });
+
   await connect();
   try {
-    // Populating the directrory object
     const user = await User.findById(req.user.id).populate("directory");
     return res.status(200).json({ success: true, user });
   } catch (error) {

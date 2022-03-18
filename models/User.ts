@@ -6,9 +6,6 @@ import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 
-// Registering dependency models
-if (!mongoose.models.Directory) require("models/Directory");
-
 const UserSchema = new mongoose.Schema(
   {
     name: {

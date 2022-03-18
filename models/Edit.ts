@@ -1,10 +1,6 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
-// Registering dependency models
-if (!mongoose.models.Product) require("models/Product");
-if (!mongoose.models.User) require("models/User");
-
 const EditSchema = new mongoose.Schema(
   {
     date: Date,
@@ -21,4 +17,4 @@ const EditSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Edit", EditSchema);
+export default mongoose.models.Edit || mongoose.model("Edit", EditSchema);

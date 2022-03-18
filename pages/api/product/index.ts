@@ -23,11 +23,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // Getting all products
     const page = parseInt(req.query.page as string) || 1;
     const limit = Math.min(parseInt(req.query.limit as string) || 20, 20);
-    const query = req.query.q as string;
-    const sort = req.query.sort as string;
-    const category = req.query.category as string;
-    const pet = req.query.pet as string;
-    const brand = req.query.brand as string;
+    const query = (req.query.q as string) || "";
+    const sort = (req.query.sort as string) || "";
+    const category = (req.query.category as string) || "";
+    const pet = (req.query.pet as string) || "";
+    const brand = (req.query.brand as string) || "";
     const min = parseInt(req.query.min as string) || 0;
     const max = parseInt(req.query.max as string) || Number.MAX_SAFE_INTEGER;
 
