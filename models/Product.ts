@@ -1,9 +1,11 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
 
-const ProductSchema = new mongoose.Schema(
+import { Product } from "types/product";
+import { Rating } from "types/review";
+
+const ProductSchema = new mongoose.Schema<Product>(
   {
     name: {
       type: String,
@@ -39,7 +41,7 @@ const ProductSchema = new mongoose.Schema(
         },
       ],
       default: [],
-      validate: [(arr) => arr.length <= 32, "Too many keywords"],
+      validate: [(arr: string[]) => arr.length <= 32, "Too many keywords"],
     },
     petType: {
       type: [{ type: String, ref: "Pet" }],
@@ -108,7 +110,8 @@ const ProductSchema = new mongoose.Schema(
     },
     productImages: {
       type: [String],
-      set: function (productImages) {
+      set: function (productImages: string[]): string[] {
+        // @ts-ignore
         this._previousProductImages = this.productImages;
         return productImages;
       },
@@ -159,10 +162,11 @@ const ProductSchema = new mongoose.Schema(
 ProductSchema.pre("save", async function (next) {
   // Deleting previous images if they are updated or removed
   if (this.isModified("productImages")) {
-    const previous = this._previousProductImages;
+    // @ts-ignore
+    const previous: string[] = this._previousProductImages;
     // Checking for deleted images
     if (previous && previous.length > this.productImages.length) {
-      const deletedImages = previous.filter((x) => !this.productImages.includes(x));
+      const deletedImages: string[] = previous.filter((x) => !this.productImages.includes(x));
       for (const image of deletedImages) {
         const previousPath = path.join(__dirname, "..", "client", "public", image);
         if (fs.existsSync(previousPath)) {
@@ -201,20 +205,27 @@ ProductSchema.virtual("reviews", {
   foreignField: "revieweeId",
 });
 
-ProductSchema.virtual("rating").get(function () {
+ProductSchema.virtual("rating").get(function (): Rating {
+  // @ts-ignore
   this.populate("reviews");
-  let rating = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  let rating: Rating = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  // @ts-ignore
   if (!this.reviews) return rating;
+  // @ts-ignore
   this.reviews.forEach((review) => rating[review.rating]++);
   return rating;
 });
 
-ProductSchema.virtual("averageRating").get(function () {
+ProductSchema.virtual("averageRating").get(function (): number {
+  // @ts-ignore
   this.populate("reviews");
+  // @ts-ignore
   if (!this.reviews || this.reviews.length === 0) return 0;
   let total = 0;
+  // @ts-ignore
   for (const num in this.rating) total += num * this.rating[num];
+  // @ts-ignore
   return (total / this.reviews.length).toFixed(1);
 });
 
-export default mongoose.models.Product || mongoose.model("Product", ProductSchema);
+export default mongoose.models.Product || mongoose.model<Product>("Product", ProductSchema);

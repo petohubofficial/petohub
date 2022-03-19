@@ -1,7 +1,9 @@
 // @ts-nocheck
 import mongoose from "mongoose";
 
-const CategorySchema = new mongoose.Schema(
+import { Category, CategoryType } from "types/category";
+
+const CategorySchema = new mongoose.Schema<Category>(
   {
     name: {
       type: String,
@@ -11,7 +13,7 @@ const CategorySchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["Product", "Directory", "Service"],
+      enum: Object.values(CategoryType),
       required: true,
     },
     subCategories: {
@@ -37,4 +39,4 @@ CategorySchema.virtual("docs", {
   foreignField: "category",
 });
 
-export default mongoose.models.Category || mongoose.model("Category", CategorySchema);
+export default mongoose.models.Category || mongoose.model<Category>("Category", CategorySchema);

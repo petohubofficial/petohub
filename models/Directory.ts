@@ -1,9 +1,11 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
 
-const DirectorySchema = new mongoose.Schema(
+import { Details, Directory, FAQ, Timings } from "types/directory";
+import { Rating } from "types/review";
+
+const DirectorySchema = new mongoose.Schema<Directory>(
   {
     storeName: {
       type: String,
@@ -72,7 +74,7 @@ const DirectorySchema = new mongoose.Schema(
         },
       ],
       default: [],
-      validate: [(arr) => arr.length <= 25, "Too many products"],
+      validate: [(arr: string[]) => arr.length <= 25, "Too many products"],
     },
     services: {
       type: [
@@ -82,11 +84,10 @@ const DirectorySchema = new mongoose.Schema(
         },
       ],
       default: [],
-      validate: [(arr) => arr.length <= 25, "Too many services"],
+      validate: [(arr: string[]) => arr.length <= 25, "Too many services"],
     },
     location: {
       type: {
-        _id: false,
         lat: Number,
         lng: Number,
       },
@@ -104,7 +105,7 @@ const DirectorySchema = new mongoose.Schema(
         },
       ],
       default: Array(7).fill({ from: "00:00", to: "00:00" }),
-      validate: [(arr) => arr.length <= 7, "You can have at most 7 timings"],
+      validate: [(arr: Timings[]) => arr.length <= 7, "You can have at most 7 timings"],
     },
     faq: {
       type: [
@@ -127,7 +128,7 @@ const DirectorySchema = new mongoose.Schema(
         },
       ],
       default: [],
-      validate: [(arr) => arr.length <= 10, "Too many FAQs"],
+      validate: [(arr: FAQ[]) => arr.length <= 10, "Too many FAQs"],
     },
     gallery: {
       type: [String],
@@ -143,7 +144,7 @@ const DirectorySchema = new mongoose.Schema(
         },
       ],
       default: [],
-      validate: [(arr) => arr.length <= 10, "Too many features"],
+      validate: [(arr: string[]) => arr.length <= 10, "Too many features"],
     },
     details: {
       type: [
@@ -164,11 +165,12 @@ const DirectorySchema = new mongoose.Schema(
         },
       ],
       default: [],
-      validate: [(arr) => arr.length <= 10, "Too many details"],
+      validate: [(arr: Details[]) => arr.length <= 10, "Too many details"],
     },
     directoryImages: {
       type: [String],
-      set: function (directoryImages) {
+      set: function (directoryImages: string[]): string[] {
+        // @ts-ignore
         this._previousDirectoryImages = this.directoryImages;
         return directoryImages;
       },
@@ -218,10 +220,11 @@ DirectorySchema.pre("save", async function (next) {
 
   // Deleting preious directory images
   if (this.isModified("directoryImages")) {
-    const previous = this._previousDirectoryImages;
+    // @ts-ignore
+    const previous: string[] = this._previousDirectoryImages;
     // Checking for deleted images
     if (previous && previous.length > this.directoryImages.length) {
-      const deletedImages = previous.filter((x) => !this.directoryImages.includes(x));
+      const deletedImages: string[] = previous.filter((x) => !this.directoryImages.includes(x));
       for (const image of deletedImages) {
         const previousPath = path.join(__dirname, "..", "client", "public", image);
         if (fs.existsSync(previousPath)) {
@@ -242,20 +245,27 @@ DirectorySchema.virtual("reviews", {
   foreignField: "revieweeId",
 });
 
-DirectorySchema.virtual("rating").get(function () {
+DirectorySchema.virtual("rating").get(function (): Rating {
+  // @ts-ignore
   this.populate("reviews");
-  let rating = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  let rating: Rating = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  // @ts-ignore
   if (!this.reviews) return rating;
+  // @ts-ignore
   this.reviews.forEach((review) => rating[review.rating]++);
   return rating;
 });
 
-DirectorySchema.virtual("averageRating").get(function () {
+DirectorySchema.virtual("averageRating").get(function (): number {
+  // @ts-ignore
   this.populate("reviews");
+  // @ts-ignore
   if (!this.reviews || this.reviews.length === 0) return 0;
   let total = 0;
+  // @ts-ignore
   for (const num in this.rating) total += num * this.rating[num];
+  // @ts-ignore
   return (total / this.reviews.length).toFixed(1);
 });
 
-export default mongoose.models.Directory || mongoose.model("Directory", DirectorySchema);
+export default mongoose.models.Directory || mongoose.model<Directory>("Directory", DirectorySchema);

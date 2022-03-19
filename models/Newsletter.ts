@@ -1,7 +1,8 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 
-const NewsletterSchema = new mongoose.Schema(
+import { Newsletter } from "types/newsletter";
+
+const NewsletterSchema = new mongoose.Schema<Newsletter>(
   {
     email: {
       type: String,
@@ -23,7 +24,7 @@ const NewsletterSchema = new mongoose.Schema(
     },
     subscribedAt: {
       type: Date,
-      default: Date.now(),
+      default: new Date(),
     },
     unsubscribedAt: {
       type: Date,
@@ -33,4 +34,5 @@ const NewsletterSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Newsletter || mongoose.model("Newsletter", NewsletterSchema);
+export default mongoose.models.Newsletter ||
+  mongoose.model<Newsletter>("Newsletter", NewsletterSchema);

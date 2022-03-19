@@ -1,7 +1,8 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 
-const InquirySchema = new mongoose.Schema(
+import { Inquiry } from "types/inquiry";
+
+const InquirySchema = new mongoose.Schema<Inquiry>(
   {
     directory: {
       type: mongoose.Schema.Types.ObjectId,
@@ -42,4 +43,4 @@ const InquirySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Inquiry || mongoose.model("Inquiry", InquirySchema);
+export default mongoose.models.Inquiry || mongoose.model<Inquiry>("Inquiry", InquirySchema);

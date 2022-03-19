@@ -1,7 +1,8 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 
-const EditSchema = new mongoose.Schema(
+import { Edit } from "types/edit";
+
+const EditSchema = new mongoose.Schema<Edit>(
   {
     date: Date,
     product: {
@@ -17,4 +18,4 @@ const EditSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Edit || mongoose.model("Edit", EditSchema);
+export default mongoose.models.Edit || mongoose.model<Edit>("Edit", EditSchema);

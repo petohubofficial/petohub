@@ -1,4 +1,3 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -6,7 +5,9 @@ import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 
-const UserSchema = new mongoose.Schema(
+import { Role, User } from "types/user";
+
+const UserSchema = new mongoose.Schema<User>(
   {
     name: {
       type: String,
@@ -39,15 +40,16 @@ const UserSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
-      set: function (profileImage) {
+      set: function (profileImage: string) {
+        // @ts-ignore
         this._previousProfileImage = this.profileImage;
         return profileImage;
       },
     },
     role: {
       type: String,
-      default: "Customer",
-      enum: ["Customer", "Client", "Product Admin", "Admin"],
+      default: Role.CUSTOMER,
+      enum: Role,
     },
     directory: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -77,7 +79,8 @@ const UserSchema = new mongoose.Schema(
 UserSchema.pre("save", async function (next) {
   // Delete the previous image if it's modified
   if (this.isModified("profileImage")) {
-    const previous = this._previousProfileImage;
+    // @ts-ignore
+    const previous: string = this._previousProfileImage;
     if (previous) {
       const previousPath = path.join(__dirname, "..", "client", "public", previous);
       if (fs.existsSync(previousPath)) {
@@ -104,13 +107,13 @@ UserSchema.methods.getVerificationToken = function () {
 };
 
 // Matching passwords entered by the user with the correct password
-UserSchema.methods.matchPasswords = async function (password) {
+UserSchema.methods.matchPasswords = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
 // Generating a signed JWT token to give authorization
 UserSchema.methods.getSignedToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET as string, {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };
@@ -123,4 +126,4 @@ UserSchema.methods.getResetToken = function () {
   return resetToken;
 };
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+export default mongoose.models.User || mongoose.model<User>("User", UserSchema);

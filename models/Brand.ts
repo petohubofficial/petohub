@@ -1,7 +1,8 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 
-const BrandSchema = new mongoose.Schema(
+import { Brand } from "types/brand";
+
+const BrandSchema = new mongoose.Schema<Brand>(
   {
     name: {
       type: String,
@@ -32,4 +33,4 @@ BrandSchema.virtual("products", {
   foreignField: "brand",
 });
 
-export default mongoose.models.Brand || mongoose.model("Brand", BrandSchema);
+export default mongoose.models.Brand || mongoose.model<Brand>("Brand", BrandSchema);

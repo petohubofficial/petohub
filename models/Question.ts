@@ -1,7 +1,8 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 
-const QuestionSchema = new mongoose.Schema(
+import { Question } from "types/question";
+
+const QuestionSchema = new mongoose.Schema<Question>(
   {
     product: {
       type: mongoose.Schema.Types.ObjectId,
@@ -48,4 +49,4 @@ const QuestionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Question || mongoose.model("Question", QuestionSchema);
+export default mongoose.models.Question || mongoose.model<Question>("Question", QuestionSchema);

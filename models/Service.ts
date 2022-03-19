@@ -1,14 +1,10 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
 
-// Registering dependency models
-if (!mongoose.models.Pet) require("models/Pet");
-if (!mongoose.models.Category) require("models/Category");
-if (!mongoose.models.Directory) require("models/Directory");
+import { Service } from "types/service";
 
-const ServiceSchema = new mongoose.Schema(
+const ServiceSchema = new mongoose.Schema<Service>(
   {
     name: {
       type: String,
@@ -99,7 +95,8 @@ const ServiceSchema = new mongoose.Schema(
     },
     serviceImages: {
       type: [String],
-      set: function (serviceImages) {
+      set: function (serviceImages: string[]): string[] {
+        // @ts-ignore
         this._previousServiceImages = this.serviceImages;
         return serviceImages;
       },
@@ -134,7 +131,7 @@ const ServiceSchema = new mongoose.Schema(
 ServiceSchema.pre("save", async function (next) {
   // Deleting previous images if they are updated or removed
   if (this.isModified("serviceImages")) {
-    const previous = this._previousServiceImages;
+    const previous: string[] = this._previousServiceImages;
     // Checking for deleted images
     if (previous && previous.length > this.serviceImages.length) {
       const deletedImages = previous.filter((x) => !this.serviceImages.includes(x));

@@ -1,7 +1,8 @@
-// @ts-nocheck
 import mongoose from "mongoose";
 
-const ReviewSchema = new mongoose.Schema(
+import { Review, RevieweeModel } from "types/review";
+
+const ReviewSchema = new mongoose.Schema<Review>(
   {
     reviewer: {
       type: mongoose.Schema.Types.ObjectId,
@@ -10,7 +11,7 @@ const ReviewSchema = new mongoose.Schema(
     },
     revieweeModel: {
       type: String,
-      enum: ["Product", "Service", "Directory"],
+      enum: RevieweeModel,
       required: true,
     },
     revieweeId: {
@@ -41,10 +42,10 @@ const ReviewSchema = new mongoose.Schema(
 
 // Virtual function to allow dynamic refs to Product, Service, Directory models
 ReviewSchema.virtual("reviewee", {
-  ref: (doc) => doc.revieweeModel,
+  ref: (doc: Review) => doc.revieweeModel,
   localField: "revieweeId",
   foreignField: "_id",
   justOne: true,
 });
 
-export default mongoose.models.Review || mongoose.model("Review", ReviewSchema);
+export default mongoose.models.Review || mongoose.model<Review>("Review", ReviewSchema);
