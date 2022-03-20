@@ -1,6 +1,4 @@
-// @ts-nocheck
 import mongoose from "mongoose";
-
 import { Category, CategoryType } from "types/category";
 
 const CategorySchema = new mongoose.Schema<Category>(
@@ -34,7 +32,7 @@ const CategorySchema = new mongoose.Schema<Category>(
 
 // Virtual function to allow dynamic refs to Product, Service, Directory models
 CategorySchema.virtual("docs", {
-  ref: (doc) => doc.type,
+  ref: (doc: Category) => doc.type,
   localField: "name",
   foreignField: "category",
 });

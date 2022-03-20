@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-
-import { Brand } from "types/brand";
+import type { Brand } from "types/brand";
 
 const BrandSchema = new mongoose.Schema<Brand>(
   {

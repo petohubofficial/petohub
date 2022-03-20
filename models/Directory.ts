@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
-
-import { Details, Directory, FAQ, Timings } from "types/directory";
-import { Rating } from "types/review";
+import type { Details, Directory, FAQ, Timings } from "types/directory";
+import type { Rating } from "types/review";
 
 const DirectorySchema = new mongoose.Schema<Directory>(
   {

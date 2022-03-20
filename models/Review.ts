@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 import { Review, RevieweeModel } from "types/review";
 
 const ReviewSchema = new mongoose.Schema<Review>(

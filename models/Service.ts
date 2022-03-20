@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
-
-import { Service } from "types/service";
+import type { Service } from "types/service";
 
 const ServiceSchema = new mongoose.Schema<Service>(
   {

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-
-import { Edit } from "types/edit";
+import type { Edit } from "types/edit";
 
 const EditSchema = new mongoose.Schema<Edit>(
   {

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-
-import { Inquiry } from "types/inquiry";
+import type { Inquiry } from "types/inquiry";
 
 const InquirySchema = new mongoose.Schema<Inquiry>(
   {

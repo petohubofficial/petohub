@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-
-import { Question } from "types/question";
+import type { Question } from "types/question";
 
 const QuestionSchema = new mongoose.Schema<Question>(
   {

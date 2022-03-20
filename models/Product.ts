@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
-
-import { Product } from "types/product";
-import { Rating } from "types/review";
+import type { Product } from "types/product";
+import type { Rating } from "types/review";
 
 const ProductSchema = new mongoose.Schema<Product>(
   {

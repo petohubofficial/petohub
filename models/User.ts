@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
-
 import { Role, User } from "types/user";
 
 const UserSchema = new mongoose.Schema<User>(

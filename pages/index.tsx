@@ -1,29 +1,51 @@
 import Head from "next/head";
-import connect from "utils/connectDb";
-import classes from "styles/HomePage.module.css";
+import { Box, Button, Container, Typography } from "@mui/material";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
+import { useSettings } from "hooks/settings";
+import type { FC } from "react";
 
-function HomePage() {
+const HomePage: FC = () => {
+  const settings = useSettings();
+  const handleToggleTheme = () => {
+    settings.saveSettings({
+      theme: settings.settings.theme === "light" ? "dark" : "light",
+      responsiveFontSizes: true,
+    });
+  };
+
   return (
-    <div className={classes.main}>
-      <Head>
-        <title>Petohub</title>
-        <meta name="description" content="Official website of Petohub - Pet lover's community" />
-      </Head>
-      <h1>
-        Welcome to <span className={classes.text}>Petohub</span>
-      </h1>
-      <p>The website is under construction and will be ready in March 2022.</p>
-    </div>
+    <Container maxWidth="lg">
+      <Box
+        height="100vh"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Head>
+          <title>Petohub</title>
+          <meta name="description" content="Official website of Petohub - Pet lover's community" />
+        </Head>
+        <Typography variant="h1" color="text.primary">
+          Welcome to{" "}
+          <Typography variant="h1" display="inline" color="primary.main">
+            Petohub
+          </Typography>
+        </Typography>
+        <Typography variant="subtitle1">
+          The website is under construction and will be ready in March 2022.
+        </Typography>
+        <Button
+          variant="outlined"
+          sx={{ mt: 1 }}
+          onClick={handleToggleTheme}
+          startIcon={<ColorLensIcon />}
+        >
+          Change theme
+        </Button>
+      </Box>
+    </Container>
   );
-}
-
-export async function getServerSideProps() {
-  try {
-    await connect();
-    return { props: { conn: true } };
-  } catch (error) {
-    return { props: { conn: false } };
-  }
-}
+};
 
 export default HomePage;

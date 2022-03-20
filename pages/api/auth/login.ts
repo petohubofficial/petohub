@@ -18,16 +18,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Don't let people know whether a certain email exists
     if (!user)
-      return res.status(401).json({ success: false, error: "Your email or password is incorrect" });
+      return res.status(400).json({ success: false, error: "Your email or password is incorrect" });
 
     // Checking if the account is verified
     if (!user.isVerified)
-      return res.status(401).json({ success: false, error: "Your account isn't verified yet" });
+      return res.status(400).json({ success: false, error: "Your account isn't verified yet" });
 
     // Comparing the password
     const isMatched = await user.matchPasswords(password);
     if (!isMatched)
-      return res.status(401).json({ success: false, error: "Your email or password is incorrect" });
+      return res.status(400).json({ success: false, error: "Your email or password is incorrect" });
 
     // Removing password
     const _user = user.toJSON();
