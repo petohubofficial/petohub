@@ -3,7 +3,7 @@ import { Layout } from "components/Layout";
 import Head from "next/head";
 import { ReactElement } from "react";
 
-const HomePage = () => {
+const About = () => {
   return (
     <Container maxWidth="lg">
       <Box
@@ -24,12 +24,13 @@ const HomePage = () => {
           </Typography>
         </Typography>
         <Typography variant="subtitle1">
-          The website is under construction and will be ready in March 2022.
+          Welcome to the best pet lover&apos;s community. Here you can find things for your pets and
+          give them the best quality care that they deserve
         </Typography>
       </Box>
     </Container>
   );
 };
 
-HomePage.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
-export default HomePage;
+About.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+export default About;

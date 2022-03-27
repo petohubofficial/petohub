@@ -11,3 +11,9 @@ export interface Pet {
   updatedAt: Date;
   categories: Category[];
 }
+
+export interface PetResponse {
+  success: boolean;
+  pets?: Pet[];
+  error?: string;
+}

@@ -5,7 +5,7 @@ import {
   RegisterRequest,
   RegisterResponse,
   MeResponse,
-} from "types/api/auth";
+} from "types/auth";
 
 class AuthService {
   async login(request: LoginRequest): Promise<LoginResponse> {

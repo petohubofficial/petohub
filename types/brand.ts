@@ -13,3 +13,9 @@ export interface Brand {
   updatedAt: Date;
   products: Product[];
 }
+
+export interface BrandResponse {
+  success: boolean;
+  brands?: Brand[];
+  error?: string;
+}

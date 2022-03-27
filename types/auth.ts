@@ -1,4 +1,4 @@
-import { Response } from "types/api/common";
+import { Response } from "types/common";
 import { User } from "types/user";
 
 export interface LoginRequest {

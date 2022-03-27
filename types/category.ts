@@ -18,3 +18,9 @@ export interface Category extends mongoose.Document {
   updatedAt: Date;
   docs: mongoose.Document[];
 }
+
+export interface CategoryResponse {
+  success: boolean;
+  categories?: Category[];
+  error?: string;
+}

@@ -3,7 +3,7 @@ import { Layout } from "components/Layout";
 import Head from "next/head";
 import { ReactElement } from "react";
 
-const HomePage = () => {
+const Shop = () => {
   return (
     <Container maxWidth="lg">
       <Box
@@ -24,12 +24,20 @@ const HomePage = () => {
           </Typography>
         </Typography>
         <Typography variant="subtitle1">
-          The website is under construction and will be ready in March 2022.
+          You can contact us by calling at the number below or by emailing directly us at{" "}
+          <Typography
+            component="a"
+            fontWeight="bold"
+            color="primary.main"
+            href="mailto:petohubofficial@gmail.com"
+          >
+            petohubofficial@gmail.com
+          </Typography>
         </Typography>
       </Box>
     </Container>
   );
 };
 
-HomePage.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
-export default HomePage;
+Shop.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+export default Shop;

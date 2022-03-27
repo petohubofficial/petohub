@@ -4,11 +4,15 @@ import type { ThunkAction } from "redux-thunk";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import type { Action } from "@reduxjs/toolkit";
 
-const rootReducer = combineReducers({});
+import { api } from "services/api.service";
+const rootReducer = combineReducers({
+  [api.reducerPath]: api.reducer,
+});
 
 export const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

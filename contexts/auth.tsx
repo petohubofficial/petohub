@@ -2,7 +2,7 @@ import { createContext, useEffect, useReducer } from "react";
 import type { FC, ReactNode } from "react";
 import { auth } from "services/auth.service";
 import type { User } from "types/user";
-import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "types/api/auth";
+import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "types/auth";
 
 interface State {
   isInitialized: boolean;
