@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 import {
   LoginRequest,
   LoginResponse,
@@ -13,7 +14,7 @@ class AuthService {
       const { data } = await axios.post("/api/auth/login", request);
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
+      toast.error(error?.response?.data?.error || "Error");
       return error.response.data;
     }
   }
@@ -23,7 +24,7 @@ class AuthService {
       const { data } = await axios.post("/api/auth/register", request);
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
+      toast.error(error?.response?.data?.error || "Error");
       return error.response.data;
     }
   }
@@ -35,7 +36,7 @@ class AuthService {
       });
       return data;
     } catch (error: any) {
-      console.log(error.response.data);
+      toast.error(error?.response?.data?.error || "Error");
       return error.response.data;
     }
   }

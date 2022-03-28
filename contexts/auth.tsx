@@ -12,7 +12,7 @@ interface State {
 
 export interface AuthContextValue extends State {
   platform: "JWT";
-  login: (request: LoginRequest) => Promise<void>;
+  login: (request: LoginRequest) => Promise<LoginResponse>;
   logout: () => Promise<void>;
   register: (request: RegisterRequest) => Promise<void>;
 }
@@ -97,6 +97,7 @@ const reducer = (state: State, action: Action): State =>
 export const AuthContext = createContext<AuthContextValue>({
   ...initialState,
   platform: "JWT",
+  // @ts-ignore
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
@@ -143,13 +144,14 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     initialize();
   }, []);
 
-  const login = async (request: LoginRequest): Promise<void> => {
+  const login = async (request: LoginRequest): Promise<LoginResponse> => {
     const loginResponse = await auth.login(request);
     localStorage.setItem("accessToken", loginResponse.token);
     dispatch({
       type: ActionType.LOGIN,
       payload: loginResponse,
     });
+    return loginResponse;
   };
 
   const logout = async (): Promise<void> => {

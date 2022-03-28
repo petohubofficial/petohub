@@ -12,13 +12,14 @@ import {
   Link,
   Menu,
   MenuItem,
+  Modal,
   Select,
   TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { Logo } from "components/Logo";
-import { Facebook, Instagram, LinkedIn, Pinterest, Search } from "@mui/icons-material";
+import { Check, Facebook, Instagram, LinkedIn, Pinterest, Search } from "@mui/icons-material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import PersonIcon from "@mui/icons-material/Person";
@@ -34,6 +35,8 @@ import { useSettings } from "hooks/settings";
 import { Settings } from "contexts/settings";
 import { useRouter } from "next/router";
 import { useGetCategoriesQuery } from "services/api.service";
+import Login from "components/auth/Login";
+import { useAuth } from "hooks/auth";
 
 interface HeaderProps {
   onOpenSidebar?: () => void;
@@ -44,7 +47,7 @@ const HeaderBar = () => {
   useEffect(() => {
     // find if scroll position is at top of page
     window.addEventListener("scroll", () => {
-      const isTop = window.scrollY < 100;
+      const isTop = window.scrollY < 10;
       if (isTop) setScrolled(false);
       else setScrolled(true);
     });
@@ -181,24 +184,39 @@ const HeaderNav = () => {
 
 export const Header: FC<HeaderProps> = (props) => {
   const { settings, saveSettings } = useSettings();
+  const { isAuthenticated, logout } = useAuth();
 
   const { data } = useGetCategoriesQuery();
+
+  const router = useRouter();
+
+  // Profile Menu
+  const [anchorElProfile, setAnchorElProfile] = useState<null | HTMLElement>(null);
+  const openProfile = Boolean(anchorElProfile);
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElProfile(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setAnchorElProfile(null);
+  };
 
   // Categories Select Menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [category, setCategory] = useState<string>("All categories");
   const open = Boolean(anchorEl);
 
-  // Setting anchor to button element
-  const handleClick = (e: any) => {
-    setAnchorEl(e.currentTarget);
+  // Setting anchor to categories select button
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  // Handling closing of menu
-  const handleClose = (e: any) => {
+  // Handling closing of categories select menu
+  const handleClose = (event: any) => {
     setAnchorEl(null);
     // Handling click outside of menu
-    if (e.target.tagName === "LI") setCategory(e.target.innerText);
+    if (event.target.tagName === "LI") setCategory(event.target.innerText);
   };
 
   // Handle toggle theme
@@ -223,7 +241,7 @@ export const Header: FC<HeaderProps> = (props) => {
       <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ minHeight: 64 }}>
           <NextLink href="/" passHref>
-            <Logo />
+            <Logo width="60px" />
           </NextLink>
           <Box sx={{ flexGrow: 1 }} />
           <TextField
@@ -272,24 +290,59 @@ export const Header: FC<HeaderProps> = (props) => {
                 </InputAdornment>
               ),
             }}
-            placeholder="Searching for"
+            placeholder="Search"
           />
-          <IconButton disableRipple sx={{ bgcolor: "primary.main", mx: 1 }}>
-            <PersonOutlineOutlinedIcon sx={{ fill: "white" }} />
-          </IconButton>
-          <IconButton disableRipple sx={{ bgcolor: "primary.main", mx: 1, overflow: "visible" }}>
-            <Badge badgeContent={0} color="secondary" sx={{ "& .MuiBadge-badge": { top: -5 } }}>
-              <ShoppingCartOutlinedIcon sx={{ fill: "white" }} />
-            </Badge>
-          </IconButton>
           <IconButton
             disableRipple
-            sx={{ bgcolor: settings.theme === "light" ? "neutral.900" : "neutral.100", mx: 1 }}
+            sx={{ border: 1, borderColor: "primary.main", mx: 1 }}
+            id="profile-button"
+            aria-controls={openProfile ? "profile-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={openProfile ? "true" : undefined}
+            onClick={(e) => {
+              if (!isAuthenticated) router.push("/login");
+              else handleProfileMenuOpen(e);
+            }}
           >
+            <PersonOutlineOutlinedIcon color="primary" />
+          </IconButton>
+          <Menu
+            id="profile-menu"
+            anchorEl={anchorElProfile}
+            open={openProfile}
+            onClose={handleProfileMenuClose}
+            MenuListProps={{
+              "aria-labelledby": "profile-button",
+            }}
+          >
+            <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
+            <MenuItem onClick={handleProfileMenuClose}>My account</MenuItem>
+            <MenuItem
+              onClick={() => {
+                logout();
+                handleProfileMenuClose();
+              }}
+            >
+              Logout
+            </MenuItem>
+          </Menu>
+          <IconButton
+            disableRipple
+            sx={{ border: 1, borderColor: "primary.main", mx: 1, overflow: "visible" }}
+          >
+            <Badge
+              badgeContent={2}
+              color="secondary"
+              sx={{ "& .MuiBadge-badge": { top: -5, right: -5 } }}
+            >
+              <ShoppingCartOutlinedIcon color="primary" />
+            </Badge>
+          </IconButton>
+          <IconButton disableRipple sx={{ border: 1, borderColor: "primary.main", mx: 1 }}>
             {settings.theme === "light" ? (
-              <DarkModeIcon sx={{ fill: "white" }} onClick={handleToggleTheme} />
+              <DarkModeIcon color="primary" onClick={handleToggleTheme} />
             ) : (
-              <LightModeIcon sx={{ fill: "black" }} onClick={handleToggleTheme} />
+              <LightModeIcon color="primary" onClick={handleToggleTheme} />
             )}
           </IconButton>
         </Toolbar>
