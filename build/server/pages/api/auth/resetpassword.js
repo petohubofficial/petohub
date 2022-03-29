@@ -69,7 +69,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const handler = async (req, res)=>{
-    if (req.method !== "PUT") return res.status(405).json({
+    if (req.method !== "POST") return res.status(405).json({
         success: false,
         error: "Method not allowed"
     });

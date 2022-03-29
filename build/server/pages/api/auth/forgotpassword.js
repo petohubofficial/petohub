@@ -107,7 +107,7 @@ const handler = async (req, res)=>{
             });
             res.status(200).json({
                 success: true,
-                data: "Email has been sent successfully"
+                data: "Email for password reset has been sent successfully"
             });
         } catch (error) {
             // In case of an error, remove the reset password token

@@ -1,9 +1,17 @@
-import { FC, MouseEvent, useEffect, useState } from "react";
-import NextLink from "next/link";
 import {
-  AppBar,
-  Avatar,
-  Badge,
+  Facebook,
+  FavoriteBorder,
+  Instagram,
+  LinkedIn,
+  Pinterest,
+  Search
+} from "@mui/icons-material";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import {
+  AppBar, Badge,
   Box,
   Button,
   Container,
@@ -11,32 +19,18 @@ import {
   InputAdornment,
   Link,
   Menu,
-  MenuItem,
-  Modal,
-  Select,
-  TextField,
+  MenuItem, TextField,
   Toolbar,
-  Typography,
+  Typography
 } from "@mui/material";
 import { Logo } from "components/Logo";
-import { Check, Facebook, Instagram, LinkedIn, Pinterest, Search } from "@mui/icons-material";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import PersonIcon from "@mui/icons-material/Person";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import InfoIcon from "@mui/icons-material/Info";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import HomeIcon from "@mui/icons-material/Home";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useSettings } from "hooks/settings";
 import { Settings } from "contexts/settings";
-import { useRouter } from "next/router";
-import { useGetCategoriesQuery } from "services/api.service";
-import Login from "components/auth/Login";
 import { useAuth } from "hooks/auth";
+import { useSettings } from "hooks/settings";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { FC, useEffect, useState } from "react";
+import { useGetCategoriesQuery } from "services/api.service";
 
 interface HeaderProps {
   onOpenSidebar?: () => void;
@@ -185,9 +179,7 @@ const HeaderNav = () => {
 export const Header: FC<HeaderProps> = (props) => {
   const { settings, saveSettings } = useSettings();
   const { isAuthenticated, logout } = useAuth();
-
   const { data } = useGetCategoriesQuery();
-
   const router = useRouter();
 
   // Profile Menu
@@ -294,6 +286,25 @@ export const Header: FC<HeaderProps> = (props) => {
           />
           <IconButton
             disableRipple
+            sx={{ border: 1, borderColor: "primary.main", mx: 1, overflow: "visible" }}
+          >
+            <Badge
+              badgeContent={2}
+              color="secondary"
+              sx={{ "& .MuiBadge-badge": { top: -5, right: -5 } }}
+            >
+              <FavoriteBorder color="primary" />
+            </Badge>
+          </IconButton>
+          <IconButton disableRipple sx={{ border: 1, borderColor: "primary.main", mx: 1 }}>
+            {settings.theme === "light" ? (
+              <DarkModeIcon color="primary" onClick={handleToggleTheme} />
+            ) : (
+              <LightModeIcon color="primary" onClick={handleToggleTheme} />
+            )}
+          </IconButton>
+          <IconButton
+            disableRipple
             sx={{ border: 1, borderColor: "primary.main", mx: 1 }}
             id="profile-button"
             aria-controls={openProfile ? "profile-menu" : undefined}
@@ -315,8 +326,8 @@ export const Header: FC<HeaderProps> = (props) => {
               "aria-labelledby": "profile-button",
             }}
           >
-            <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
             <MenuItem onClick={handleProfileMenuClose}>My account</MenuItem>
+            <MenuItem onClick={handleProfileMenuClose}>My favorites</MenuItem>
             <MenuItem
               onClick={() => {
                 logout();
@@ -326,25 +337,6 @@ export const Header: FC<HeaderProps> = (props) => {
               Logout
             </MenuItem>
           </Menu>
-          <IconButton
-            disableRipple
-            sx={{ border: 1, borderColor: "primary.main", mx: 1, overflow: "visible" }}
-          >
-            <Badge
-              badgeContent={2}
-              color="secondary"
-              sx={{ "& .MuiBadge-badge": { top: -5, right: -5 } }}
-            >
-              <ShoppingCartOutlinedIcon color="primary" />
-            </Badge>
-          </IconButton>
-          <IconButton disableRipple sx={{ border: 1, borderColor: "primary.main", mx: 1 }}>
-            {settings.theme === "light" ? (
-              <DarkModeIcon color="primary" onClick={handleToggleTheme} />
-            ) : (
-              <LightModeIcon color="primary" onClick={handleToggleTheme} />
-            )}
-          </IconButton>
         </Toolbar>
       </Container>
       <HeaderNav />

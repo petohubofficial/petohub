@@ -30,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await user.save();
 
     // Returning a success message
-    return res.status(200).json({ success: true, token: user.getSignedToken(), user });
+    return res.status(200).json({ success: true, data: "User has been verified successfully" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, error: "Server error" });

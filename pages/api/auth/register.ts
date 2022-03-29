@@ -56,7 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await user.save();
 
     // Generating a verification url and message
-    const verifyUrl = `${process.env.SITE_URL}/verify/${verificationToken}`;
+    const verifyUrl = `${process.env.SITE_URL}/verify?token=${verificationToken}`;
     const message = `
             <h1>Petohub account verification</h1>
             <p>Please go to this link to verify your account</p>
@@ -66,7 +66,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // Sending the email
     try {
       await sendEmail({ to: user.email, subject: "Petohub Account Verification", text: message });
-      return res.status(200).json({ success: true, data: "Email has been sent successfully" });
+      return res
+        .status(200)
+        .json({ success: true, data: "Email for account verification has been sent successfully" });
     } catch (error) {
       return res.status(500).json({ success: false, error: "Email sending failed" });
     }

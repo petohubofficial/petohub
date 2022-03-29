@@ -1,8 +1,8 @@
-import { FC, ReactNode, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { Sidebar } from "components/Sidebar";
+import { FC, ReactNode, useState } from "react";
 
 interface LayoutProps {
   children?: ReactNode;

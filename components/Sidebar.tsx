@@ -1,10 +1,10 @@
-import { useEffect } from "react";
-import type { FC } from "react";
+import type { Theme } from "@mui/material";
+import { Box, Button, Drawer, Link, useMediaQuery } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { Box, Button, Drawer, Link, useMediaQuery } from "@mui/material";
-import type { Theme } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import type { FC } from "react";
+import { useEffect } from "react";
 
 interface SidebarProps {
   onClose?: () => void;

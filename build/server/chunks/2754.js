@@ -62,10 +62,41 @@ class AuthService {
             return error.response.data;
         }
     }
+    async verify(token) {
+        try {
+            const { data  } = await external_axios_default().get(`/api/auth/verify?token=${token}`);
+            return data;
+        } catch (error) {
+            var ref, ref4;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref4 = ref.data) === null || ref4 === void 0 ? void 0 : ref4.error) || "Error");
+            return error.response.data;
+        }
+    }
+    async forgotPassword(request) {
+        try {
+            const { data  } = await external_axios_default().post("/api/auth/forgotpassword", request);
+            return data;
+        } catch (error) {
+            var ref, ref5;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref5 = ref.data) === null || ref5 === void 0 ? void 0 : ref5.error) || "Error");
+            return error.response.data;
+        }
+    }
+    async resetPassword(token, request) {
+        try {
+            const { data  } = await external_axios_default().post(`/api/auth/resetpassword?token=${token}`, request);
+            return data;
+        } catch (error) {
+            var ref, ref6;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref6 = ref.data) === null || ref6 === void 0 ? void 0 : ref6.error) || "Error");
+            return error.response.data;
+        }
+    }
 }
 const auth = new AuthService();
 
 ;// CONCATENATED MODULE: ./contexts/auth.tsx
+
 
 
 
@@ -75,6 +106,9 @@ var ActionType;
     ActionType["LOGIN"] = "LOGIN";
     ActionType["LOGOUT"] = "LOGOUT";
     ActionType["REGISTER"] = "REGISTER";
+    ActionType["VERIFY"] = "VERIFY";
+    ActionType["FORGOT_PASSWORD"] = "FORGOT_PASSWORD";
+    ActionType["RESET_PASSWORD"] = "RESET_PASSWORD";
 })(ActionType || (ActionType = {}));
 const initialState = {
     isAuthenticated: false,
@@ -107,6 +141,15 @@ const handlers = {
     ,
     REGISTER: (state)=>{
         return state;
+    },
+    VERIFY: (state)=>{
+        return state;
+    },
+    FORGOT_PASSWORD: (state)=>{
+        return state;
+    },
+    RESET_PASSWORD: (state)=>{
+        return state;
     }
 };
 const reducer = (state, action)=>handlers[action.type] ? handlers[action.type](state, action) : state
@@ -119,7 +162,17 @@ const AuthContext = /*#__PURE__*/ (0,external_react_.createContext)({
     ,
     logout: ()=>Promise.resolve()
     ,
+    // @ts-ignore
     register: ()=>Promise.resolve()
+    ,
+    // @ts-ignore
+    verify: ()=>Promise.resolve()
+    ,
+    // @ts-ignore
+    forgotPassword: ()=>Promise.resolve()
+    ,
+    // @ts-ignore
+    resetPassword: ()=>Promise.resolve()
 });
 const AuthProvider = (props)=>{
     const { children  } = props;
@@ -162,6 +215,7 @@ const AuthProvider = (props)=>{
     const login = async (request)=>{
         const loginResponse = await auth.login(request);
         localStorage.setItem("accessToken", loginResponse.token);
+        localStorage.setItem("user", JSON.stringify(loginResponse.user));
         dispatch({
             type: ActionType.LOGIN,
             payload: loginResponse
@@ -170,9 +224,11 @@ const AuthProvider = (props)=>{
     };
     const logout = async ()=>{
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
         dispatch({
             type: ActionType.LOGOUT
         });
+        external_react_hot_toast_default().success("Logged out successfully");
     };
     const register = async (request)=>{
         const registerResponse = await auth.register(request);
@@ -180,6 +236,31 @@ const AuthProvider = (props)=>{
             type: ActionType.REGISTER,
             payload: registerResponse
         });
+        return registerResponse;
+    };
+    const verify = async (token)=>{
+        const verifyResponse = await auth.verify(token);
+        dispatch({
+            type: ActionType.VERIFY,
+            payload: verifyResponse
+        });
+        return verifyResponse;
+    };
+    const forgotPassword = async (request)=>{
+        const forgotPasswordResponse = await auth.forgotPassword(request);
+        dispatch({
+            type: ActionType.FORGOT_PASSWORD,
+            payload: forgotPasswordResponse
+        });
+        return forgotPasswordResponse;
+    };
+    const resetPassword = async (token, request)=>{
+        const resetPasswordResponse = await auth.resetPassword(token, request);
+        dispatch({
+            type: ActionType.RESET_PASSWORD,
+            payload: resetPasswordResponse
+        });
+        return resetPasswordResponse;
     };
     return(/*#__PURE__*/ jsx_runtime_.jsx(AuthContext.Provider, {
         value: {
@@ -187,7 +268,10 @@ const AuthProvider = (props)=>{
             platform: "JWT",
             login,
             logout,
-            register
+            register,
+            verify,
+            forgotPassword,
+            resetPassword
         },
         children: children
     }));

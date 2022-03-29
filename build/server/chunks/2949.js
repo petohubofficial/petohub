@@ -14,16 +14,14 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "react/jsx-runtime"
 var jsx_runtime_ = __webpack_require__(997);
-// EXTERNAL MODULE: external "react"
-var external_react_ = __webpack_require__(6689);
 // EXTERNAL MODULE: external "@mui/material/styles"
 var styles_ = __webpack_require__(8442);
+// EXTERNAL MODULE: external "@mui/icons-material"
+var icons_material_ = __webpack_require__(7915);
 // EXTERNAL MODULE: external "@mui/material"
 var material_ = __webpack_require__(5692);
 // EXTERNAL MODULE: ./components/Logo.tsx
 var Logo = __webpack_require__(5120);
-// EXTERNAL MODULE: external "@mui/icons-material"
-var icons_material_ = __webpack_require__(7915);
 ;// CONCATENATED MODULE: ./components/Footer.tsx
 
 
@@ -258,33 +256,31 @@ const Footer = (props)=>/*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
     })
 ;
 
-// EXTERNAL MODULE: ./node_modules/next/link.js
-var next_link = __webpack_require__(1664);
-// EXTERNAL MODULE: external "@mui/icons-material/PersonOutlineOutlined"
-var PersonOutlineOutlined_ = __webpack_require__(9667);
-var PersonOutlineOutlined_default = /*#__PURE__*/__webpack_require__.n(PersonOutlineOutlined_);
-// EXTERNAL MODULE: external "@mui/icons-material/ShoppingCartOutlined"
-var ShoppingCartOutlined_ = __webpack_require__(2749);
-var ShoppingCartOutlined_default = /*#__PURE__*/__webpack_require__.n(ShoppingCartOutlined_);
 // EXTERNAL MODULE: external "@mui/icons-material/DarkMode"
 var DarkMode_ = __webpack_require__(5262);
 var DarkMode_default = /*#__PURE__*/__webpack_require__.n(DarkMode_);
-// EXTERNAL MODULE: external "@mui/icons-material/LightMode"
-var LightMode_ = __webpack_require__(3684);
-var LightMode_default = /*#__PURE__*/__webpack_require__.n(LightMode_);
 // EXTERNAL MODULE: external "@mui/icons-material/ExpandMore"
 var ExpandMore_ = __webpack_require__(8148);
 var ExpandMore_default = /*#__PURE__*/__webpack_require__.n(ExpandMore_);
-// EXTERNAL MODULE: ./hooks/settings.ts
-var hooks_settings = __webpack_require__(6428);
-// EXTERNAL MODULE: external "next/router"
-var router_ = __webpack_require__(1853);
-// EXTERNAL MODULE: ./services/api.service.ts
-var api_service = __webpack_require__(9850);
+// EXTERNAL MODULE: external "@mui/icons-material/LightMode"
+var LightMode_ = __webpack_require__(3684);
+var LightMode_default = /*#__PURE__*/__webpack_require__.n(LightMode_);
+// EXTERNAL MODULE: external "@mui/icons-material/PersonOutlineOutlined"
+var PersonOutlineOutlined_ = __webpack_require__(9667);
+var PersonOutlineOutlined_default = /*#__PURE__*/__webpack_require__.n(PersonOutlineOutlined_);
 // EXTERNAL MODULE: ./hooks/auth.ts
 var auth = __webpack_require__(9187);
+// EXTERNAL MODULE: ./hooks/settings.ts
+var hooks_settings = __webpack_require__(6428);
+// EXTERNAL MODULE: ./node_modules/next/link.js
+var next_link = __webpack_require__(1664);
+// EXTERNAL MODULE: external "next/router"
+var router_ = __webpack_require__(1853);
+// EXTERNAL MODULE: external "react"
+var external_react_ = __webpack_require__(6689);
+// EXTERNAL MODULE: ./services/api.service.ts
+var api_service = __webpack_require__(9850);
 ;// CONCATENATED MODULE: ./components/Header.tsx
-
 
 
 
@@ -658,6 +654,43 @@ const Header = (props)=>{
                             sx: {
                                 border: 1,
                                 borderColor: "primary.main",
+                                mx: 1,
+                                overflow: "visible"
+                            },
+                            children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Badge, {
+                                badgeContent: 2,
+                                color: "secondary",
+                                sx: {
+                                    "& .MuiBadge-badge": {
+                                        top: -5,
+                                        right: -5
+                                    }
+                                },
+                                children: /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.FavoriteBorder, {
+                                    color: "primary"
+                                })
+                            })
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
+                            disableRipple: true,
+                            sx: {
+                                border: 1,
+                                borderColor: "primary.main",
+                                mx: 1
+                            },
+                            children: settings.theme === "light" ? /*#__PURE__*/ jsx_runtime_.jsx((DarkMode_default()), {
+                                color: "primary",
+                                onClick: handleToggleTheme
+                            }) : /*#__PURE__*/ jsx_runtime_.jsx((LightMode_default()), {
+                                color: "primary",
+                                onClick: handleToggleTheme
+                            })
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
+                            disableRipple: true,
+                            sx: {
+                                border: 1,
+                                borderColor: "primary.main",
                                 mx: 1
                             },
                             id: "profile-button",
@@ -683,11 +716,11 @@ const Header = (props)=>{
                             children: [
                                 /*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
                                     onClick: handleProfileMenuClose,
-                                    children: "Profile"
+                                    children: "My account"
                                 }),
                                 /*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
                                     onClick: handleProfileMenuClose,
-                                    children: "My account"
+                                    children: "My favorites"
                                 }),
                                 /*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
                                     onClick: ()=>{
@@ -697,43 +730,6 @@ const Header = (props)=>{
                                     children: "Logout"
                                 })
                             ]
-                        }),
-                        /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
-                            disableRipple: true,
-                            sx: {
-                                border: 1,
-                                borderColor: "primary.main",
-                                mx: 1,
-                                overflow: "visible"
-                            },
-                            children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Badge, {
-                                badgeContent: 2,
-                                color: "secondary",
-                                sx: {
-                                    "& .MuiBadge-badge": {
-                                        top: -5,
-                                        right: -5
-                                    }
-                                },
-                                children: /*#__PURE__*/ jsx_runtime_.jsx((ShoppingCartOutlined_default()), {
-                                    color: "primary"
-                                })
-                            })
-                        }),
-                        /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
-                            disableRipple: true,
-                            sx: {
-                                border: 1,
-                                borderColor: "primary.main",
-                                mx: 1
-                            },
-                            children: settings.theme === "light" ? /*#__PURE__*/ jsx_runtime_.jsx((DarkMode_default()), {
-                                color: "primary",
-                                onClick: handleToggleTheme
-                            }) : /*#__PURE__*/ jsx_runtime_.jsx((LightMode_default()), {
-                                color: "primary",
-                                onClick: handleToggleTheme
-                            })
                         })
                     ]
                 })

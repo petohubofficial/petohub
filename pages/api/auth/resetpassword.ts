@@ -4,7 +4,7 @@ import User from "models/User";
 import connect from "utils/connectDb";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== "PUT")
+  if (req.method !== "POST")
     return res.status(405).json({ success: false, error: "Method not allowed" });
   await connect();
 

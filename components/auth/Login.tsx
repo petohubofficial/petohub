@@ -1,3 +1,4 @@
+import { ArrowBack, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -8,13 +9,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import Link from "next/link";
-import { ArrowBack, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAuth } from "hooks/auth";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import * as Yup from "yup";
 
 const Login = () => {
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -44,7 +44,7 @@ const Login = () => {
   return (
     <Card sx={{ width: 500, boxShadow: 12, my: 1 }}>
       <CardContent>
-        <Box>
+        <Box sx={{ mb: 2 }}>
           <Link href="/" passHref>
             <Button startIcon={<ArrowBack />}>Back to site</Button>
           </Link>
@@ -65,6 +65,7 @@ const Login = () => {
                   Email address
                 </Typography>
                 <TextField
+                  autoFocus
                   fullWidth
                   size="small"
                   placeholder="example@company.com"
@@ -73,8 +74,8 @@ const Login = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.email}
-                  error={formik.errors.email ? true : false}
-                  helperText={formik.errors.email}
+                  error={Boolean(formik.touched.email && formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
                 />
               </Box>
               <Box sx={{ mt: 3 }}>
@@ -90,8 +91,8 @@ const Login = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.password}
-                  error={formik.errors.password ? true : false}
-                  helperText={formik.errors.password}
+                  error={Boolean(formik.touched.password && formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
                   InputProps={{
                     endAdornment: showPassword ? (
                       <VisibilityOff

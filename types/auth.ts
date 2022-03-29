@@ -24,3 +24,23 @@ export interface RegisterResponse extends Response {
 export interface MeResponse extends Response {
   user: User;
 }
+
+export interface VerifyResponse extends Response {
+  data?: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordRespose extends Response {
+  data?: string;
+}
+
+export interface ResetPasswordRequest {
+  password: string;
+}
+
+export interface ResetPasswordResponse extends Response {
+  data?: string;
+}

@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { Facebook, Instagram, LinkedIn, Pinterest } from "@mui/icons-material";
 import {
   Box,
   Container,
@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { Logo } from "components/Logo";
-import { Facebook, Instagram, LinkedIn, Menu, Pinterest } from "@mui/icons-material";
+import type { FC } from "react";
 
 const sections = [
   {

@@ -98,8 +98,7 @@ const handler = async (req, res)=>{
         // Returning a success message
         return res.status(200).json({
             success: true,
-            token: user.getSignedToken(),
-            user
+            data: "User has been verified successfully"
         });
     } catch (error) {
         console.log(error);

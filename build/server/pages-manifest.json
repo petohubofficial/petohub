@@ -34,9 +34,13 @@
   "/api/user/updatepassword": "pages/api/user/updatepassword.js",
   "/api/user/updateprofile": "pages/api/user/updateprofile.js",
   "/contact": "pages/contact.html",
+  "/forgotpassword": "pages/forgotpassword.html",
   "/": "pages/index.html",
   "/login": "pages/login.html",
+  "/resetpassword": "pages/resetpassword.html",
   "/shop": "pages/shop.html",
+  "/signup": "pages/signup.html",
+  "/verify": "pages/verify.html",
   "/_error": "pages/_error.js",
   "/404": "pages/404.html"
 }
