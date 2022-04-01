@@ -1,40 +1,42 @@
 import {
   Facebook,
   FavoriteBorder,
+  FavoriteBorderOutlined,
   Instagram,
   LinkedIn,
+  LogoutOutlined,
   Pinterest,
-  Search
+  Search,
+  SettingsOutlined,
 } from "@mui/icons-material";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import {
-  AppBar, Badge,
+  AppBar,
+  Avatar,
+  Badge,
   Box,
   Button,
   Container,
+  Divider,
   IconButton,
   InputAdornment,
-  Link,
   Menu,
-  MenuItem, TextField,
+  MenuItem,
+  TextField,
   Toolbar,
-  Typography
+  Typography,
 } from "@mui/material";
 import { Logo } from "components/Logo";
 import { Settings } from "contexts/settings";
 import { useAuth } from "hooks/auth";
 import { useSettings } from "hooks/settings";
-import NextLink from "next/link";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import { useGetCategoriesQuery } from "services/api.service";
-
-interface HeaderProps {
-  onOpenSidebar?: () => void;
-}
 
 const HeaderBar = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -111,8 +113,36 @@ const HeaderBar = () => {
   );
 };
 
-const HeaderNav = () => {
+interface HeaderNavLinkProps {
+  href: string;
+  text: string;
+  [key: string]: any;
+}
+
+const HeaderNavLink = ({ href, text, ...other }: HeaderNavLinkProps) => {
   const router = useRouter();
+  return (
+    <Link href={href} passHref {...other}>
+      <Typography
+        component="a"
+        color={router.pathname === href ? "primary.main" : "text.secondary"}
+        sx={{
+          "&:hover": { color: "primary.main" },
+          py: 1,
+          borderBottom: 1,
+          borderColor: "primary.main",
+          borderWidth: router.pathname === href ? "2px !important" : 0,
+          textDecoration: "none",
+        }}
+        variant="subtitle2"
+      >
+        {text}
+      </Typography>
+    </Link>
+  );
+};
+
+const HeaderNav = () => {
   return (
     <Container maxWidth="lg">
       <Box
@@ -120,65 +150,24 @@ const HeaderNav = () => {
         gap={{ xs: 0, sm: 6 }}
         alignItems="center"
         justifyContent={{ xs: "space-around", sm: "center" }}
-        sx={{
-          mt: 1,
-          "& a": {
-            "&:hover": { color: "primary.main" },
-            py: 1,
-            borderBottom: 1,
-            borderColor: "primary.main",
-            borderWidth: 0,
-          },
-        }}
+        sx={{ mt: 1 }}
       >
-        <NextLink href="/" passHref>
-          <Link
-            color="textSecondary"
-            sx={{ borderWidth: router.pathname === "/" ? "2px !important" : 0 }}
-            underline="none"
-            variant="subtitle2"
-          >
-            Home
-          </Link>
-        </NextLink>
-        <NextLink href="/shop" passHref>
-          <Link
-            color="textSecondary"
-            sx={{ borderWidth: router.pathname === "/shop" ? "2px !important" : 0 }}
-            underline="none"
-            variant="subtitle2"
-          >
-            Shop
-          </Link>
-        </NextLink>
-        <NextLink href="/about" passHref>
-          <Link
-            color="textSecondary"
-            sx={{ borderWidth: router.pathname === "/about" ? "2px !important" : 0 }}
-            underline="none"
-            variant="subtitle2"
-          >
-            About
-          </Link>
-        </NextLink>
-        <NextLink href="/contact" passHref>
-          <Link
-            color="textSecondary"
-            sx={{ borderWidth: router.pathname === "/contact" ? "2px !important" : 0 }}
-            underline="none"
-            variant="subtitle2"
-          >
-            Contact
-          </Link>
-        </NextLink>
+        <HeaderNavLink href="/" text="Home" />
+        <HeaderNavLink href="/shop" text="Shop" />
+        <HeaderNavLink href="/about" text="About Us" />
+        <HeaderNavLink href="/contact" text="Contact" />
       </Box>
     </Container>
   );
 };
 
+interface HeaderProps {
+  onOpenSidebar?: () => void;
+}
+
 export const Header: FC<HeaderProps> = (props) => {
   const { settings, saveSettings } = useSettings();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const { data } = useGetCategoriesQuery();
   const router = useRouter();
 
@@ -232,9 +221,9 @@ export const Header: FC<HeaderProps> = (props) => {
       <HeaderBar />
       <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ minHeight: 64 }}>
-          <NextLink href="/" passHref>
+          <Link href="/" passHref>
             <Logo width="60px" />
-          </NextLink>
+          </Link>
           <Box sx={{ flexGrow: 1 }} />
           <TextField
             fullWidth
@@ -284,10 +273,7 @@ export const Header: FC<HeaderProps> = (props) => {
             }}
             placeholder="Search"
           />
-          <IconButton
-            disableRipple
-            sx={{ border: 1, borderColor: "primary.main", mx: 1, overflow: "visible" }}
-          >
+          <IconButton sx={{ border: 1, borderColor: "primary.main", mx: 1, overflow: "visible" }}>
             <Badge
               badgeContent={2}
               color="secondary"
@@ -296,7 +282,7 @@ export const Header: FC<HeaderProps> = (props) => {
               <FavoriteBorder color="primary" />
             </Badge>
           </IconButton>
-          <IconButton disableRipple sx={{ border: 1, borderColor: "primary.main", mx: 1 }}>
+          <IconButton sx={{ border: 1, borderColor: "primary.main", mx: 1 }}>
             {settings.theme === "light" ? (
               <DarkModeIcon color="primary" onClick={handleToggleTheme} />
             ) : (
@@ -304,7 +290,6 @@ export const Header: FC<HeaderProps> = (props) => {
             )}
           </IconButton>
           <IconButton
-            disableRipple
             sx={{ border: 1, borderColor: "primary.main", mx: 1 }}
             id="profile-button"
             aria-controls={openProfile ? "profile-menu" : undefined}
@@ -326,15 +311,30 @@ export const Header: FC<HeaderProps> = (props) => {
               "aria-labelledby": "profile-button",
             }}
           >
-            <MenuItem onClick={handleProfileMenuClose}>My account</MenuItem>
-            <MenuItem onClick={handleProfileMenuClose}>My favorites</MenuItem>
+            <Box sx={{ px: 3, py: 2 }} display="flex" alignItems="center" gap={2}>
+              <Avatar alt="Profile" src={user?.profileImage} />
+              <Box>
+                <Typography variant="h6">{user?.name}</Typography>
+                <Typography color="text.secondary">{user?.email}</Typography>
+              </Box>
+            </Box>
+            <Divider sx={{ mb: 1 }} />
+            <MenuItem onClick={handleProfileMenuClose}>
+              <SettingsOutlined color="action" sx={{ mr: 0.5 }} />
+              <Typography color="text.secondary">Settings</Typography>
+            </MenuItem>
+            <MenuItem onClick={handleProfileMenuClose}>
+              <FavoriteBorderOutlined color="action" sx={{ mr: 0.5 }} />
+              <Typography color="text.secondary">Favorites</Typography>
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 logout();
                 handleProfileMenuClose();
               }}
             >
-              Logout
+              <LogoutOutlined color="action" sx={{ mr: 0.5 }} />
+              <Typography color="text.secondary">Logout</Typography>
             </MenuItem>
           </Menu>
         </Toolbar>

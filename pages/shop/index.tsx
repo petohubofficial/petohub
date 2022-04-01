@@ -24,7 +24,7 @@ const Shop = () => {
           </Typography>
         </Typography>
         <Typography variant="subtitle1">
-          The shop is under construction and will be ready in March 2022.
+          The shop is under construction and will be ready in April 2022.
         </Typography>
       </Box>
     </Container>

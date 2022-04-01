@@ -20,6 +20,10 @@ import { createTheme } from "theme";
 import { createEmotionCache } from "utils/createEmotionCache";
 import { SplashScreen } from "components/SplashScreen";
 
+import "node_modules/swiper/swiper.scss";
+import "node_modules/swiper/modules/navigation/navigation.scss";
+import "node_modules/swiper/modules/pagination/pagination.scss";
+
 Router.events.on("routeChangeStart", nProgress.start);
 Router.events.on("routeChangeError", nProgress.done);
 Router.events.on("routeChangeComplete", nProgress.done);

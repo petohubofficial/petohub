@@ -182,13 +182,16 @@ const AuthProvider = (props)=>{
             try {
                 const accessToken = globalThis.localStorage.getItem("accessToken");
                 if (accessToken) {
-                    const { user  } = await auth.me(accessToken);
-                    dispatch({
+                    const { success , user  } = await auth.me(accessToken);
+                    if (success) dispatch({
                         type: ActionType.INITIALIZE,
                         payload: {
                             isAuthenticated: true,
                             user
                         }
+                    });
+                    else dispatch({
+                        type: ActionType.LOGOUT
                     });
                 } else {
                     dispatch({

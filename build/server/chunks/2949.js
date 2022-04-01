@@ -439,8 +439,31 @@ const HeaderBar = ()=>{
         ]
     }));
 };
-const HeaderNav = ()=>{
+const HeaderNavLink = ({ href , text , ...other })=>{
     const router = (0,router_.useRouter)();
+    return(/*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
+        href: href,
+        passHref: true,
+        ...other,
+        children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+            component: "a",
+            color: router.pathname === href ? "primary.main" : "text.secondary",
+            sx: {
+                "&:hover": {
+                    color: "primary.main"
+                },
+                py: 1,
+                borderBottom: 1,
+                borderColor: "primary.main",
+                borderWidth: router.pathname === href ? "2px !important" : 0,
+                textDecoration: "none"
+            },
+            variant: "subtitle2",
+            children: text
+        })
+    }));
+};
+const HeaderNav = ()=>{
     return(/*#__PURE__*/ jsx_runtime_.jsx(material_.Container, {
         maxWidth: "lg",
         children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
@@ -455,69 +478,24 @@ const HeaderNav = ()=>{
                 sm: "center"
             },
             sx: {
-                mt: 1,
-                "& a": {
-                    "&:hover": {
-                        color: "primary.main"
-                    },
-                    py: 1,
-                    borderBottom: 1,
-                    borderColor: "primary.main",
-                    borderWidth: 0
-                }
+                mt: 1
             },
             children: [
-                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
+                /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
                     href: "/",
-                    passHref: true,
-                    children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Link, {
-                        color: "textSecondary",
-                        sx: {
-                            borderWidth: router.pathname === "/" ? "2px !important" : 0
-                        },
-                        underline: "none",
-                        variant: "subtitle2",
-                        children: "Home"
-                    })
+                    text: "Home"
                 }),
-                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
+                /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
                     href: "/shop",
-                    passHref: true,
-                    children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Link, {
-                        color: "textSecondary",
-                        sx: {
-                            borderWidth: router.pathname === "/shop" ? "2px !important" : 0
-                        },
-                        underline: "none",
-                        variant: "subtitle2",
-                        children: "Shop"
-                    })
+                    text: "Shop"
                 }),
-                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
+                /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
                     href: "/about",
-                    passHref: true,
-                    children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Link, {
-                        color: "textSecondary",
-                        sx: {
-                            borderWidth: router.pathname === "/about" ? "2px !important" : 0
-                        },
-                        underline: "none",
-                        variant: "subtitle2",
-                        children: "About"
-                    })
+                    text: "About Us"
                 }),
-                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
+                /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
                     href: "/contact",
-                    passHref: true,
-                    children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Link, {
-                        color: "textSecondary",
-                        sx: {
-                            borderWidth: router.pathname === "/contact" ? "2px !important" : 0
-                        },
-                        underline: "none",
-                        variant: "subtitle2",
-                        children: "Contact"
-                    })
+                    text: "Contact"
                 })
             ]
         })
@@ -526,7 +504,7 @@ const HeaderNav = ()=>{
 const Header = (props)=>{
     var ref;
     const { settings , saveSettings  } = (0,hooks_settings/* useSettings */.r)();
-    const { isAuthenticated , logout  } = (0,auth/* useAuth */.a)();
+    const { isAuthenticated , logout , user  } = (0,auth/* useAuth */.a)();
     const { data  } = (0,api_service/* useGetCategoriesQuery */.NL)();
     const router = (0,router_.useRouter)();
     // Profile Menu
@@ -650,7 +628,6 @@ const Header = (props)=>{
                             placeholder: "Search"
                         }),
                         /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
-                            disableRipple: true,
                             sx: {
                                 border: 1,
                                 borderColor: "primary.main",
@@ -672,7 +649,6 @@ const Header = (props)=>{
                             })
                         }),
                         /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
-                            disableRipple: true,
                             sx: {
                                 border: 1,
                                 borderColor: "primary.main",
@@ -687,7 +663,6 @@ const Header = (props)=>{
                             })
                         }),
                         /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
-                            disableRipple: true,
                             sx: {
                                 border: 1,
                                 borderColor: "primary.main",
@@ -714,20 +689,85 @@ const Header = (props)=>{
                                 "aria-labelledby": "profile-button"
                             },
                             children: [
-                                /*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
-                                    onClick: handleProfileMenuClose,
-                                    children: "My account"
+                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
+                                    sx: {
+                                        px: 3,
+                                        py: 2
+                                    },
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 2,
+                                    children: [
+                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Avatar, {
+                                            alt: "Profile",
+                                            src: user === null || user === void 0 ? void 0 : user.profileImage
+                                        }),
+                                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
+                                            children: [
+                                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                                    variant: "h6",
+                                                    children: user === null || user === void 0 ? void 0 : user.name
+                                                }),
+                                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                                    color: "text.secondary",
+                                                    children: user === null || user === void 0 ? void 0 : user.email
+                                                })
+                                            ]
+                                        })
+                                    ]
                                 }),
-                                /*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
-                                    onClick: handleProfileMenuClose,
-                                    children: "My favorites"
+                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Divider, {
+                                    sx: {
+                                        mb: 1
+                                    }
                                 }),
-                                /*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
+                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
+                                    onClick: handleProfileMenuClose,
+                                    children: [
+                                        /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.SettingsOutlined, {
+                                            color: "action",
+                                            sx: {
+                                                mr: 0.5
+                                            }
+                                        }),
+                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                            color: "text.secondary",
+                                            children: "Settings"
+                                        })
+                                    ]
+                                }),
+                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
+                                    onClick: handleProfileMenuClose,
+                                    children: [
+                                        /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.FavoriteBorderOutlined, {
+                                            color: "action",
+                                            sx: {
+                                                mr: 0.5
+                                            }
+                                        }),
+                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                            color: "text.secondary",
+                                            children: "Favorites"
+                                        })
+                                    ]
+                                }),
+                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
                                     onClick: ()=>{
                                         logout();
                                         handleProfileMenuClose();
                                     },
-                                    children: "Logout"
+                                    children: [
+                                        /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.LogoutOutlined, {
+                                            color: "action",
+                                            sx: {
+                                                mr: 0.5
+                                            }
+                                        }),
+                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                            color: "text.secondary",
+                                            children: "Logout"
+                                        })
+                                    ]
                                 })
                             ]
                         })

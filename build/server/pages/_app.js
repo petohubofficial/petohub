@@ -869,6 +869,9 @@ const SplashScreen = ()=>/*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
 
 
 
+
+
+
 router_default().events.on("routeChangeStart", (external_nprogress_default()).start);
 router_default().events.on("routeChangeError", (external_nprogress_default()).done);
 router_default().events.on("routeChangeComplete", (external_nprogress_default()).done);

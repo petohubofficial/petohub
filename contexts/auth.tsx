@@ -170,14 +170,16 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
       try {
         const accessToken = globalThis.localStorage.getItem("accessToken");
         if (accessToken) {
-          const { user } = await auth.me(accessToken);
-          dispatch({
-            type: ActionType.INITIALIZE,
-            payload: {
-              isAuthenticated: true,
-              user,
-            },
-          });
+          const { success, user } = await auth.me(accessToken);
+          if (success)
+            dispatch({
+              type: ActionType.INITIALIZE,
+              payload: {
+                isAuthenticated: true,
+                user,
+              },
+            });
+          else dispatch({ type: ActionType.LOGOUT });
         } else {
           dispatch({
             type: ActionType.INITIALIZE,
