@@ -34,7 +34,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     delete _user.password;
 
     // Success response
-    return res.status(200).json({ success: true, token: user.getSignedToken(), user: _user });
+    res.setHeader("Set-Cookie", [`token=${user.generateAuthToken()}; httpOnly; path=/`]);
+    return res.status(200).json({ success: true, user: _user });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, error: "Server error" });

@@ -1,9 +1,9 @@
 "use strict";
-exports.id = 2949;
-exports.ids = [2949];
+exports.id = 3489;
+exports.ids = [3489];
 exports.modules = {
 
-/***/ 2949:
+/***/ 3489:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 
@@ -14,12 +14,12 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "react/jsx-runtime"
 var jsx_runtime_ = __webpack_require__(997);
+// EXTERNAL MODULE: external "@mui/material"
+var material_ = __webpack_require__(5692);
 // EXTERNAL MODULE: external "@mui/material/styles"
 var styles_ = __webpack_require__(8442);
 // EXTERNAL MODULE: external "@mui/icons-material"
 var icons_material_ = __webpack_require__(7915);
-// EXTERNAL MODULE: external "@mui/material"
-var material_ = __webpack_require__(5692);
 // EXTERNAL MODULE: ./components/Logo.tsx
 var Logo = __webpack_require__(5120);
 ;// CONCATENATED MODULE: ./components/Footer.tsx
@@ -300,7 +300,7 @@ const HeaderBar = ()=>{
     (0,external_react_.useEffect)(()=>{
         // find if scroll position is at top of page
         window.addEventListener("scroll", ()=>{
-            const isTop = window.scrollY < 10;
+            const isTop = window.scrollY < 100;
             if (isTop) setScrolled(false);
             else setScrolled(true);
         });
@@ -501,7 +501,7 @@ const HeaderNav = ()=>{
         })
     }));
 };
-const Header = (props)=>{
+const Header = ()=>{
     var ref;
     const { settings , saveSettings  } = (0,hooks_settings/* useSettings */.r)();
     const { isAuthenticated , logout , user  } = (0,auth/* useAuth */.a)();
@@ -539,10 +539,10 @@ const Header = (props)=>{
         saveSettings(newSettings);
     };
     return(/*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.AppBar, {
-        elevation: 0,
+        position: "sticky",
+        elevation: 5,
         sx: {
             backgroundColor: "background.paper",
-            boxShadow: 5,
             color: "text.secondary"
         },
         children: [
@@ -779,126 +779,25 @@ const Header = (props)=>{
     }));
 };
 
-;// CONCATENATED MODULE: ./components/Sidebar.tsx
-
-
-
-
-
-
-const SidebarLink = (0,styles_.styled)(material_.Link)(({ theme  })=>({
-        borderRadius: theme.shape.borderRadius,
-        display: "block",
-        padding: theme.spacing(1.5),
-        "&:hover": {
-            backgroundColor: theme.palette.action.hover
-        }
-    })
-);
-const Sidebar = (props)=>{
-    const { onClose , open  } = props;
-    const router = (0,router_.useRouter)();
-    const lgUp = (0,material_.useMediaQuery)((theme)=>theme.breakpoints.up("lg")
-    );
-    const handlePathChange = ()=>{
-        if (open) {
-            onClose === null || onClose === void 0 ? void 0 : onClose();
-        }
-    };
-    (0,external_react_.useEffect)(handlePathChange, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-        router.asPath
-    ]);
-    return(/*#__PURE__*/ jsx_runtime_.jsx(material_.Drawer, {
-        anchor: "right",
-        onClose: onClose,
-        open: !lgUp && open,
-        PaperProps: {
-            sx: {
-                width: 256
-            }
-        },
-        sx: {
-            zIndex: (theme)=>theme.zIndex.appBar + 100
-        },
-        variant: "temporary",
-        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
-            sx: {
-                p: 2
-            },
-            children: [
-                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
-                    href: "/dashboard",
-                    passHref: true,
-                    children: /*#__PURE__*/ jsx_runtime_.jsx(SidebarLink, {
-                        color: "textSecondary",
-                        underline: "none",
-                        variant: "subtitle2",
-                        children: "Live Demo"
-                    })
-                }),
-                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
-                    href: "/browse",
-                    passHref: true,
-                    children: /*#__PURE__*/ jsx_runtime_.jsx(SidebarLink, {
-                        color: "textSecondary",
-                        underline: "none",
-                        variant: "subtitle2",
-                        children: "Components"
-                    })
-                }),
-                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
-                    href: "/docs/welcome",
-                    passHref: true,
-                    children: /*#__PURE__*/ jsx_runtime_.jsx(SidebarLink, {
-                        color: "textSecondary",
-                        underline: "none",
-                        variant: "subtitle2",
-                        children: "Documentation"
-                    })
-                }),
-                /*#__PURE__*/ jsx_runtime_.jsx(material_.Button, {
-                    component: "a",
-                    fullWidth: true,
-                    href: "https://material-ui.com/store/items/devias-kit-pro",
-                    sx: {
-                        mt: 1.5
-                    },
-                    target: "_blank",
-                    variant: "contained",
-                    children: "Buy Now"
-                })
-            ]
-        })
-    }));
-};
-
 ;// CONCATENATED MODULE: ./components/Layout.tsx
 
 
 
 
 
-
-const LayoutRoot = (0,styles_.styled)("div")(({ theme  })=>({
+const LayoutRoot = (0,styles_.styled)(material_.Box)(({ theme  })=>({
         backgroundColor: theme.palette.background.default,
-        height: "100%",
-        paddingTop: 64
+        height: "100%"
     })
 );
 const Layout = ({ children  })=>{
-    const { 0: isSidebarOpen , 1: setIsSidebarOpen  } = (0,external_react_.useState)(false);
     return(/*#__PURE__*/ (0,jsx_runtime_.jsxs)(LayoutRoot, {
         children: [
-            /*#__PURE__*/ jsx_runtime_.jsx(Header, {
-                onOpenSidebar: ()=>setIsSidebarOpen(true)
+            /*#__PURE__*/ jsx_runtime_.jsx(Header, {}),
+            /*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
+                component: "main",
+                children: children
             }),
-            /*#__PURE__*/ jsx_runtime_.jsx(Sidebar, {
-                onClose: ()=>setIsSidebarOpen(false)
-                ,
-                open: isSidebarOpen
-            }),
-            children,
             /*#__PURE__*/ jsx_runtime_.jsx(Footer, {})
         ]
     }));

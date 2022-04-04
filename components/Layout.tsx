@@ -1,27 +1,23 @@
+import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
-import { Sidebar } from "components/Sidebar";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode } from "react";
 
 interface LayoutProps {
   children?: ReactNode;
 }
 
-const LayoutRoot = styled("div")(({ theme }) => ({
+const LayoutRoot = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   height: "100%",
-  paddingTop: 64,
 }));
 
 export const Layout: FC<LayoutProps> = ({ children }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-
   return (
     <LayoutRoot>
-      <Header onOpenSidebar={(): void => setIsSidebarOpen(true)} />
-      <Sidebar onClose={(): void => setIsSidebarOpen(false)} open={isSidebarOpen} />
-      {children}
+      <Header />
+      <Box component="main">{children}</Box>
       <Footer />
     </LayoutRoot>
   );

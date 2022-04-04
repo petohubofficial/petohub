@@ -5,14 +5,18 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import type { Action } from "@reduxjs/toolkit";
 
 import { api } from "services/api.service";
+import { admin } from "services/admin.service";
+
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
+  [admin.reducerPath]: admin.reducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware, admin.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

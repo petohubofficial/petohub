@@ -43,7 +43,7 @@ const HeaderBar = () => {
   useEffect(() => {
     // find if scroll position is at top of page
     window.addEventListener("scroll", () => {
-      const isTop = window.scrollY < 10;
+      const isTop = window.scrollY < 100;
       if (isTop) setScrolled(false);
       else setScrolled(true);
     });
@@ -161,11 +161,7 @@ const HeaderNav = () => {
   );
 };
 
-interface HeaderProps {
-  onOpenSidebar?: () => void;
-}
-
-export const Header: FC<HeaderProps> = (props) => {
+export const Header: FC = () => {
   const { settings, saveSettings } = useSettings();
   const { isAuthenticated, logout, user } = useAuth();
   const { data } = useGetCategoriesQuery();
@@ -211,10 +207,10 @@ export const Header: FC<HeaderProps> = (props) => {
 
   return (
     <AppBar
-      elevation={0}
+      position="sticky"
+      elevation={5}
       sx={{
         backgroundColor: "background.paper",
-        boxShadow: 5,
         color: "text.secondary",
       }}
     >

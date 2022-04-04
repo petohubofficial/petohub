@@ -102,9 +102,11 @@ const handler = async (req, res)=>{
         const _user = user.toJSON();
         delete _user.password;
         // Success response
+        res.setHeader("Set-Cookie", [
+            `token=${user.generateAuthToken()}; httpOnly; path=/`
+        ]);
         return res.status(200).json({
             success: true,
-            token: user.getSignedToken(),
             user: _user
         });
     } catch (error) {

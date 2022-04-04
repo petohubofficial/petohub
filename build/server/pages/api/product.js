@@ -186,7 +186,19 @@ const handler = async (req, res)=>{
         // Executing the query
         const products = await productQuery;
         // Making the results object along with some metadata
-        const results = {};
+        const results = {
+            total: 0,
+            pages: 0,
+            results: [],
+            next: {
+                page: 0,
+                limit: 0
+            },
+            prev: {
+                page: 0,
+                limit: 0
+            }
+        };
         results.total = products.length;
         results.pages = Math.ceil(results.total / limit);
         results.results = products;
@@ -201,7 +213,7 @@ const handler = async (req, res)=>{
         };
         return res.status(200).json({
             success: true,
-            results
+            data: results
         });
     } catch (error) {
         console.log(error);

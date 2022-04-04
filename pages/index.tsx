@@ -1,7 +1,11 @@
 import { Box, Container, Typography } from "@mui/material";
 import { Layout } from "components/Layout";
 import Head from "next/head";
+import Image from "next/image";
 import { ReactElement } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import VeterinaryCare from "public/assets/images/veterinary-care.jpg";
 
 const HomePage = () => {
   return (
@@ -17,15 +21,11 @@ const HomePage = () => {
           <title>Petohub</title>
           <meta name="description" content="Official website of Petohub - Pet lover's community" />
         </Head>
-        <Typography variant="h1" color="text.primary">
-          Welcome to{" "}
-          <Typography variant="h1" display="inline" color="primary.main">
-            Petohub
-          </Typography>
-        </Typography>
-        <Typography variant="subtitle1">
-          The website is under construction and will be ready in April 2022.
-        </Typography>
+        <Swiper>
+          <SwiperSlide>
+            <Image src={VeterinaryCare} width="800" height="600" alt="slide1" />
+          </SwiperSlide>
+        </Swiper>
       </Box>
     </Container>
   );

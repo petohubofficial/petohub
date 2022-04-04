@@ -4,6 +4,7 @@ import { Question } from "types/question";
 import { Review, Rating } from "types/review";
 import { Directory } from "types/directory";
 import { Category } from "types/category";
+import { Response } from "types/common";
 
 export interface AffiliateLink {
   productId: string;
@@ -49,4 +50,26 @@ export interface Product extends mongoose.Document {
   reviews: Review[];
   rating: Rating;
   averageRating: number;
+}
+
+export interface GetProductsFilters {
+  page?: number;
+  limit?: number;
+  q?: string;
+  sort?: string;
+  category?: string;
+  pet?: string;
+  brand?: string;
+  min?: number;
+  max?: number;
+}
+export interface PaginatedResponse {
+  total: number;
+  pages: number;
+  results: Product[];
+  next: { page: number; limit: number };
+  prev: { page: number; limit: number };
+}
+export interface GetProductsResponse extends Response {
+  data: PaginatedResponse;
 }

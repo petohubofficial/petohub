@@ -168,19 +168,16 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   useEffect(() => {
     const initialize = async (): Promise<void> => {
       try {
-        const accessToken = globalThis.localStorage.getItem("accessToken");
-        if (accessToken) {
-          const { success, user } = await auth.me(accessToken);
-          if (success)
-            dispatch({
-              type: ActionType.INITIALIZE,
-              payload: {
-                isAuthenticated: true,
-                user,
-              },
-            });
-          else dispatch({ type: ActionType.LOGOUT });
-        } else {
+        const { success, user } = await auth.me();
+        if (success)
+          dispatch({
+            type: ActionType.INITIALIZE,
+            payload: {
+              isAuthenticated: true,
+              user,
+            },
+          });
+        else {
           dispatch({
             type: ActionType.INITIALIZE,
             payload: {
@@ -188,6 +185,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
               user: null,
             },
           });
+          dispatch({ type: ActionType.LOGOUT });
         }
       } catch (err) {
         console.error(err);
@@ -206,8 +204,6 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
 
   const login = async (request: LoginRequest): Promise<LoginResponse> => {
     const loginResponse = await auth.login(request);
-    localStorage.setItem("accessToken", loginResponse.token);
-    localStorage.setItem("user", JSON.stringify(loginResponse.user));
     dispatch({
       type: ActionType.LOGIN,
       payload: loginResponse,
@@ -216,8 +212,6 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
 
   const logout = async (): Promise<void> => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
     dispatch({ type: ActionType.LOGOUT });
     toast.success("Logged out successfully");
   };

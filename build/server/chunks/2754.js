@@ -48,12 +48,10 @@ class AuthService {
             return error.response.data;
         }
     }
-    async me(accessToken) {
+    async me() {
         try {
             const { data  } = await external_axios_default().get("/api/user", {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                withCredentials: true
             });
             return data;
         } catch (error) {
@@ -180,26 +178,24 @@ const AuthProvider = (props)=>{
     (0,external_react_.useEffect)(()=>{
         const initialize = async ()=>{
             try {
-                const accessToken = globalThis.localStorage.getItem("accessToken");
-                if (accessToken) {
-                    const { success , user  } = await auth.me(accessToken);
-                    if (success) dispatch({
-                        type: ActionType.INITIALIZE,
-                        payload: {
-                            isAuthenticated: true,
-                            user
-                        }
-                    });
-                    else dispatch({
-                        type: ActionType.LOGOUT
-                    });
-                } else {
+                const { success , user  } = await auth.me();
+                if (success) dispatch({
+                    type: ActionType.INITIALIZE,
+                    payload: {
+                        isAuthenticated: true,
+                        user
+                    }
+                });
+                else {
                     dispatch({
                         type: ActionType.INITIALIZE,
                         payload: {
                             isAuthenticated: false,
                             user: null
                         }
+                    });
+                    dispatch({
+                        type: ActionType.LOGOUT
                     });
                 }
             } catch (err) {
@@ -217,8 +213,6 @@ const AuthProvider = (props)=>{
     }, []);
     const login = async (request)=>{
         const loginResponse = await auth.login(request);
-        localStorage.setItem("accessToken", loginResponse.token);
-        localStorage.setItem("user", JSON.stringify(loginResponse.user));
         dispatch({
             type: ActionType.LOGIN,
             payload: loginResponse
@@ -226,8 +220,6 @@ const AuthProvider = (props)=>{
         return loginResponse;
     };
     const logout = async ()=>{
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("user");
         dispatch({
             type: ActionType.LOGOUT
         });

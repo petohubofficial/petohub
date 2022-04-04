@@ -34,11 +34,9 @@ class AuthService {
     }
   }
 
-  async me(accessToken: string): Promise<MeResponse> {
+  async me(): Promise<MeResponse> {
     try {
-      const { data } = await axios.get("/api/user", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      const { data } = await axios.get("/api/user", { withCredentials: true });
       return data;
     } catch (error: any) {
       toast.error(error?.response?.data?.error || "Error");

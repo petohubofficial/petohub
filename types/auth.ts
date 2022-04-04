@@ -7,7 +7,6 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse extends Response {
-  token: string;
   user: User;
 }
 

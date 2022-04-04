@@ -1,8 +1,8 @@
 "use strict";
 (() => {
 var exports = {};
-exports.id = 4078;
-exports.ids = [4078];
+exports.id = 7393;
+exports.ids = [7393];
 exports.modules = {
 
 /***/ 8432:
@@ -102,7 +102,7 @@ const EditSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)(
 
 /***/ }),
 
-/***/ 3024:
+/***/ 5476:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -170,7 +170,7 @@ const handler = async (req, res)=>{
 var __webpack_require__ = require("../../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299,9598,1266], () => (__webpack_exec__(3024)));
+var __webpack_exports__ = __webpack_require__.X(0, [4035,3299,9598,1266], () => (__webpack_exec__(5476)));
 module.exports = __webpack_exports__;
 
 })();

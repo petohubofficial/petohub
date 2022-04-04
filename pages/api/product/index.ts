@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Product from "models/Product";
 import connect from "utils/connectDb";
+import { PaginatedResponse } from "types/product";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET")
@@ -70,12 +71,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const products = await productQuery;
 
     // Making the results object along with some metadata
-    const results = {} as {
-      total: number;
-      pages: number;
-      results: object[];
-      next: { page: number; limit: number };
-      prev: { page: number; limit: number };
+    const results: PaginatedResponse = {
+      total: 0,
+      pages: 0,
+      results: [],
+      next: { page: 0, limit: 0 },
+      prev: { page: 0, limit: 0 },
     };
     results.total = products.length;
     results.pages = Math.ceil(results.total / limit);
@@ -85,7 +86,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (endIndex < results.total) results.next = { page: page + 1, limit: limit };
     if (startIndex > 0) results.prev = { page: page - 1, limit: limit };
 
-    return res.status(200).json({ success: true, results });
+    return res.status(200).json({ success: true, data: results });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, error: "Server error" });

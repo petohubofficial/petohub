@@ -19,7 +19,12 @@ exports.modules = {
 const JWT_SECRET = process.env.JWT_SECRET;
 const withProtect = (handler)=>async (req, res)=>{
         let token;
-        if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) token = req.headers.authorization.split(" ")[1];
+        if (req.headers.cookie) {
+            const cookies = req.headers.cookie.split(";");
+            const cookie = cookies.find((c)=>c.trim().startsWith("token=")
+            );
+            if (cookie) token = cookie.split("=")[1];
+        }
         if (!token) return res.status(401).json({
             success: false,
             error: "Unauthorized"
