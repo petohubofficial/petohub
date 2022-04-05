@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Layout } from "components/Layout";
+import { Scrollbar } from "components/Scrollbar";
 import { ReactElement, useState } from "react";
 import { useGetProductsQuery } from "services/admin.service";
 import { GetProductsFilters } from "types/product";
@@ -24,7 +25,7 @@ const ProductsDashboard = () => {
         {isLoading ? (
           <Typography variant="h5">Loading...</Typography>
         ) : (
-          <Box>
+          <Scrollbar>
             <Table>
               <TableHead>
                 <TableRow>
@@ -53,7 +54,7 @@ const ProductsDashboard = () => {
                 ))}
               </TableBody>
             </Table>
-          </Box>
+          </Scrollbar>
         )}
       </Box>
     </Container>

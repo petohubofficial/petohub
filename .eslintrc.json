@@ -5,6 +5,6 @@
     "jsx-a11y/alt-text": "off",
     "react/display-name": "off",
     "react/no-children-prop": "off",
-    "react/jsx-max-props-per-line": [1, { "maximum": 5 }]
+    "react/jsx-max-props-per-line": [1, { "maximum": 6 }]
   }
 }

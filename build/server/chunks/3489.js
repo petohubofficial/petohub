@@ -296,19 +296,10 @@ var api_service = __webpack_require__(9850);
 
 
 const HeaderBar = ()=>{
-    const { 0: scrolled , 1: setScrolled  } = (0,external_react_.useState)(false);
-    (0,external_react_.useEffect)(()=>{
-        // find if scroll position is at top of page
-        window.addEventListener("scroll", ()=>{
-            const isTop = window.scrollY < 100;
-            if (isTop) setScrolled(false);
-            else setScrolled(true);
-        });
-    }, []);
     return(/*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
         display: {
-            sm: scrolled ? "none" : "flex",
-            xs: scrolled ? "none" : "block"
+            sm: "flex",
+            xs: "block"
         },
         maxHeight: {
             sm: 50,
@@ -322,7 +313,6 @@ const HeaderBar = ()=>{
             py: 2,
             backgroundColor: "neutral.800"
         },
-        position: "sticky",
         children: [
             /*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
                 sx: {
@@ -538,243 +528,247 @@ const Header = ()=>{
         };
         saveSettings(newSettings);
     };
-    return(/*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.AppBar, {
-        position: "sticky",
-        elevation: 5,
-        sx: {
-            backgroundColor: "background.paper",
-            color: "text.secondary"
-        },
+    return(/*#__PURE__*/ (0,jsx_runtime_.jsxs)(jsx_runtime_.Fragment, {
         children: [
             /*#__PURE__*/ jsx_runtime_.jsx(HeaderBar, {}),
-            /*#__PURE__*/ jsx_runtime_.jsx(material_.Container, {
-                maxWidth: "lg",
-                children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Toolbar, {
-                    disableGutters: true,
-                    sx: {
-                        minHeight: 64
-                    },
-                    children: [
-                        /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
-                            href: "/",
-                            passHref: true,
-                            children: /*#__PURE__*/ jsx_runtime_.jsx(Logo/* Logo */.T, {
-                                width: "60px"
-                            })
-                        }),
-                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
+            /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.AppBar, {
+                position: "sticky",
+                elevation: 5,
+                sx: {
+                    backgroundColor: "background.paper",
+                    color: "text.secondary"
+                },
+                children: [
+                    /*#__PURE__*/ jsx_runtime_.jsx(material_.Container, {
+                        maxWidth: "lg",
+                        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Toolbar, {
+                            disableGutters: true,
                             sx: {
-                                flexGrow: 1
-                            }
-                        }),
-                        /*#__PURE__*/ jsx_runtime_.jsx(material_.TextField, {
-                            fullWidth: true,
-                            sx: {
-                                px: 4,
-                                display: {
-                                    xs: "none",
-                                    sm: "block"
-                                }
-                            },
-                            inputMode: "search",
-                            size: "small",
-                            InputProps: {
-                                startAdornment: /*#__PURE__*/ jsx_runtime_.jsx(material_.InputAdornment, {
-                                    position: "start",
-                                    children: /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.Search, {})
-                                }),
-                                endAdornment: /*#__PURE__*/ jsx_runtime_.jsx(material_.InputAdornment, {
-                                    position: "end",
-                                    children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
-                                        sx: {
-                                            m: 0
-                                        },
-                                        children: [
-                                            /*#__PURE__*/ jsx_runtime_.jsx(material_.Button, {
-                                                id: "basic-button",
-                                                "aria-controls": "basic-menu",
-                                                "aria-haspopup": "true",
-                                                "aria-expanded": open ? "true" : undefined,
-                                                onClick: handleClick,
-                                                endIcon: /*#__PURE__*/ jsx_runtime_.jsx((ExpandMore_default()), {}),
-                                                children: category1
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Menu, {
-                                                id: "basic-menu",
-                                                anchorEl: anchorEl,
-                                                open: open,
-                                                onClose: handleClose,
-                                                MenuListProps: {
-                                                    "aria-labelledby": "basic-button"
-                                                },
-                                                children: [
-                                                    /*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
-                                                        value: "All categories",
-                                                        onClick: handleClose,
-                                                        children: "All categories"
-                                                    }),
-                                                    data === null || data === void 0 ? void 0 : (ref = data.categories) === null || ref === void 0 ? void 0 : ref.map((category)=>/*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
-                                                            value: category.name,
-                                                            onClick: handleClose,
-                                                            children: category.name
-                                                        }, category.id)
-                                                    )
-                                                ]
-                                            })
-                                        ]
-                                    })
-                                })
-                            },
-                            placeholder: "Search"
-                        }),
-                        /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
-                            sx: {
-                                border: 1,
-                                borderColor: "primary.main",
-                                mx: 1,
-                                overflow: "visible"
-                            },
-                            children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Badge, {
-                                badgeContent: 2,
-                                color: "secondary",
-                                sx: {
-                                    "& .MuiBadge-badge": {
-                                        top: -5,
-                                        right: -5
-                                    }
-                                },
-                                children: /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.FavoriteBorder, {
-                                    color: "primary"
-                                })
-                            })
-                        }),
-                        /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
-                            sx: {
-                                border: 1,
-                                borderColor: "primary.main",
-                                mx: 1
-                            },
-                            children: settings.theme === "light" ? /*#__PURE__*/ jsx_runtime_.jsx((DarkMode_default()), {
-                                color: "primary",
-                                onClick: handleToggleTheme
-                            }) : /*#__PURE__*/ jsx_runtime_.jsx((LightMode_default()), {
-                                color: "primary",
-                                onClick: handleToggleTheme
-                            })
-                        }),
-                        /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
-                            sx: {
-                                border: 1,
-                                borderColor: "primary.main",
-                                mx: 1
-                            },
-                            id: "profile-button",
-                            "aria-controls": openProfile ? "profile-menu" : undefined,
-                            "aria-haspopup": "true",
-                            "aria-expanded": openProfile ? "true" : undefined,
-                            onClick: (e)=>{
-                                if (!isAuthenticated) router.push("/login");
-                                else handleProfileMenuOpen(e);
-                            },
-                            children: /*#__PURE__*/ jsx_runtime_.jsx((PersonOutlineOutlined_default()), {
-                                color: "primary"
-                            })
-                        }),
-                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Menu, {
-                            id: "profile-menu",
-                            anchorEl: anchorElProfile,
-                            open: openProfile,
-                            onClose: handleProfileMenuClose,
-                            MenuListProps: {
-                                "aria-labelledby": "profile-button"
+                                minHeight: 64
                             },
                             children: [
-                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
+                                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
+                                    href: "/",
+                                    passHref: true,
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(Logo/* Logo */.T, {
+                                        width: "60px"
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
                                     sx: {
-                                        px: 3,
-                                        py: 2
+                                        flexGrow: 1
+                                    }
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(material_.TextField, {
+                                    fullWidth: true,
+                                    sx: {
+                                        px: 4,
+                                        display: {
+                                            xs: "none",
+                                            sm: "block"
+                                        }
                                     },
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 2,
-                                    children: [
-                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Avatar, {
-                                            alt: "Profile",
-                                            src: user === null || user === void 0 ? void 0 : user.profileImage
+                                    inputMode: "search",
+                                    size: "small",
+                                    InputProps: {
+                                        startAdornment: /*#__PURE__*/ jsx_runtime_.jsx(material_.InputAdornment, {
+                                            position: "start",
+                                            children: /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.Search, {})
                                         }),
+                                        endAdornment: /*#__PURE__*/ jsx_runtime_.jsx(material_.InputAdornment, {
+                                            position: "end",
+                                            children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
+                                                sx: {
+                                                    m: 0
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ jsx_runtime_.jsx(material_.Button, {
+                                                        id: "basic-button",
+                                                        "aria-controls": "basic-menu",
+                                                        "aria-haspopup": "true",
+                                                        "aria-expanded": open ? "true" : undefined,
+                                                        onClick: handleClick,
+                                                        endIcon: /*#__PURE__*/ jsx_runtime_.jsx((ExpandMore_default()), {}),
+                                                        children: category1
+                                                    }),
+                                                    /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Menu, {
+                                                        id: "basic-menu",
+                                                        anchorEl: anchorEl,
+                                                        open: open,
+                                                        onClose: handleClose,
+                                                        MenuListProps: {
+                                                            "aria-labelledby": "basic-button"
+                                                        },
+                                                        children: [
+                                                            /*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
+                                                                value: "All categories",
+                                                                onClick: handleClose,
+                                                                children: "All categories"
+                                                            }),
+                                                            data === null || data === void 0 ? void 0 : (ref = data.categories) === null || ref === void 0 ? void 0 : ref.map((category)=>/*#__PURE__*/ jsx_runtime_.jsx(material_.MenuItem, {
+                                                                    value: category.name,
+                                                                    onClick: handleClose,
+                                                                    children: category.name
+                                                                }, category.id)
+                                                            )
+                                                        ]
+                                                    })
+                                                ]
+                                            })
+                                        })
+                                    },
+                                    placeholder: "Search"
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
+                                    sx: {
+                                        border: 1,
+                                        borderColor: "primary.main",
+                                        mx: 1,
+                                        overflow: "visible"
+                                    },
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx(material_.Badge, {
+                                        badgeContent: 2,
+                                        color: "secondary",
+                                        sx: {
+                                            "& .MuiBadge-badge": {
+                                                top: -5,
+                                                right: -5
+                                            }
+                                        },
+                                        children: /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.FavoriteBorder, {
+                                            color: "primary"
+                                        })
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
+                                    sx: {
+                                        border: 1,
+                                        borderColor: "primary.main",
+                                        mx: 1
+                                    },
+                                    children: settings.theme === "light" ? /*#__PURE__*/ jsx_runtime_.jsx((DarkMode_default()), {
+                                        color: "primary",
+                                        onClick: handleToggleTheme
+                                    }) : /*#__PURE__*/ jsx_runtime_.jsx((LightMode_default()), {
+                                        color: "primary",
+                                        onClick: handleToggleTheme
+                                    })
+                                }),
+                                /*#__PURE__*/ jsx_runtime_.jsx(material_.IconButton, {
+                                    sx: {
+                                        border: 1,
+                                        borderColor: "primary.main",
+                                        mx: 1
+                                    },
+                                    id: "profile-button",
+                                    "aria-controls": openProfile ? "profile-menu" : undefined,
+                                    "aria-haspopup": "true",
+                                    "aria-expanded": openProfile ? "true" : undefined,
+                                    onClick: (e)=>{
+                                        if (!isAuthenticated) router.push("/login");
+                                        else handleProfileMenuOpen(e);
+                                    },
+                                    children: /*#__PURE__*/ jsx_runtime_.jsx((PersonOutlineOutlined_default()), {
+                                        color: "primary"
+                                    })
+                                }),
+                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Menu, {
+                                    id: "profile-menu",
+                                    anchorEl: anchorElProfile,
+                                    open: openProfile,
+                                    onClose: handleProfileMenuClose,
+                                    MenuListProps: {
+                                        "aria-labelledby": "profile-button"
+                                    },
+                                    children: [
                                         /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
+                                            sx: {
+                                                px: 3,
+                                                py: 2
+                                            },
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 2,
                                             children: [
-                                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
-                                                    variant: "h6",
-                                                    children: user === null || user === void 0 ? void 0 : user.name
+                                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Avatar, {
+                                                    alt: "Profile",
+                                                    src: user === null || user === void 0 ? void 0 : user.profileImage
+                                                }),
+                                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
+                                                    children: [
+                                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                                            variant: "h6",
+                                                            children: user === null || user === void 0 ? void 0 : user.name
+                                                        }),
+                                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                                            color: "text.secondary",
+                                                            children: user === null || user === void 0 ? void 0 : user.email
+                                                        })
+                                                    ]
+                                                })
+                                            ]
+                                        }),
+                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Divider, {
+                                            sx: {
+                                                mb: 1
+                                            }
+                                        }),
+                                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
+                                            onClick: handleProfileMenuClose,
+                                            children: [
+                                                /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.SettingsOutlined, {
+                                                    color: "action",
+                                                    sx: {
+                                                        mr: 0.5
+                                                    }
                                                 }),
                                                 /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
                                                     color: "text.secondary",
-                                                    children: user === null || user === void 0 ? void 0 : user.email
+                                                    children: "Settings"
                                                 })
                                             ]
-                                        })
-                                    ]
-                                }),
-                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Divider, {
-                                    sx: {
-                                        mb: 1
-                                    }
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
-                                    onClick: handleProfileMenuClose,
-                                    children: [
-                                        /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.SettingsOutlined, {
-                                            color: "action",
-                                            sx: {
-                                                mr: 0.5
-                                            }
                                         }),
-                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
-                                            color: "text.secondary",
-                                            children: "Settings"
-                                        })
-                                    ]
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
-                                    onClick: handleProfileMenuClose,
-                                    children: [
-                                        /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.FavoriteBorderOutlined, {
-                                            color: "action",
-                                            sx: {
-                                                mr: 0.5
-                                            }
+                                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
+                                            onClick: handleProfileMenuClose,
+                                            children: [
+                                                /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.FavoriteBorderOutlined, {
+                                                    color: "action",
+                                                    sx: {
+                                                        mr: 0.5
+                                                    }
+                                                }),
+                                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                                    color: "text.secondary",
+                                                    children: "Favorites"
+                                                })
+                                            ]
                                         }),
-                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
-                                            color: "text.secondary",
-                                            children: "Favorites"
-                                        })
-                                    ]
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
-                                    onClick: ()=>{
-                                        logout();
-                                        handleProfileMenuClose();
-                                    },
-                                    children: [
-                                        /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.LogoutOutlined, {
-                                            color: "action",
-                                            sx: {
-                                                mr: 0.5
-                                            }
-                                        }),
-                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
-                                            color: "text.secondary",
-                                            children: "Logout"
+                                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
+                                            onClick: ()=>{
+                                                logout();
+                                                handleProfileMenuClose();
+                                            },
+                                            children: [
+                                                /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.LogoutOutlined, {
+                                                    color: "action",
+                                                    sx: {
+                                                        mr: 0.5
+                                                    }
+                                                }),
+                                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                                    color: "text.secondary",
+                                                    children: "Logout"
+                                                })
+                                            ]
                                         })
                                     ]
                                 })
                             ]
                         })
-                    ]
-                })
-            }),
-            /*#__PURE__*/ jsx_runtime_.jsx(HeaderNav, {})
+                    }),
+                    /*#__PURE__*/ jsx_runtime_.jsx(HeaderNav, {})
+                ]
+            })
         ]
     }));
 };

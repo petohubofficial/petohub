@@ -35,30 +35,19 @@ import { useAuth } from "hooks/auth";
 import { useSettings } from "hooks/settings";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useGetCategoriesQuery } from "services/api.service";
 
 const HeaderBar = () => {
-  const [scrolled, setScrolled] = useState<boolean>(false);
-  useEffect(() => {
-    // find if scroll position is at top of page
-    window.addEventListener("scroll", () => {
-      const isTop = window.scrollY < 100;
-      if (isTop) setScrolled(false);
-      else setScrolled(true);
-    });
-  }, []);
-
   return (
     <Box
-      display={{ sm: scrolled ? "none" : "flex", xs: scrolled ? "none" : "block" }}
+      display={{ sm: "flex", xs: "block" }}
       maxHeight={{ sm: 50, xs: "100%" }}
       justifyContent="space-around"
       alignItems="center"
       textAlign="center"
       color="neutral.100"
       sx={{ py: 2, backgroundColor: "neutral.800" }}
-      position="sticky"
     >
       <Box sx={{ px: 1 }}>
         <Typography component="span" fontSize={14} fontWeight="bold">
@@ -206,136 +195,138 @@ export const Header: FC = () => {
   };
 
   return (
-    <AppBar
-      position="sticky"
-      elevation={5}
-      sx={{
-        backgroundColor: "background.paper",
-        color: "text.secondary",
-      }}
-    >
+    <>
       <HeaderBar />
-      <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ minHeight: 64 }}>
-          <Link href="/" passHref>
-            <Logo width="60px" />
-          </Link>
-          <Box sx={{ flexGrow: 1 }} />
-          <TextField
-            fullWidth
-            sx={{ px: 4, display: { xs: "none", sm: "block" } }}
-            inputMode="search"
-            size="small"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Box sx={{ m: 0 }}>
-                    <Button
-                      id="basic-button"
-                      aria-controls="basic-menu"
-                      aria-haspopup="true"
-                      aria-expanded={open ? "true" : undefined}
-                      onClick={handleClick}
-                      endIcon={<ExpandMoreIcon />}
-                    >
-                      {category}
-                    </Button>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                      }}
-                    >
-                      <MenuItem value="All categories" onClick={handleClose}>
-                        All categories
-                      </MenuItem>
-                      {data?.categories?.map((category) => (
-                        <MenuItem key={category.id} value={category.name} onClick={handleClose}>
-                          {category.name}
+      <AppBar
+        position="sticky"
+        elevation={5}
+        sx={{
+          backgroundColor: "background.paper",
+          color: "text.secondary",
+        }}
+      >
+        <Container maxWidth="lg">
+          <Toolbar disableGutters sx={{ minHeight: 64 }}>
+            <Link href="/" passHref>
+              <Logo width="60px" />
+            </Link>
+            <Box sx={{ flexGrow: 1 }} />
+            <TextField
+              fullWidth
+              sx={{ px: 4, display: { xs: "none", sm: "block" } }}
+              inputMode="search"
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box sx={{ m: 0 }}>
+                      <Button
+                        id="basic-button"
+                        aria-controls="basic-menu"
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                        endIcon={<ExpandMoreIcon />}
+                      >
+                        {category}
+                      </Button>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem value="All categories" onClick={handleClose}>
+                          All categories
                         </MenuItem>
-                      ))}
-                    </Menu>
-                  </Box>
-                </InputAdornment>
-              ),
-            }}
-            placeholder="Search"
-          />
-          <IconButton sx={{ border: 1, borderColor: "primary.main", mx: 1, overflow: "visible" }}>
-            <Badge
-              badgeContent={2}
-              color="secondary"
-              sx={{ "& .MuiBadge-badge": { top: -5, right: -5 } }}
-            >
-              <FavoriteBorder color="primary" />
-            </Badge>
-          </IconButton>
-          <IconButton sx={{ border: 1, borderColor: "primary.main", mx: 1 }}>
-            {settings.theme === "light" ? (
-              <DarkModeIcon color="primary" onClick={handleToggleTheme} />
-            ) : (
-              <LightModeIcon color="primary" onClick={handleToggleTheme} />
-            )}
-          </IconButton>
-          <IconButton
-            sx={{ border: 1, borderColor: "primary.main", mx: 1 }}
-            id="profile-button"
-            aria-controls={openProfile ? "profile-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={openProfile ? "true" : undefined}
-            onClick={(e) => {
-              if (!isAuthenticated) router.push("/login");
-              else handleProfileMenuOpen(e);
-            }}
-          >
-            <PersonOutlineOutlinedIcon color="primary" />
-          </IconButton>
-          <Menu
-            id="profile-menu"
-            anchorEl={anchorElProfile}
-            open={openProfile}
-            onClose={handleProfileMenuClose}
-            MenuListProps={{
-              "aria-labelledby": "profile-button",
-            }}
-          >
-            <Box sx={{ px: 3, py: 2 }} display="flex" alignItems="center" gap={2}>
-              <Avatar alt="Profile" src={user?.profileImage} />
-              <Box>
-                <Typography variant="h6">{user?.name}</Typography>
-                <Typography color="text.secondary">{user?.email}</Typography>
-              </Box>
-            </Box>
-            <Divider sx={{ mb: 1 }} />
-            <MenuItem onClick={handleProfileMenuClose}>
-              <SettingsOutlined color="action" sx={{ mr: 0.5 }} />
-              <Typography color="text.secondary">Settings</Typography>
-            </MenuItem>
-            <MenuItem onClick={handleProfileMenuClose}>
-              <FavoriteBorderOutlined color="action" sx={{ mr: 0.5 }} />
-              <Typography color="text.secondary">Favorites</Typography>
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                logout();
-                handleProfileMenuClose();
+                        {data?.categories?.map((category) => (
+                          <MenuItem key={category.id} value={category.name} onClick={handleClose}>
+                            {category.name}
+                          </MenuItem>
+                        ))}
+                      </Menu>
+                    </Box>
+                  </InputAdornment>
+                ),
+              }}
+              placeholder="Search"
+            />
+            <IconButton sx={{ border: 1, borderColor: "primary.main", mx: 1, overflow: "visible" }}>
+              <Badge
+                badgeContent={2}
+                color="secondary"
+                sx={{ "& .MuiBadge-badge": { top: -5, right: -5 } }}
+              >
+                <FavoriteBorder color="primary" />
+              </Badge>
+            </IconButton>
+            <IconButton sx={{ border: 1, borderColor: "primary.main", mx: 1 }}>
+              {settings.theme === "light" ? (
+                <DarkModeIcon color="primary" onClick={handleToggleTheme} />
+              ) : (
+                <LightModeIcon color="primary" onClick={handleToggleTheme} />
+              )}
+            </IconButton>
+            <IconButton
+              sx={{ border: 1, borderColor: "primary.main", mx: 1 }}
+              id="profile-button"
+              aria-controls={openProfile ? "profile-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openProfile ? "true" : undefined}
+              onClick={(e) => {
+                if (!isAuthenticated) router.push("/login");
+                else handleProfileMenuOpen(e);
               }}
             >
-              <LogoutOutlined color="action" sx={{ mr: 0.5 }} />
-              <Typography color="text.secondary">Logout</Typography>
-            </MenuItem>
-          </Menu>
-        </Toolbar>
-      </Container>
-      <HeaderNav />
-    </AppBar>
+              <PersonOutlineOutlinedIcon color="primary" />
+            </IconButton>
+            <Menu
+              id="profile-menu"
+              anchorEl={anchorElProfile}
+              open={openProfile}
+              onClose={handleProfileMenuClose}
+              MenuListProps={{
+                "aria-labelledby": "profile-button",
+              }}
+            >
+              <Box sx={{ px: 3, py: 2 }} display="flex" alignItems="center" gap={2}>
+                <Avatar alt="Profile" src={user?.profileImage} />
+                <Box>
+                  <Typography variant="h6">{user?.name}</Typography>
+                  <Typography color="text.secondary">{user?.email}</Typography>
+                </Box>
+              </Box>
+              <Divider sx={{ mb: 1 }} />
+              <MenuItem onClick={handleProfileMenuClose}>
+                <SettingsOutlined color="action" sx={{ mr: 0.5 }} />
+                <Typography color="text.secondary">Settings</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleProfileMenuClose}>
+                <FavoriteBorderOutlined color="action" sx={{ mr: 0.5 }} />
+                <Typography color="text.secondary">Favorites</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  logout();
+                  handleProfileMenuClose();
+                }}
+              >
+                <LogoutOutlined color="action" sx={{ mr: 0.5 }} />
+                <Typography color="text.secondary">Logout</Typography>
+              </MenuItem>
+            </Menu>
+          </Toolbar>
+        </Container>
+        <HeaderNav />
+      </AppBar>
+    </>
   );
 };

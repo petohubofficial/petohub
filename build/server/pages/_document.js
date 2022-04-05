@@ -18,13 +18,13 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "react/jsx-runtime"
 var jsx_runtime_ = __webpack_require__(997);
-// EXTERNAL MODULE: external "react"
-var external_react_ = __webpack_require__(6689);
-// EXTERNAL MODULE: ./node_modules/next/document.js
-var next_document = __webpack_require__(6859);
 ;// CONCATENATED MODULE: external "@emotion/server/create-instance"
 const create_instance_namespaceObject = require("@emotion/server/create-instance");
 var create_instance_default = /*#__PURE__*/__webpack_require__.n(create_instance_namespaceObject);
+// EXTERNAL MODULE: ./node_modules/next/document.js
+var next_document = __webpack_require__(6859);
+// EXTERNAL MODULE: external "react"
+var external_react_ = __webpack_require__(6689);
 // EXTERNAL MODULE: ./utils/createEmotionCache.ts + 1 modules
 var createEmotionCache = __webpack_require__(5742);
 ;// CONCATENATED MODULE: ./pages/_document.tsx
@@ -40,6 +40,18 @@ class MyDocument extends next_document["default"] {
             children: [
                 /*#__PURE__*/ (0,jsx_runtime_.jsxs)(next_document.Head, {
                     children: [
+                        /*#__PURE__*/ jsx_runtime_.jsx("link", {
+                            rel: "preconnect",
+                            href: "https://fonts.googleapis.com"
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx("link", {
+                            rel: "preconnect",
+                            href: "https://fonts.gstatic.com"
+                        }),
+                        /*#__PURE__*/ jsx_runtime_.jsx("link", {
+                            href: "https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@300&display=swap",
+                            rel: "stylesheet"
+                        }),
                         /*#__PURE__*/ jsx_runtime_.jsx("link", {
                             rel: "apple-touch-icon",
                             sizes: "57x57",
