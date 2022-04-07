@@ -536,7 +536,8 @@ const Header = ()=>{
                 elevation: 5,
                 sx: {
                     backgroundColor: "background.paper",
-                    color: "text.secondary"
+                    color: "text.secondary",
+                    zIndex: 1000
                 },
                 children: [
                     /*#__PURE__*/ jsx_runtime_.jsx(material_.Container, {

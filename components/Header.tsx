@@ -203,6 +203,7 @@ export const Header: FC = () => {
         sx={{
           backgroundColor: "background.paper",
           color: "text.secondary",
+          zIndex: 1000,
         }}
       >
         <Container maxWidth="lg">

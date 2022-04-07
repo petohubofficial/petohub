@@ -138,6 +138,21 @@ export const baseTheme: ThemeOptions = {
         },
       },
     },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          fontSize: "14px",
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          display: "flex",
+          alignItems: "center",
+        },
+      },
+    },
     MuiIconButton: {
       styleOverrides: {
         root: {
@@ -194,6 +209,12 @@ export const baseTheme: ThemeOptions = {
     MuiRadio: {
       defaultProps: {
         color: "primary",
+      },
+      styleOverrides: {
+        root: {
+          paddingTop: "4px",
+          paddingBottom: "4px",
+        },
       },
     },
     MuiSwitch: {

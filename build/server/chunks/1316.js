@@ -161,9 +161,10 @@ const useSettings = ()=>(0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(contex
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "hi": () => (/* binding */ api),
 /* harmony export */   "NL": () => (/* binding */ useGetCategoriesQuery),
+/* harmony export */   "Eh": () => (/* binding */ useGetPetsQuery),
 /* harmony export */   "C$": () => (/* binding */ useGetProductsQuery)
 /* harmony export */ });
-/* unused harmony exports useGetPetsQuery, useGetBrandsQuery */
+/* unused harmony export useGetBrandsQuery */
 /* harmony import */ var _reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4335);
 /* harmony import */ var _reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__);
 
