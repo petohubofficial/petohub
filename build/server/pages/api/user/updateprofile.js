@@ -69,11 +69,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "config": () => (/* binding */ config),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9598);
-/* harmony import */ var middlewares_withMulter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2970);
-/* harmony import */ var models_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3299);
-/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4035);
-/* harmony import */ var models_Directory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9297);
+/* harmony import */ var middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2970);
+/* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9598);
+/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4818);
+/* harmony import */ var models_User_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(881);
+/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1957);
+/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4035);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8738);
+
+
 
 
 
@@ -84,11 +88,11 @@ const handler = async (req, res)=>{
         success: false,
         error: "Method not allowed"
     });
-    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)();
+    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)();
     try {
-        const user = await models_User__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.user.id).populate("directory");
+        const user = await models_User_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.user.id).populate("directory");
         // Controlling customer update profile request
-        if (req.user.role === "Customer") {
+        if (req.user.role === types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CUSTOMER */ .u.CUSTOMER) {
             if (req.body.name) user.name = req.body.name;
             if (req.files) {
                 const profileImage = req.files.find((file)=>file.fieldname === "profileImage"
@@ -96,12 +100,12 @@ const handler = async (req, res)=>{
                 if (profileImage) user.profileImage = `/uploads/${profileImage.filename}`;
             }
             await user.save();
-        } else if (req.user.role === "Client") {
+        } else if (req.user.role === types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CLIENT */ .u.CLIENT) {
             // Getting the directory profile
             const directory = user.directory;
             // Checking for username
             if (req.body.username) {
-                if (await models_Directory__WEBPACK_IMPORTED_MODULE_4__/* ["default"].findOne */ .Z.findOne({
+                if (await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findOne */ .Z.findOne({
                     username: req.body.username
                 })) return res.status(400).json({
                     success: false,
@@ -199,11 +203,7 @@ const handler = async (req, res)=>{
             user
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z)(error, res);
     }
 };
 const config = {
@@ -211,7 +211,7 @@ const config = {
         bodyParser: false
     }
 }; // Disallow body parsing, since we're using multer
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)(handler)));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler)));
 
 
 /***/ })
@@ -223,7 +223,7 @@ const config = {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299,9598,9297,2970], () => (__webpack_exec__(1257)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,4818,2970], () => (__webpack_exec__(1257)));
 module.exports = __webpack_exports__;
 
 })();

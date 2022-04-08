@@ -1,9 +1,11 @@
-import { NextApiResponse } from "next";
-import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
 import withMulter, { MulterNextApiRequest } from "middlewares/withMulter";
-import User from "models/User";
+import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
+import Directory from "models/Directory.model";
+import User from "models/User.model";
+import { NextApiResponse } from "next";
+import { Role } from "types/user";
 import connect from "utils/connectDb";
-import Directory from "models/Directory";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (
   req: ProtectedNextApiRequest & MulterNextApiRequest,
@@ -16,7 +18,7 @@ const handler = async (
   try {
     const user = await User.findById(req.user.id).populate("directory");
     // Controlling customer update profile request
-    if (req.user.role === "Customer") {
+    if (req.user.role === Role.CUSTOMER) {
       if (req.body.name) user.name = req.body.name;
       if (req.files) {
         const profileImage = req.files.find((file) => file.fieldname === "profileImage");
@@ -25,7 +27,7 @@ const handler = async (
       await user.save();
     }
     // Controlling client update profile request
-    else if (req.user.role === "Client") {
+    else if (req.user.role === Role.CLIENT) {
       // Getting the directory profile
       const directory = user.directory;
       // Checking for username
@@ -117,8 +119,7 @@ const handler = async (
 
     return res.status(200).json({ success: true, user });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

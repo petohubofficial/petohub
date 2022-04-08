@@ -2,8 +2,10 @@ import { NextApiResponse } from "next";
 import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
 import withRoles from "middlewares/withRoles";
 import connect from "utils/connectDb";
-import Product from "models/Product";
-import Edit from "models/Edit";
+import Product from "models/Product.model";
+import Edit from "models/Edit.model";
+import errorHandler from "utils/errorHandler";
+import { Role } from "types/user";
 
 const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
   if (req.method !== "PUT")
@@ -27,9 +29,8 @@ const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
     await product.save();
     return res.status(200).json({ success: true, product });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 
-export default withProtect(withRoles("Admin", "Product Admin")(handler));
+export default withProtect(withRoles(Role.ADMIN, Role.PRODUCT_ADMIN)(handler));

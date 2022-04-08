@@ -81,7 +81,7 @@ const withRoles = (...roles)=>(handler)=>(req, res)=>{
 
 /***/ }),
 
-/***/ 3332:
+/***/ 102:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -119,10 +119,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2970);
 /* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9598);
-/* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6097);
+/* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6097);
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4035);
-/* harmony import */ var models_Product__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1266);
-/* harmony import */ var models_Edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3332);
+/* harmony import */ var models_Product_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5916);
+/* harmony import */ var models_Edit_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(102);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8738);
+/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1957);
+
+
 
 
 
@@ -146,7 +150,7 @@ const handler = async (req, res)=>{
         if (req.method === "GET") {
             // Get a single product
             if (req.query.id) {
-                const product = await models_Product__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).where("seller").equals(req.user.directory);
+                const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).where("seller").equals(req.user.directory);
                 if (!product) return res.status(404).json({
                     success: false,
                     error: "Product not found"
@@ -156,7 +160,7 @@ const handler = async (req, res)=>{
                     product
                 });
             } else {
-                const products = await models_Product__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find().where("seller").equals(req.user.directory);
+                const products = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find().where("seller").equals(req.user.directory);
                 return res.status(200).json({
                     success: true,
                     products
@@ -164,7 +168,7 @@ const handler = async (req, res)=>{
             }
         } else if (req.method === "POST") {
             var ref, ref1, ref2;
-            const product = await models_Product__WEBPACK_IMPORTED_MODULE_3__/* ["default"].create */ .Z.create({
+            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].create */ .Z.create({
                 seller: req.user.directory,
                 name: req.body.name,
                 brand: req.body.brand,
@@ -192,7 +196,7 @@ const handler = async (req, res)=>{
                 }
             }
             // Tracking edits
-            const edit = await models_Edit__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
+            const edit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
                 user: req.user._id,
                 product: product._id,
                 date: Date.now(),
@@ -207,7 +211,7 @@ const handler = async (req, res)=>{
             });
         } else if (req.method === "PUT") {
             // Check if the product exists
-            const product = await models_Product__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).select("+edits");
+            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).select("+edits");
             if (!product) return res.status(404).json({
                 success: false,
                 error: "Product not found"
@@ -249,7 +253,7 @@ const handler = async (req, res)=>{
             if (req.body.productImages) product.productImages = req.body.productImages.split(",");
             if (req.body.productImages === "") product.productImages = [];
             // Tracking edits
-            const edit = await models_Edit__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
+            const edit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
                 user: req.user._id,
                 product: product._id,
                 date: Date.now(),
@@ -265,7 +269,7 @@ const handler = async (req, res)=>{
             });
         } else if (req.method === "DELETE") {
             // Check if the product exists
-            const product = await models_Product__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id);
+            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id);
             if (!product) return res.status(404).json({
                 success: false,
                 error: "Product not found"
@@ -288,11 +292,7 @@ const handler = async (req, res)=>{
             });
         }
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z)(error, res);
     }
 };
 const config = {
@@ -300,7 +300,7 @@ const config = {
         bodyParser: false
     }
 }; // Disallow body parsing, since we're using multer
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)("Client")((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler))));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z)(types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.CLIENT */ .u.CLIENT)((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler))));
 
 
 /***/ })
@@ -312,7 +312,7 @@ const config = {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299,9598,1266,2970], () => (__webpack_exec__(3736)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,5916,2970], () => (__webpack_exec__(3736)));
 module.exports = __webpack_exports__;
 
 })();

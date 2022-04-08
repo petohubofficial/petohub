@@ -1,8 +1,18 @@
-import { ArrowBack, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Container, TextField, Typography } from "@mui/material";
+import { ArrowBack, Handshake, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useFormik } from "formik";
 import { useAuth } from "hooks/auth";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
@@ -13,6 +23,7 @@ const Signup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const { register } = useAuth();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -184,6 +195,18 @@ const Signup = () => {
                   </Typography>
                 </Link>
               </Typography>
+            </Box>
+            <Divider sx={{ my: 2 }} />
+            <Box display="flex" alignItems="center" flexDirection="column" justifyContent="center">
+              <Typography variant="h5" textAlign="center">
+                Want to sell at Petohub?
+              </Typography>
+              <Typography variant="body2" textAlign="center" color="text.secondary">
+                Become a member by clicking here
+              </Typography>
+              <Button startIcon={<Handshake />} onClick={() => router.push("/member")}>
+                Register as member
+              </Button>
             </Box>
           </Box>
         </Container>

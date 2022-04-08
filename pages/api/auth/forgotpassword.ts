@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import User from "models/User";
+import User from "models/User.model";
 import connect from "utils/connectDb";
 import sendEmail from "utils/sendEmail";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
@@ -42,12 +43,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
       await user.save();
-      console.log(error);
       return res.status(400).json({ success: false, error: "The email couldn't be sent" });
     }
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

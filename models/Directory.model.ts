@@ -45,13 +45,6 @@ const DirectorySchema = new mongoose.Schema<Directory>(
       minlength: [2, "State name is too short"],
       maxlength: [16, "State name is too long"],
     },
-    city: {
-      type: String,
-      required: [true, "Please provide a city"],
-      trim: true,
-      minlength: [2, "City name is too short"],
-      maxlength: [16, "City name is too long"],
-    },
     pincode: {
       type: String,
       required: [true, "Please provide a pincode"],

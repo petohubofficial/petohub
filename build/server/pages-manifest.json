@@ -38,6 +38,7 @@
   "/forgotpassword": "pages/forgotpassword.html",
   "/": "pages/index.html",
   "/login": "pages/login.html",
+  "/member": "pages/member.html",
   "/resetpassword": "pages/resetpassword.html",
   "/shop": "pages/shop.html",
   "/signup": "pages/signup.html",

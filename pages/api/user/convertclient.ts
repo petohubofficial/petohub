@@ -1,14 +1,16 @@
 import { NextApiResponse } from "next";
 import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
-import Directory from "models/Directory";
+import Directory from "models/Directory.model";
 import connect from "utils/connectDb";
+import errorHandler from "utils/errorHandler";
+import { Role } from "types/user";
 
 const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
     return res.status(405).json({ success: false, error: "Method not allowed" });
 
   // Chceking if user is a client
-  if (req.user.role === "Client") return res.status(200).json({ success: true, user: req.user });
+  if (req.user.role === Role.CLIENT) return res.status(200).json({ success: true, user: req.user });
 
   await connect();
   try {
@@ -27,14 +29,12 @@ const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
 
     // Updating user data and saving
     req.user.directory = directory._id;
-    req.user.role = "Client";
+    req.user.role = Role.CLIENT;
     await req.user.save();
 
     return res.status(200).json({ success: true, user: req.user });
   } catch (error) {
-    // Handling errors
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

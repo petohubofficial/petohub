@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import crypto from "crypto";
-import User from "models/User";
+import User from "models/User.model";
 import connect from "utils/connectDb";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET")
@@ -32,8 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // Returning a success message
     return res.status(200).json({ success: true, data: "User has been verified successfully" });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

@@ -26,13 +26,6 @@ module.exports = require("mongoose");
 
 /***/ }),
 
-/***/ 1738:
-/***/ ((module) => {
-
-module.exports = require("multer");
-
-/***/ }),
-
 /***/ 6113:
 /***/ ((module) => {
 
@@ -89,12 +82,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "config": () => (/* binding */ config),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2970);
-/* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9598);
-/* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6097);
-/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4035);
-/* harmony import */ var models_Directory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9297);
-/* harmony import */ var models_User__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3299);
+/* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9598);
+/* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6097);
+/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4035);
+/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4818);
+/* harmony import */ var models_User_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(881);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8738);
+/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1957);
+
 
 
 
@@ -112,13 +107,13 @@ const handler = async (req, res)=>{
         success: false,
         error: "Method not allowed"
     });
-    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)();
+    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)();
     try {
         // Get directories
         if (req.method === "GET") {
             // Get a single directory
             if (req.query.id) {
-                const directory = await models_Directory__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).select("+user").populate("user");
+                const directory = await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id).select("+user").populate("user");
                 if (!directory) return res.status(404).json({
                     success: false,
                     error: "Directory not found"
@@ -128,7 +123,7 @@ const handler = async (req, res)=>{
                     directory
                 });
             } else {
-                const directories = await models_Directory__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find().select("+user").populate("user");
+                const directories = await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].find */ .Z.find().select("+user").populate("user");
                 return res.status(200).json({
                     success: true,
                     directories
@@ -139,7 +134,7 @@ const handler = async (req, res)=>{
             // Checking if the directory is being linked to an existing user
             let user, link;
             if (req.body.user && req.body.user !== "") {
-                user = await models_User__WEBPACK_IMPORTED_MODULE_4__/* ["default"].findById */ .Z.findById(req.body.user);
+                user = await models_User_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.body.user);
                 if (!user) return res.status(404).json({
                     success: false,
                     error: "User not found"
@@ -151,7 +146,7 @@ const handler = async (req, res)=>{
                 link = true;
             }
             // Creating the directory
-            const directory = await models_Directory__WEBPACK_IMPORTED_MODULE_3__/* ["default"].create */ .Z.create({
+            const directory = await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].create */ .Z.create({
                 storeName: (ref = req.body) === null || ref === void 0 ? void 0 : ref.storeName,
                 email: (ref1 = req.body) === null || ref1 === void 0 ? void 0 : ref1.email,
                 address: (ref2 = req.body) === null || ref2 === void 0 ? void 0 : ref2.address,
@@ -165,7 +160,7 @@ const handler = async (req, res)=>{
             if (link) {
                 directory.user = req.body.user;
                 user.directory = directory._id;
-                if (user.role === "Customer") user.role = "Client";
+                if (user.role === types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CUSTOMER */ .u.CUSTOMER) user.role = types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CLIENT */ .u.CLIENT;
                 await directory.save();
                 await user.save();
                 directory.user = user;
@@ -176,7 +171,7 @@ const handler = async (req, res)=>{
             });
         } else if (req.method === "PUT") {
             // Checking if the directory exists
-            const directory = await models_Directory__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).select("+user").populate("user");
+            const directory = await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id).select("+user").populate("user");
             if (!directory) return res.status(404).json({
                 success: false,
                 error: "Directory not found"
@@ -187,12 +182,12 @@ const handler = async (req, res)=>{
                 if (req.body.user === "") {
                     if (directory.user !== null) {
                         directory.user.directory = null;
-                        directory.user.role = "Customer";
+                        directory.user.role = types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CUSTOMER */ .u.CUSTOMER;
                         await directory.user.save();
                         directory.user = null;
                     }
                 } else {
-                    const user = await models_User__WEBPACK_IMPORTED_MODULE_4__/* ["default"].findById */ .Z.findById(req.body.user);
+                    const user = await models_User_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.body.user);
                     if (!user) return res.status(404).json({
                         success: false,
                         error: "User not found"
@@ -202,14 +197,14 @@ const handler = async (req, res)=>{
                         error: "User is already a client"
                     });
                     user.directory = directory._id;
-                    user.role = "Client";
+                    user.role = types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CLIENT */ .u.CLIENT;
                     await user.save();
                     directory.user = user._id;
                 }
             }
             // Updating fields
             if (req.body.username) {
-                if (await models_Directory__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findOne */ .Z.findOne({
+                if (await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findOne */ .Z.findOne({
                     username: req.body.username
                 })) return res.status(400).json({
                     success: false,
@@ -307,7 +302,7 @@ const handler = async (req, res)=>{
         } else if (req.method === "DELETE") {
             var ref8;
             // Check if the directory exists
-            const directory = await models_Directory__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).select("+user").populate("user");
+            const directory = await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id).select("+user").populate("user");
             if (!directory) return res.status(404).json({
                 success: false,
                 error: "Directory not found"
@@ -315,7 +310,7 @@ const handler = async (req, res)=>{
             // Removing directory reference from the linked user
             if ((ref8 = directory.user) === null || ref8 === void 0 ? void 0 : ref8.directory) {
                 delete directory.user.directory;
-                directory.user.role = "Customer";
+                directory.user.role = types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CUSTOMER */ .u.CUSTOMER;
                 await directory.user.save();
             }
             // Delete the directory
@@ -326,11 +321,7 @@ const handler = async (req, res)=>{
             });
         }
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)(error, res);
     }
 };
 const config = {
@@ -338,7 +329,7 @@ const config = {
         bodyParser: false
     }
 }; // Disallow body parsing, since we're using multer
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)("Admin", "Product Admin")((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler))));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z)(types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.ADMIN */ .u.ADMIN, types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.PRODUCT_ADMIN */ .u.PRODUCT_ADMIN)(handler)));
 
 
 /***/ })
@@ -350,7 +341,7 @@ const config = {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299,9598,9297,2970], () => (__webpack_exec__(3153)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,4818], () => (__webpack_exec__(3153)));
 module.exports = __webpack_exports__;
 
 })();

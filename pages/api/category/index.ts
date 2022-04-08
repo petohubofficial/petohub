@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connect from "utils/connectDb";
-import Category from "models/Category";
+import Category from "models/Category.model";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET")
@@ -18,8 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const categories = await Category.find().populate("docs");
     return res.status(200).json({ success: true, categories });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

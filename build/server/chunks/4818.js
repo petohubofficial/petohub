@@ -1,9 +1,9 @@
 "use strict";
-exports.id = 9297;
-exports.ids = [9297];
+exports.id = 4818;
+exports.ids = [4818];
 exports.modules = {
 
-/***/ 9297:
+/***/ 4818:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -91,22 +91,6 @@ const DirectorySchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sch
         maxlength: [
             16,
             "State name is too long"
-        ]
-    },
-    city: {
-        type: String,
-        required: [
-            true,
-            "Please provide a city"
-        ],
-        trim: true,
-        minlength: [
-            2,
-            "City name is too short"
-        ],
-        maxlength: [
-            16,
-            "City name is too long"
         ]
     },
     pincode: {

@@ -1,8 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import User from "models/User";
-import Directory from "models/Directory";
+import User from "models/User.model";
+import Directory from "models/Directory.model";
 import sendEmail from "utils/sendEmail";
 import connect from "utils/connectDb";
+import errorHandler from "utils/errorHandler";
+import { Role } from "types/user";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
@@ -23,7 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Handling client registeration
     let user;
-    if (req.body.role === "Client") {
+    if (req.body.role === Role.CLIENT) {
       // Creating new directory profile
       const directory = await Directory.create({
         email,
@@ -31,7 +33,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         storeName: req.body?.storeName,
         category: req.body?.category,
         address: req.body?.address,
-        city: req.body?.city,
         state: req.body?.state,
         pincode: req.body?.pincode,
       });
@@ -73,8 +74,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(500).json({ success: false, error: "Email sending failed" });
     }
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

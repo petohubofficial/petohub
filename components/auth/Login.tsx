@@ -1,4 +1,4 @@
-import { ArrowBack, Visibility, VisibilityOff } from "@mui/icons-material";
+import { ArrowBack, Handshake, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -109,6 +109,19 @@ const Login = () => {
                     ),
                   }}
                 />
+                <Typography variant="body2" textAlign="right" color="text.secondary" sx={{ pt: 1 }}>
+                  <Link href="/forgotpassword" passHref>
+                    <Typography
+                      component="a"
+                      fontWeight="bold"
+                      fontSize={14}
+                      color="primary.main"
+                      sx={{ ml: 1 }}
+                    >
+                      Forgot password?
+                    </Typography>
+                  </Link>
+                </Typography>
               </Box>
               <Button
                 sx={{ mt: 3 }}
@@ -135,21 +148,18 @@ const Login = () => {
                   </Typography>
                 </Link>
               </Typography>
-              <Divider sx={{ my: 2 }} />
-              <Typography variant="body2" textAlign="center" color="text.secondary">
-                Forgot your password?
-                <Link href="/forgotpassword" passHref>
-                  <Typography
-                    component="a"
-                    fontWeight="bold"
-                    fontSize={14}
-                    color="primary.main"
-                    sx={{ ml: 1 }}
-                  >
-                    Reset it
-                  </Typography>
-                </Link>
+            </Box>
+            <Divider sx={{ my: 3 }} />
+            <Box display="flex" alignItems="center" flexDirection="column" justifyContent="center">
+              <Typography variant="h5" textAlign="center">
+                Want to sell at Petohub?
               </Typography>
+              <Typography variant="body2" textAlign="center" color="text.secondary">
+                Become a member by clicking here
+              </Typography>
+              <Button startIcon={<Handshake />} onClick={() => router.push("/member")}>
+                Register as member
+              </Button>
             </Box>
           </Box>
         </Container>

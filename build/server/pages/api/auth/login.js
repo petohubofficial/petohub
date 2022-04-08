@@ -54,15 +54,39 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ 9539:
+/***/ 1203:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var models_User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3299);
-/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4035);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (/* binding */ login)
+});
+
+// EXTERNAL MODULE: ./models/User.model.ts
+var User_model = __webpack_require__(881);
+// EXTERNAL MODULE: ./utils/connectDb.ts
+var connectDb = __webpack_require__(4035);
+;// CONCATENATED MODULE: external "cookie"
+const external_cookie_namespaceObject = require("cookie");
+;// CONCATENATED MODULE: ./utils/setCookie.ts
+
+const setCookie = (res, name, value, options = {})=>{
+    const stringValue = typeof value === "object" ? "j:" + JSON.stringify(value) : String(value);
+    if (options.maxAge) {
+        options.expires = new Date(Date.now() + options.maxAge);
+        options.maxAge /= 1000;
+    }
+    res.setHeader("Set-Cookie", (0,external_cookie_namespaceObject.serialize)(name, stringValue, options));
+};
+
+// EXTERNAL MODULE: ./utils/errorHandler.ts
+var errorHandler = __webpack_require__(8738);
+;// CONCATENATED MODULE: ./pages/api/auth/login.ts
+
+
 
 
 const handler = async (req, res)=>{
@@ -70,7 +94,7 @@ const handler = async (req, res)=>{
         success: false,
         error: "Method not allowed"
     });
-    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)();
+    await (0,connectDb/* default */.Z)();
     // Taking the credentials and verifying
     const { email , password  } = req.body;
     if (!email || !password) return res.status(400).json({
@@ -79,7 +103,7 @@ const handler = async (req, res)=>{
     });
     try {
         // Finding the user
-        const user = await models_User__WEBPACK_IMPORTED_MODULE_0__/* ["default"].findOne */ .Z.findOne({
+        const user = await User_model/* default.findOne */.Z.findOne({
             email
         }).select("+password");
         // Don't let people know whether a certain email exists
@@ -102,22 +126,18 @@ const handler = async (req, res)=>{
         const _user = user.toJSON();
         delete _user.password;
         // Success response
-        res.setHeader("Set-Cookie", [
-            `token=${user.generateAuthToken()}; httpOnly; path=/`
-        ]);
+        setCookie(res, "token", user.generateAuthToken(), {
+            maxAge: 2 * 24 * 60 * 60 * 1000
+        });
         return res.status(200).json({
             success: true,
             user: _user
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,errorHandler/* default */.Z)(error, res);
     }
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (handler);
+/* harmony default export */ const login = (handler);
 
 
 /***/ })
@@ -129,7 +149,7 @@ const handler = async (req, res)=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299], () => (__webpack_exec__(9539)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881], () => (__webpack_exec__(1203)));
 module.exports = __webpack_exports__;
 
 })();

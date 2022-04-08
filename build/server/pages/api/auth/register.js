@@ -61,10 +61,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var models_User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3299);
-/* harmony import */ var models_Directory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9297);
+/* harmony import */ var models_User_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(881);
+/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4818);
 /* harmony import */ var utils_sendEmail__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1453);
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4035);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8738);
+/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1957);
+
+
 
 
 
@@ -83,7 +87,7 @@ const handler = async (req, res)=>{
             error: "Please provide email, name and password"
         });
         // Checking if the user already exists
-        if (await models_User__WEBPACK_IMPORTED_MODULE_0__/* ["default"].findOne */ .Z.findOne({
+        if (await models_User_model__WEBPACK_IMPORTED_MODULE_0__/* ["default"].findOne */ .Z.findOne({
             email
         })) return res.status(400).json({
             success: false,
@@ -91,32 +95,31 @@ const handler = async (req, res)=>{
         });
         // Handling client registeration
         let user;
-        if (req.body.role === "Client") {
-            var ref, ref1, ref2, ref3, ref4, ref5, ref6, ref7;
+        if (req.body.role === types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CLIENT */ .u.CLIENT) {
+            var ref, ref1, ref2, ref3, ref4, ref5, ref6;
             // Creating new directory profile
-            const directory = await models_Directory__WEBPACK_IMPORTED_MODULE_1__/* ["default"].create */ .Z.create({
+            const directory = await models_Directory_model__WEBPACK_IMPORTED_MODULE_1__/* ["default"].create */ .Z.create({
                 email,
                 number: (ref = req.body) === null || ref === void 0 ? void 0 : ref.number,
                 storeName: (ref1 = req.body) === null || ref1 === void 0 ? void 0 : ref1.storeName,
                 category: (ref2 = req.body) === null || ref2 === void 0 ? void 0 : ref2.category,
                 address: (ref3 = req.body) === null || ref3 === void 0 ? void 0 : ref3.address,
-                city: (ref4 = req.body) === null || ref4 === void 0 ? void 0 : ref4.city,
-                state: (ref5 = req.body) === null || ref5 === void 0 ? void 0 : ref5.state,
-                pincode: (ref6 = req.body) === null || ref6 === void 0 ? void 0 : ref6.pincode
+                state: (ref4 = req.body) === null || ref4 === void 0 ? void 0 : ref4.state,
+                pincode: (ref5 = req.body) === null || ref5 === void 0 ? void 0 : ref5.pincode
             });
             // Creating new user profile along with directory id
-            user = await models_User__WEBPACK_IMPORTED_MODULE_0__/* ["default"].create */ .Z.create({
+            user = await models_User_model__WEBPACK_IMPORTED_MODULE_0__/* ["default"].create */ .Z.create({
                 name,
                 email,
                 password,
-                number: (ref7 = req.body) === null || ref7 === void 0 ? void 0 : ref7.number,
+                number: (ref6 = req.body) === null || ref6 === void 0 ? void 0 : ref6.number,
                 role: req.body.role,
                 directory: directory._id
             });
             // Adding user object ref to directory object
             directory.user = user._id;
             directory.save();
-        } else user = await models_User__WEBPACK_IMPORTED_MODULE_0__/* ["default"].create */ .Z.create({
+        } else user = await models_User_model__WEBPACK_IMPORTED_MODULE_0__/* ["default"].create */ .Z.create({
             name,
             email,
             password
@@ -149,11 +152,7 @@ const handler = async (req, res)=>{
             });
         }
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)(error, res);
     }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (handler);
@@ -207,7 +206,7 @@ const sendEmail = async (options)=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299,9297], () => (__webpack_exec__(1333)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,4818], () => (__webpack_exec__(1333)));
 module.exports = __webpack_exports__;
 
 })();

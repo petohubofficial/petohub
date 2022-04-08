@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connect from "utils/connectDb";
-import Brand from "models/Brand";
+import Brand from "models/Brand.model";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET")
@@ -18,8 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const brands = await Brand.find().populate("products").populate("sellers");
     return res.status(200).json({ success: true, brands });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

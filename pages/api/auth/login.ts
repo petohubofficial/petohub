@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import User from "models/User";
+import User from "models/User.model";
 import connect from "utils/connectDb";
+import { setCookie } from "utils/setCookie";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
@@ -34,11 +36,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     delete _user.password;
 
     // Success response
-    res.setHeader("Set-Cookie", [`token=${user.generateAuthToken()}; httpOnly; path=/`]);
+    setCookie(res, "token", user.generateAuthToken(), { maxAge: 2 * 24 * 60 * 60 * 1000 });
     return res.status(200).json({ success: true, user: _user });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

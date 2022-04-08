@@ -1,15 +1,15 @@
 "use strict";
-exports.id = 4547;
-exports.ids = [4547];
+exports.id = 2378;
+exports.ids = [2378];
 exports.modules = {
 
-/***/ 4547:
+/***/ 2378:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Z": () => (/* binding */ Review)
+  "Z": () => (/* binding */ Review_model)
 });
 
 // EXTERNAL MODULE: external "mongoose"
@@ -23,7 +23,7 @@ var RevieweeModel;
     RevieweeModel["SERVICE"] = "Service";
 })(RevieweeModel || (RevieweeModel = {}));
 
-;// CONCATENATED MODULE: ./models/Review.ts
+;// CONCATENATED MODULE: ./models/Review.model.ts
 
 
 const ReviewSchema = new (external_mongoose_default()).Schema({
@@ -103,7 +103,7 @@ ReviewSchema.virtual("reviewee", {
     foreignField: "_id",
     justOne: true
 });
-/* harmony default export */ const Review = ((external_mongoose_default()).models.Review || external_mongoose_default().model("Review", ReviewSchema));
+/* harmony default export */ const Review_model = ((external_mongoose_default()).models.Review || external_mongoose_default().model("Review", ReviewSchema));
 
 
 /***/ })

@@ -1,15 +1,15 @@
 "use strict";
-exports.id = 1440;
-exports.ids = [1440];
+exports.id = 1134;
+exports.ids = [1134];
 exports.modules = {
 
-/***/ 1440:
+/***/ 1134:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Z": () => (/* binding */ Category)
+  "Z": () => (/* binding */ Category_model)
 });
 
 // EXTERNAL MODULE: external "mongoose"
@@ -23,7 +23,7 @@ var CategoryType;
     CategoryType["SERVICE"] = "Service";
 })(CategoryType || (CategoryType = {}));
 
-;// CONCATENATED MODULE: ./models/Category.ts
+;// CONCATENATED MODULE: ./models/Category.model.ts
 
 
 const CategorySchema = new (external_mongoose_default()).Schema({
@@ -77,7 +77,7 @@ CategorySchema.virtual("docs", {
     localField: "name",
     foreignField: "category"
 });
-/* harmony default export */ const Category = ((external_mongoose_default()).models.Category || external_mongoose_default().model("Category", CategorySchema));
+/* harmony default export */ const Category_model = ((external_mongoose_default()).models.Category || external_mongoose_default().model("Category", CategorySchema));
 
 
 /***/ })

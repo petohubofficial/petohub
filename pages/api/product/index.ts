@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Product from "models/Product";
+import Product from "models/Product.model";
 import connect from "utils/connectDb";
 import { PaginatedResponse } from "types/product";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET")
@@ -88,8 +89,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res.status(200).json({ success: true, data: results });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

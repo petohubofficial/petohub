@@ -62,8 +62,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9598);
-/* harmony import */ var models_Directory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9297);
+/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4818);
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4035);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8738);
+/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1957);
+
+
 
 
 
@@ -73,7 +77,7 @@ const handler = async (req, res)=>{
         error: "Method not allowed"
     });
     // Chceking if user is a client
-    if (req.user.role === "Client") return res.status(200).json({
+    if (req.user.role === types_user__WEBPACK_IMPORTED_MODULE_3__/* .Role.CLIENT */ .u.CLIENT) return res.status(200).json({
         success: true,
         user: req.user
     });
@@ -81,7 +85,7 @@ const handler = async (req, res)=>{
     try {
         var ref, ref1, ref2, ref3, ref4, ref5, ref6;
         // Handling directory creation and updating user object
-        const directory = await models_Directory__WEBPACK_IMPORTED_MODULE_1__/* ["default"].create */ .Z.create({
+        const directory = await models_Directory_model__WEBPACK_IMPORTED_MODULE_1__/* ["default"].create */ .Z.create({
             email: req.user.email,
             user: req.user._id,
             number: (ref = req.body) === null || ref === void 0 ? void 0 : ref.number,
@@ -94,19 +98,14 @@ const handler = async (req, res)=>{
         });
         // Updating user data and saving
         req.user.directory = directory._id;
-        req.user.role = "Client";
+        req.user.role = types_user__WEBPACK_IMPORTED_MODULE_3__/* .Role.CLIENT */ .u.CLIENT;
         await req.user.save();
         return res.status(200).json({
             success: true,
             user: req.user
         });
     } catch (error) {
-        // Handling errors
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)(error, res);
     }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler));
@@ -121,7 +120,7 @@ const handler = async (req, res)=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299,9598,9297], () => (__webpack_exec__(7163)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,4818], () => (__webpack_exec__(7163)));
 module.exports = __webpack_exports__;
 
 })();

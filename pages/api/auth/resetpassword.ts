@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import crypto from "crypto";
-import User from "models/User";
+import User from "models/User.model";
 import connect from "utils/connectDb";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
@@ -39,8 +40,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res.status(200).json({ success: true, data: "Password resetted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

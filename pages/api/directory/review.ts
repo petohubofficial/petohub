@@ -1,8 +1,9 @@
 import { NextApiResponse } from "next";
-import Directory from "models/Directory";
+import Directory from "models/Directory.model";
 import connect from "utils/connectDb";
 import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
-import Review from "models/Review";
+import Review from "models/Review.model";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST" && req.method !== "DELETE")
@@ -59,8 +60,7 @@ const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
       return res.status(200).json({ success: true, review });
     }
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

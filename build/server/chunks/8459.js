@@ -1,35 +1,35 @@
-exports.id = 4035;
-exports.ids = [4035];
+exports.id = 8459;
+exports.ids = [8459];
 exports.modules = {
 
 /***/ 6291:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var map = {
-	"./Brand": 5363,
-	"./Brand.ts": 5363,
-	"./Category": 3351,
-	"./Category.ts": 3351,
-	"./Directory": 8248,
-	"./Directory.ts": 8248,
-	"./Edit": 2921,
-	"./Edit.ts": 2921,
-	"./Inquiry": 5219,
-	"./Inquiry.ts": 5219,
-	"./Newsletter": 6603,
-	"./Newsletter.ts": 6603,
-	"./Pet": 8182,
-	"./Pet.ts": 8182,
-	"./Product": 527,
-	"./Product.ts": 527,
-	"./Question": 3138,
-	"./Question.ts": 3138,
-	"./Review": 7912,
-	"./Review.ts": 7912,
-	"./Service": 3606,
-	"./Service.ts": 3606,
-	"./User": 7371,
-	"./User.ts": 7371
+	"./Brand.model": 9549,
+	"./Brand.model.ts": 9549,
+	"./Category.model": 6925,
+	"./Category.model.ts": 6925,
+	"./Directory.model": 8356,
+	"./Directory.model.ts": 8356,
+	"./Edit.model": 4229,
+	"./Edit.model.ts": 4229,
+	"./Inquiry.model": 4834,
+	"./Inquiry.model.ts": 4834,
+	"./Newsletter.model": 7928,
+	"./Newsletter.model.ts": 7928,
+	"./Pet.model": 5227,
+	"./Pet.model.ts": 5227,
+	"./Product.model": 5412,
+	"./Product.model.ts": 5412,
+	"./Question.model": 2404,
+	"./Question.model.ts": 2404,
+	"./Review.model": 8985,
+	"./Review.model.ts": 8985,
+	"./Service.model": 6690,
+	"./Service.model.ts": 6690,
+	"./User.model": 7718,
+	"./User.model.ts": 7718
 };
 
 
@@ -54,7 +54,7 @@ webpackContext.id = 6291;
 
 /***/ }),
 
-/***/ 5363:
+/***/ 9549:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -115,7 +115,7 @@ BrandSchema.virtual("products", {
 
 /***/ }),
 
-/***/ 3351:
+/***/ 6925:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ Category)
+  "default": () => (/* binding */ Category_model)
 });
 
 // EXTERNAL MODULE: external "mongoose"
@@ -138,7 +138,7 @@ var CategoryType;
     CategoryType["SERVICE"] = "Service";
 })(CategoryType || (CategoryType = {}));
 
-;// CONCATENATED MODULE: ./models/Category.ts
+;// CONCATENATED MODULE: ./models/Category.model.ts
 
 
 const CategorySchema = new (external_mongoose_default()).Schema({
@@ -192,12 +192,12 @@ CategorySchema.virtual("docs", {
     localField: "name",
     foreignField: "category"
 });
-/* harmony default export */ const Category = ((external_mongoose_default()).models.Category || external_mongoose_default().model("Category", CategorySchema));
+/* harmony default export */ const Category_model = ((external_mongoose_default()).models.Category || external_mongoose_default().model("Category", CategorySchema));
 
 
 /***/ }),
 
-/***/ 8248:
+/***/ 8356:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -287,22 +287,6 @@ const DirectorySchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sch
         maxlength: [
             16,
             "State name is too long"
-        ]
-    },
-    city: {
-        type: String,
-        required: [
-            true,
-            "Please provide a city"
-        ],
-        trim: true,
-        minlength: [
-            2,
-            "City name is too short"
-        ],
-        maxlength: [
-            16,
-            "City name is too long"
         ]
     },
     pincode: {
@@ -610,7 +594,7 @@ DirectorySchema.virtual("averageRating").get(function() {
 
 /***/ }),
 
-/***/ 2921:
+/***/ 4229:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -640,7 +624,7 @@ const EditSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)(
 
 /***/ }),
 
-/***/ 5219:
+/***/ 4834:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -716,7 +700,7 @@ const InquirySchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
 
 /***/ }),
 
-/***/ 6603:
+/***/ 7928:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -767,7 +751,7 @@ const NewsletterSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sc
 
 /***/ }),
 
-/***/ 8182:
+/***/ 5227:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -819,7 +803,7 @@ PetSchema.virtual("categories", {
 
 /***/ }),
 
-/***/ 527:
+/***/ 5412:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1142,7 +1126,7 @@ ProductSchema.virtual("averageRating").get(function() {
 
 /***/ }),
 
-/***/ 3138:
+/***/ 2404:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1221,7 +1205,7 @@ const QuestionSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sche
 
 /***/ }),
 
-/***/ 7912:
+/***/ 8985:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1230,7 +1214,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ Review)
+  "default": () => (/* binding */ Review_model)
 });
 
 // EXTERNAL MODULE: external "mongoose"
@@ -1244,7 +1228,7 @@ var RevieweeModel;
     RevieweeModel["SERVICE"] = "Service";
 })(RevieweeModel || (RevieweeModel = {}));
 
-;// CONCATENATED MODULE: ./models/Review.ts
+;// CONCATENATED MODULE: ./models/Review.model.ts
 
 
 const ReviewSchema = new (external_mongoose_default()).Schema({
@@ -1324,12 +1308,12 @@ ReviewSchema.virtual("reviewee", {
     foreignField: "_id",
     justOne: true
 });
-/* harmony default export */ const Review = ((external_mongoose_default()).models.Review || external_mongoose_default().model("Review", ReviewSchema));
+/* harmony default export */ const Review_model = ((external_mongoose_default()).models.Review || external_mongoose_default().model("Review", ReviewSchema));
 
 
 /***/ }),
 
-/***/ 3606:
+/***/ 6690:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1567,7 +1551,7 @@ ServiceSchema.pre("remove", async function(next) {
 
 /***/ }),
 
-/***/ 7371:
+/***/ 7718:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1576,7 +1560,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ User)
+  "default": () => (/* binding */ User_model)
 });
 
 // EXTERNAL MODULE: external "mongoose"
@@ -1606,7 +1590,7 @@ var Role;
     Role["PRODUCT_ADMIN"] = "Product Admin";
 })(Role || (Role = {}));
 
-;// CONCATENATED MODULE: ./models/User.ts
+;// CONCATENATED MODULE: ./models/User.model.ts
 
 
 
@@ -1747,7 +1731,7 @@ UserSchema.methods.getResetToken = function() {
     this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
     return resetToken;
 };
-/* harmony default export */ const User = ((external_mongoose_default()).models.User || external_mongoose_default().model("User", UserSchema));
+/* harmony default export */ const User_model = ((external_mongoose_default()).models.User || external_mongoose_default().model("User", UserSchema));
 
 
 /***/ }),
@@ -1788,6 +1772,45 @@ async function connect() {
     cached.conn = await cached.promise;
     return cached.conn;
 };
+
+
+/***/ }),
+
+/***/ 8738:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function errorHandler(err, res) {
+    let error = {
+        ...err
+    };
+    error.message = err.message;
+    // Mongoose duplicate unique email/username error
+    if (err.code == 11000) {
+        return res.status(400).json({
+            success: false,
+            message: "Duplicate field value"
+        });
+    }
+    // Mongoose validation error for min, max, required fields
+    if (err.name == "ValidationError") {
+        const message = Object.values(err.errors).map((val)=>val.message
+        )[0];
+        return res.status(400).json({
+            success: false,
+            message
+        });
+    }
+    // Fallback to generic error
+    return res.status(error.statusCode || 500).json({
+        success: false,
+        error: (error === null || error === void 0 ? void 0 : error.message) || "Server Error"
+    });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (errorHandler);
 
 
 /***/ })

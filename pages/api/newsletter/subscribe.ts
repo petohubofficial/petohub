@@ -1,6 +1,7 @@
-import Newsletter from "models/Newsletter";
+import Newsletter from "models/Newsletter.model";
 import { NextApiRequest, NextApiResponse } from "next";
 import connect from "utils/connectDb";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
@@ -26,8 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     else return res.status(400).json({ success: false, error: "Email is already subscribed" });
     return res.status(200).json({ success: true, newsletter });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

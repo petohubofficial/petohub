@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connect from "utils/connectDb";
-import Directory from "models/Directory";
-import Product from "models/Product";
+import Directory from "models/Directory.model";
+import Product from "models/Product.model";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET")
@@ -34,8 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     return res.status(200).json({ success: true, directories });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 

@@ -61,9 +61,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var models_User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3299);
+/* harmony import */ var models_User_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(881);
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4035);
 /* harmony import */ var utils_sendEmail__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1453);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8738);
+
 
 
 
@@ -80,7 +82,7 @@ const handler = async (req, res)=>{
     });
     try {
         // Taking the credentials and verifying
-        const user = await models_User__WEBPACK_IMPORTED_MODULE_0__/* ["default"].findOne */ .Z.findOne({
+        const user = await models_User_model__WEBPACK_IMPORTED_MODULE_0__/* ["default"].findOne */ .Z.findOne({
             email: req.body.email
         });
         // Don't let people know whether a certain email exists or not
@@ -114,18 +116,13 @@ const handler = async (req, res)=>{
             user.resetPasswordToken = undefined;
             user.resetPasswordExpire = undefined;
             await user.save();
-            console.log(error);
             return res.status(400).json({
                 success: false,
                 error: "The email couldn't be sent"
             });
         }
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)(error, res);
     }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (handler);
@@ -179,7 +176,7 @@ const sendEmail = async (options)=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299], () => (__webpack_exec__(7636)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881], () => (__webpack_exec__(7636)));
 module.exports = __webpack_exports__;
 
 })();

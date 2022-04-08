@@ -91,10 +91,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2970);
 /* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9598);
-/* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6097);
-/* harmony import */ var models_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3299);
+/* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6097);
+/* harmony import */ var models_User_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(881);
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4035);
-/* harmony import */ var models_Directory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9297);
+/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4818);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8738);
+/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1957);
+
+
 
 
 
@@ -118,7 +122,7 @@ const handler = async (req, res)=>{
         if (req.method === "GET") {
             // Get user by ID
             if (req.query.id) {
-                const user = await models_User__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id);
+                const user = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id);
                 if (!user) return res.status(404).json({
                     success: false,
                     error: "User not found"
@@ -128,7 +132,7 @@ const handler = async (req, res)=>{
                     user
                 });
             } else {
-                const users = await models_User__WEBPACK_IMPORTED_MODULE_2__/* ["default"].find */ .Z.find().populate("directory");
+                const users = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].find */ .Z.find().populate("directory");
                 return res.status(200).json({
                     success: true,
                     users
@@ -143,7 +147,7 @@ const handler = async (req, res)=>{
                 error: "Please provide all fields"
             });
             // Checking if a user already exists with that email
-            if (await models_User__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findOne */ .Z.findOne({
+            if (await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findOne */ .Z.findOne({
                 email
             })) return res.status(400).json({
                 success: false,
@@ -151,10 +155,10 @@ const handler = async (req, res)=>{
             });
             // Handling client registration
             let user;
-            if (req.body.role === "Client") {
+            if (req.body.role === types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.CLIENT */ .u.CLIENT) {
                 var ref2, ref3, ref4, ref5, ref6, ref7, ref8, ref9;
                 // Creating new directory profile
-                const directory = await models_Directory__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
+                const directory = await models_Directory_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
                     email,
                     number: (ref2 = req.body) === null || ref2 === void 0 ? void 0 : ref2.number,
                     storeName: (ref3 = req.body) === null || ref3 === void 0 ? void 0 : ref3.storeName,
@@ -165,7 +169,7 @@ const handler = async (req, res)=>{
                     pincode: (ref8 = req.body) === null || ref8 === void 0 ? void 0 : ref8.pincode
                 });
                 // Creating new user profile along with directory id
-                user = await models_User__WEBPACK_IMPORTED_MODULE_2__/* ["default"].create */ .Z.create({
+                user = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].create */ .Z.create({
                     name,
                     email,
                     password,
@@ -176,7 +180,7 @@ const handler = async (req, res)=>{
                 // Adding user object ref to directory object
                 directory.user = user._id;
                 directory.save();
-            } else user = await models_User__WEBPACK_IMPORTED_MODULE_2__/* ["default"].create */ .Z.create({
+            } else user = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].create */ .Z.create({
                 name,
                 email,
                 password,
@@ -190,7 +194,7 @@ const handler = async (req, res)=>{
         } else if (req.method === "PUT") {
             var ref10;
             // Checking if the user exists
-            const user = await models_User__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id).populate("directory");
+            const user = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id).populate("directory");
             if (!user) return res.status(404).json({
                 success: false,
                 error: "User not found"
@@ -207,9 +211,9 @@ const handler = async (req, res)=>{
                     user.directory.user = null;
                     await user.directory.save();
                     user.directory = null;
-                    user.role = "Customer";
+                    user.role = types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.CUSTOMER */ .u.CUSTOMER;
                 } else {
-                    const directory = await models_Directory__WEBPACK_IMPORTED_MODULE_4__/* ["default"].findById */ .Z.findById(req.body.directory);
+                    const directory = await models_Directory_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].findById */ .Z.findById(req.body.directory);
                     if (!directory) return res.status(404).json({
                         success: false,
                         error: "Directory not found"
@@ -219,7 +223,7 @@ const handler = async (req, res)=>{
                         error: "Directory already assigned to another user"
                     });
                     user.directory = req.body.directory;
-                    user.role = "Client";
+                    user.role = types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.CLIENT */ .u.CLIENT;
                     directory.user = user._id;
                     await directory.save();
                 }
@@ -233,18 +237,14 @@ const handler = async (req, res)=>{
                 user
             });
         } else if (req.method === "DELETE") {
-            const user = await models_User__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findByIdAndDelete */ .Z.findByIdAndDelete(req.query.id);
+            const user = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findByIdAndDelete */ .Z.findByIdAndDelete(req.query.id);
             return res.status(200).json({
                 success: true,
                 user
             });
         }
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z)(error, res);
     }
 };
 const config = {
@@ -252,7 +252,7 @@ const config = {
         bodyParser: false
     }
 }; // Disallow body parsing, since we're using multer
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)("Admin")((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler))));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z)(types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.ADMIN */ .u.ADMIN, types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.PRODUCT_ADMIN */ .u.PRODUCT_ADMIN)((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler))));
 
 
 /***/ })
@@ -264,7 +264,7 @@ const config = {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035,3299,9598,9297,2970], () => (__webpack_exec__(706)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,4818,2970], () => (__webpack_exec__(706)));
 module.exports = __webpack_exports__;
 
 })();

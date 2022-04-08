@@ -31,7 +31,6 @@ export interface Directory extends mongoose.Document {
   address: string;
   category: string[] | Category[];
   state: string;
-  city: string;
   pincode: string;
   number: string;
   products: string[];

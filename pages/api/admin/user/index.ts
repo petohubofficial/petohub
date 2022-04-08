@@ -2,9 +2,11 @@ import { NextApiResponse } from "next";
 import withMulter, { MulterNextApiRequest } from "middlewares/withMulter";
 import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
 import withRoles from "middlewares/withRoles";
-import User from "models/User";
+import User from "models/User.model";
 import connect from "utils/connectDb";
-import Directory from "models/Directory";
+import Directory from "models/Directory.model";
+import errorHandler from "utils/errorHandler";
+import { Role } from "types/user";
 
 const handler = async (
   req: ProtectedNextApiRequest & MulterNextApiRequest,
@@ -44,7 +46,7 @@ const handler = async (
 
       // Handling client registration
       let user;
-      if (req.body.role === "Client") {
+      if (req.body.role === Role.CLIENT) {
         // Creating new directory profile
         const directory = await Directory.create({
           email,
@@ -100,7 +102,7 @@ const handler = async (
           user.directory.user = null;
           await user.directory.save();
           user.directory = null;
-          user.role = "Customer";
+          user.role = Role.CUSTOMER;
         }
         // Adding or updating directory of user
         else {
@@ -112,7 +114,7 @@ const handler = async (
               .status(400)
               .json({ success: false, error: "Directory already assigned to another user" });
           user.directory = req.body.directory;
-          user.role = "Client";
+          user.role = Role.CLIENT;
           directory.user = user._id;
           await directory.save();
         }
@@ -133,11 +135,10 @@ const handler = async (
       return res.status(200).json({ success: true, user });
     }
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 
 export const config = { api: { bodyParser: false } }; // Disallow body parsing, since we're using multer
 
-export default withProtect(withRoles("Admin")(withMulter(handler)));
+export default withProtect(withRoles(Role.ADMIN, Role.PRODUCT_ADMIN)(withMulter(handler)));

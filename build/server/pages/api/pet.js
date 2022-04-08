@@ -54,7 +54,7 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ 7826:
+/***/ 7408:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -112,7 +112,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4035);
-/* harmony import */ var models_Pet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7826);
+/* harmony import */ var models_Pet_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7408);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8738);
+
 
 
 const handler = async (req, res)=>{
@@ -124,7 +126,7 @@ const handler = async (req, res)=>{
     try {
         // Getting a single pet by id
         if (req.query.id) {
-            const pet = await models_Pet__WEBPACK_IMPORTED_MODULE_1__/* ["default"].findById */ .Z.findById(req.query.id).populate({
+            const pet = await models_Pet_model__WEBPACK_IMPORTED_MODULE_1__/* ["default"].findById */ .Z.findById(req.query.id).populate({
                 path: "categories",
                 populate: {
                     path: "docs"
@@ -140,7 +142,7 @@ const handler = async (req, res)=>{
             });
         }
         // Getting all pets
-        const pets = await models_Pet__WEBPACK_IMPORTED_MODULE_1__/* ["default"].find */ .Z.find().populate({
+        const pets = await models_Pet_model__WEBPACK_IMPORTED_MODULE_1__/* ["default"].find */ .Z.find().populate({
             path: "categories",
             populate: {
                 path: "docs"
@@ -151,11 +153,7 @@ const handler = async (req, res)=>{
             pets
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)(error, res);
     }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (handler);
@@ -170,7 +168,7 @@ const handler = async (req, res)=>{
 var __webpack_require__ = require("../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035], () => (__webpack_exec__(5824)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459], () => (__webpack_exec__(5824)));
 module.exports = __webpack_exports__;
 
 })();

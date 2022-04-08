@@ -16,6 +16,18 @@ export interface RegisterRequest {
   password: string;
 }
 
+export interface MemberRegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  address: string;
+  state: string;
+  pincode: string;
+  number: string;
+  category: string[];
+  role: "Client";
+}
+
 export interface RegisterResponse extends Response {
   data?: string;
 }

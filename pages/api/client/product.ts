@@ -3,8 +3,10 @@ import withMulter, { MulterNextApiRequest } from "middlewares/withMulter";
 import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
 import withRoles from "middlewares/withRoles";
 import connect from "utils/connectDb";
-import Product from "models/Product";
-import Edit from "models/Edit";
+import Product from "models/Product.model";
+import Edit from "models/Edit.model";
+import errorHandler from "utils/errorHandler";
+import { Role } from "types/user";
 
 const handler = async (
   req: ProtectedNextApiRequest & MulterNextApiRequest,
@@ -149,11 +151,10 @@ const handler = async (
       return res.status(200).json({ success: true, product });
     }
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 
 export const config = { api: { bodyParser: false } }; // Disallow body parsing, since we're using multer
 
-export default withProtect(withRoles("Client")(withMulter(handler)));
+export default withProtect(withRoles(Role.CLIENT)(withMulter(handler)));

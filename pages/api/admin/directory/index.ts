@@ -3,8 +3,10 @@ import withMulter, { MulterNextApiRequest } from "middlewares/withMulter";
 import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
 import withRoles from "middlewares/withRoles";
 import connect from "utils/connectDb";
-import Directory from "models/Directory";
-import User from "models/User";
+import Directory from "models/Directory.model";
+import User from "models/User.model";
+import errorHandler from "utils/errorHandler";
+import { Role } from "types/user";
 
 const handler = async (
   req: ProtectedNextApiRequest & MulterNextApiRequest,
@@ -60,7 +62,7 @@ const handler = async (
       if (link) {
         directory.user = req.body.user;
         user.directory = directory._id;
-        if (user.role === "Customer") user.role = "Client";
+        if (user.role === Role.CUSTOMER) user.role = Role.CLIENT;
         await directory.save();
         await user.save();
         directory.user = user;
@@ -80,7 +82,7 @@ const handler = async (
         if (req.body.user === "") {
           if (directory.user !== null) {
             directory.user.directory = null;
-            directory.user.role = "Customer";
+            directory.user.role = Role.CUSTOMER;
             await directory.user.save();
             directory.user = null;
           }
@@ -92,7 +94,7 @@ const handler = async (
           if (user.directory)
             return res.status(400).json({ success: false, error: "User is already a client" });
           user.directory = directory._id;
-          user.role = "Client";
+          user.role = Role.CLIENT;
           await user.save();
           directory.user = user._id;
         }
@@ -196,7 +198,7 @@ const handler = async (
       // Removing directory reference from the linked user
       if (directory.user?.directory) {
         delete directory.user.directory;
-        directory.user.role = "Customer";
+        directory.user.role = Role.CUSTOMER;
         await directory.user.save();
       }
 
@@ -205,11 +207,10 @@ const handler = async (
       return res.status(200).json({ success: true, directory });
     }
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 
 export const config = { api: { bodyParser: false } }; // Disallow body parsing, since we're using multer
 
-export default withProtect(withRoles("Admin", "Product Admin")(withMulter(handler)));
+export default withProtect(withRoles(Role.ADMIN, Role.PRODUCT_ADMIN)(handler));

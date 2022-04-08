@@ -54,7 +54,7 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ 552:
+/***/ 5696:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -110,8 +110,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var models_Newsletter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(552);
+/* harmony import */ var models_Newsletter_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5696);
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4035);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8738);
+
 
 
 const handler = async (req, res)=>{
@@ -126,7 +128,7 @@ const handler = async (req, res)=>{
     await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)();
     try {
         // Check if the email is not already subscribed
-        const newsletter = await models_Newsletter__WEBPACK_IMPORTED_MODULE_0__/* ["default"].findOne */ .Z.findOne({
+        const newsletter = await models_Newsletter_model__WEBPACK_IMPORTED_MODULE_0__/* ["default"].findOne */ .Z.findOne({
             email: req.body.email
         });
         if (!newsletter) return res.status(404).json({
@@ -147,11 +149,7 @@ const handler = async (req, res)=>{
             newsletter
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            error: "Server error"
-        });
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)(error, res);
     }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (handler);
@@ -166,7 +164,7 @@ const handler = async (req, res)=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [4035], () => (__webpack_exec__(5371)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459], () => (__webpack_exec__(5371)));
 module.exports = __webpack_exports__;
 
 })();

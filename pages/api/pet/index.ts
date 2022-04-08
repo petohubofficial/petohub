@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connect from "utils/connectDb";
-import Pet from "models/Pet";
+import Pet from "models/Pet.model";
+import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET")
@@ -21,8 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const pets = await Pet.find().populate({ path: "categories", populate: { path: "docs" } });
     return res.status(200).json({ success: true, pets });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, error: "Server error" });
+    errorHandler(error, res);
   }
 };
 
