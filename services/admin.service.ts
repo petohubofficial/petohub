@@ -3,7 +3,7 @@ import type { GetProductsFilters, GetProductsResponse } from "types/product";
 
 export const admin = createApi({
   reducerPath: "admin",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/admin" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/admin", credentials: "include" }),
   endpoints: (builder) => ({
     getProducts: builder.query<GetProductsResponse, GetProductsFilters>({
       query: (filters) => {
@@ -18,10 +18,7 @@ export const admin = createApi({
         if (brand) params.push(`brand=${brand}`);
         if (min) params.push(`min=${min}`);
         if (max) params.push(`max=${max}`);
-        return {
-          url: `/products?${params.join("&")}`,
-          credentials: "include",
-        };
+        return `/products?${params.join("&")}`;
       },
     }),
   }),

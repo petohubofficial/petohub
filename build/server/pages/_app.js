@@ -865,8 +865,6 @@ const SplashScreen = ()=>/*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
         children: /*#__PURE__*/ jsx_runtime_.jsx(Logo/* Logo */.T, {
             isDark: true,
             sx: {
-                height: 80,
-                width: 80,
                 "& path:nth-child(1)": {
                     animation: `${bounce1} 1s ease-in-out infinite`
                 },

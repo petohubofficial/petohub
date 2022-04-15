@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import User from "models/User.model";
 import connect from "utils/connectDb";
-import { setCookie } from "utils/setCookie";
+import setCookie from "utils/setCookie";
 import errorHandler from "utils/errorHandler";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

@@ -506,6 +506,10 @@ const Header = ()=>{
     const handleProfileMenuClose = ()=>{
         setAnchorElProfile(null);
     };
+    const handleProfileMenuClick = (link)=>{
+        setAnchorElProfile(null);
+        router.push(link);
+    };
     // Categories Select Menu
     const { 0: anchorEl , 1: setAnchorEl  } = (0,external_react_.useState)(null);
     const { 0: category1 , 1: setCategory  } = (0,external_react_.useState)("All categories");
@@ -715,7 +719,8 @@ const Header = ()=>{
                                             }
                                         }),
                                         /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
-                                            onClick: handleProfileMenuClose,
+                                            onClick: ()=>handleProfileMenuClick("/")
+                                            ,
                                             children: [
                                                 /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.SettingsOutlined, {
                                                     color: "action",
@@ -730,7 +735,24 @@ const Header = ()=>{
                                             ]
                                         }),
                                         /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
-                                            onClick: handleProfileMenuClose,
+                                            onClick: ()=>handleProfileMenuClick("/dashboard")
+                                            ,
+                                            children: [
+                                                /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.DashboardOutlined, {
+                                                    color: "action",
+                                                    sx: {
+                                                        mr: 0.5
+                                                    }
+                                                }),
+                                                /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                                    color: "text.secondary",
+                                                    children: "Dashboard"
+                                                })
+                                            ]
+                                        }),
+                                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
+                                            onClick: ()=>handleProfileMenuClick("/")
+                                            ,
                                             children: [
                                                 /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.FavoriteBorderOutlined, {
                                                     color: "action",

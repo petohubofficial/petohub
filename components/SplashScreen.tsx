@@ -47,8 +47,6 @@ export const SplashScreen: FC = () => (
     <Logo
       isDark
       sx={{
-        height: 80,
-        width: 80,
         "& path:nth-child(1)": {
           animation: `${bounce1} 1s ease-in-out infinite`,
         },

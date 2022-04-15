@@ -2,13 +2,15 @@ import { useAuth } from "hooks/auth";
 import { useRouter } from "next/router";
 import type { FC, ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { Role } from "types/user";
 
 interface AuthGuardProps {
   children: ReactNode;
+  role?: Role;
 }
 
 export const AuthGuard: FC<AuthGuardProps> = (props) => {
-  const { children } = props;
+  const { children, role } = props;
   const auth = useAuth();
   const router = useRouter();
   const [checked, setChecked] = useState(false);
@@ -16,7 +18,8 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
   useEffect(
     () => {
       if (!router.isReady) return;
-      if (!auth.isAuthenticated) router.push("/login");
+      if (!role && !auth.isAuthenticated) router.push("/login");
+      else if (role && auth.isAuthenticated && auth?.user?.role !== role) router.push("/");
       else setChecked(true);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

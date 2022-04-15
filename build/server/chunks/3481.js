@@ -16,7 +16,8 @@ exports.modules = {
 const admin = (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.createApi)({
     reducerPath: "admin",
     baseQuery: (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.fetchBaseQuery)({
-        baseUrl: "/api/admin"
+        baseUrl: "/api/admin",
+        credentials: "include"
     }),
     endpoints: (builder)=>({
             getProducts: builder.query({
@@ -32,10 +33,7 @@ const admin = (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.creat
                     if (brand) params.push(`brand=${brand}`);
                     if (min) params.push(`min=${min}`);
                     if (max) params.push(`max=${max}`);
-                    return {
-                        url: `/products?${params.join("&")}`,
-                        credentials: "include"
-                    };
+                    return `/products?${params.join("&")}`;
                 }
             })
         })

@@ -73,7 +73,7 @@ var connectDb = __webpack_require__(4035);
 const external_cookie_namespaceObject = require("cookie");
 ;// CONCATENATED MODULE: ./utils/setCookie.ts
 
-const setCookie = (res, name, value, options = {})=>{
+function setCookie(res, name, value, options = {}) {
     const stringValue = typeof value === "object" ? "j:" + JSON.stringify(value) : String(value);
     if (options.maxAge) {
         options.expires = new Date(Date.now() + options.maxAge);

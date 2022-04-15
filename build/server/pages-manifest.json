@@ -35,6 +35,7 @@
   "/api/user/updatepassword": "pages/api/user/updatepassword.js",
   "/api/user/updateprofile": "pages/api/user/updateprofile.js",
   "/contact": "pages/contact.html",
+  "/dashboard": "pages/dashboard.html",
   "/forgotpassword": "pages/forgotpassword.html",
   "/": "pages/index.html",
   "/login": "pages/login.html",

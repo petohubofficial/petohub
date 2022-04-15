@@ -1,4 +1,5 @@
 import {
+  DashboardOutlined,
   Facebook,
   FavoriteBorder,
   FavoriteBorderOutlined,
@@ -168,6 +169,11 @@ export const Header: FC = () => {
     setAnchorElProfile(null);
   };
 
+  const handleProfileMenuClick = (link: string) => {
+    setAnchorElProfile(null);
+    router.push(link);
+  };
+
   // Categories Select Menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [category, setCategory] = useState<string>("All categories");
@@ -306,11 +312,15 @@ export const Header: FC = () => {
                 </Box>
               </Box>
               <Divider sx={{ mb: 1 }} />
-              <MenuItem onClick={handleProfileMenuClose}>
+              <MenuItem onClick={() => handleProfileMenuClick("/")}>
                 <SettingsOutlined color="action" sx={{ mr: 0.5 }} />
                 <Typography color="text.secondary">Settings</Typography>
               </MenuItem>
-              <MenuItem onClick={handleProfileMenuClose}>
+              <MenuItem onClick={() => handleProfileMenuClick("/dashboard")}>
+                <DashboardOutlined color="action" sx={{ mr: 0.5 }} />
+                <Typography color="text.secondary">Dashboard</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleProfileMenuClick("/")}>
                 <FavoriteBorderOutlined color="action" sx={{ mr: 0.5 }} />
                 <Typography color="text.secondary">Favorites</Typography>
               </MenuItem>
