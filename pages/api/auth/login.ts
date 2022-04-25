@@ -4,6 +4,9 @@ import connect from "utils/connectDb";
 import setCookie from "utils/setCookie";
 import errorHandler from "utils/errorHandler";
 
+const JWT_EXPIRE = process.env.JWT_EXPIRE as string;
+const NODE_ENV = process.env.NODE_ENV as string;
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
     return res.status(405).json({ success: false, error: "Method not allowed" });
@@ -35,8 +38,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const _user = user.toJSON();
     delete _user.password;
 
+    // Setting the Access Token in the cookie
+    setCookie(res, "at", user.generateAuthToken(), {
+      httpOnly: true,
+      path: "/",
+      sameSite: "strict",
+      secure: NODE_ENV === "production",
+      maxAge: parseInt(JWT_EXPIRE) * 1000,
+    });
     // Success response
-    setCookie(res, "token", user.generateAuthToken(), { maxAge: 2 * 24 * 60 * 60 * 1000 });
     return res.status(200).json({ success: true, user: _user });
   } catch (error) {
     errorHandler(error, res);

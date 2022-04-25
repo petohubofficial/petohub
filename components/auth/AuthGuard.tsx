@@ -18,7 +18,13 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
   useEffect(
     () => {
       if (!router.isReady) return;
-      if (!role && !auth.isAuthenticated) router.push("/login");
+      if (!auth.isAuthenticated)
+        router.push({
+          pathname: "/login",
+          query: {
+            redirect: router.pathname,
+          },
+        });
       else if (role && auth.isAuthenticated && auth?.user?.role !== role) router.push("/");
       else setChecked(true);
     },

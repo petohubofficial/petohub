@@ -280,7 +280,10 @@ var router_ = __webpack_require__(1853);
 var external_react_ = __webpack_require__(6689);
 // EXTERNAL MODULE: ./services/api.service.ts
 var api_service = __webpack_require__(9850);
+// EXTERNAL MODULE: ./types/user.ts
+var types_user = __webpack_require__(1674);
 ;// CONCATENATED MODULE: ./components/Header.tsx
+
 
 
 
@@ -454,6 +457,7 @@ const HeaderNavLink = ({ href , text , ...other })=>{
     }));
 };
 const HeaderNav = ()=>{
+    const { user  } = (0,auth/* useAuth */.a)();
     return(/*#__PURE__*/ jsx_runtime_.jsx(material_.Container, {
         maxWidth: "lg",
         children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Box, {
@@ -486,13 +490,21 @@ const HeaderNav = ()=>{
                 /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
                     href: "/contact",
                     text: "Contact"
+                }),
+                (user === null || user === void 0 ? void 0 : user.role) === types_user/* Role.ADMIN */.u.ADMIN && /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
+                    href: "/admin",
+                    text: "Admin"
+                }),
+                (user === null || user === void 0 ? void 0 : user.role) === types_user/* Role.CLIENT */.u.CLIENT && /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
+                    href: "/dashboard",
+                    text: "Dashboard"
                 })
             ]
         })
     }));
 };
 const Header = ()=>{
-    var ref;
+    var ref, ref1;
     const { settings , saveSettings  } = (0,hooks_settings/* useSettings */.r)();
     const { isAuthenticated , logout , user  } = (0,auth/* useAuth */.a)();
     const { data  } = (0,api_service/* useGetCategoriesQuery */.NL)();
@@ -696,6 +708,9 @@ const Header = ()=>{
                                             gap: 2,
                                             children: [
                                                 /*#__PURE__*/ jsx_runtime_.jsx(material_.Avatar, {
+                                                    sx: {
+                                                        bgcolor: "transparent"
+                                                    },
                                                     alt: "Profile",
                                                     src: user === null || user === void 0 ? void 0 : user.profileImage
                                                 }),
@@ -708,6 +723,20 @@ const Header = ()=>{
                                                         /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
                                                             color: "text.secondary",
                                                             children: user === null || user === void 0 ? void 0 : user.email
+                                                        }),
+                                                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.Typography, {
+                                                            component: "span",
+                                                            color: "text.secondary",
+                                                            children: [
+                                                                "Account Type:",
+                                                                " "
+                                                            ]
+                                                        }),
+                                                        /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
+                                                            component: "span",
+                                                            color: "primary.main",
+                                                            fontWeight: 600,
+                                                            children: user === null || user === void 0 ? void 0 : (ref1 = user.role) === null || ref1 === void 0 ? void 0 : ref1.toLocaleUpperCase()
                                                         })
                                                     ]
                                                 })
@@ -734,7 +763,7 @@ const Header = ()=>{
                                                 })
                                             ]
                                         }),
-                                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
+                                        (user === null || user === void 0 ? void 0 : user.role) !== types_user/* Role.CUSTOMER */.u.CUSTOMER && /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
                                             onClick: ()=>handleProfileMenuClick("/dashboard")
                                             ,
                                             children: [
@@ -836,6 +865,23 @@ const Layout = ({ children  })=>{
 
 const useAuth = ()=>(0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(contexts_auth__WEBPACK_IMPORTED_MODULE_1__/* .AuthContext */ .Vo)
 ;
+
+
+/***/ }),
+
+/***/ 1674:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "u": () => (/* binding */ Role)
+/* harmony export */ });
+var Role;
+(function(Role) {
+    Role["ADMIN"] = "Admin";
+    Role["CUSTOMER"] = "Customer";
+    Role["CLIENT"] = "Client";
+    Role["PRODUCT_ADMIN"] = "Product Admin";
+})(Role || (Role = {}));
 
 
 /***/ })

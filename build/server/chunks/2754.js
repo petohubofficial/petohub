@@ -38,13 +38,22 @@ class AuthService {
             return error.response.data;
         }
     }
+    async logout() {
+        try {
+            await external_axios_default().post("/api/auth/logout");
+        } catch (error) {
+            var ref, ref2;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref2 = ref.data) === null || ref2 === void 0 ? void 0 : ref2.error) || "Error");
+            return error.response.data;
+        }
+    }
     async register(request) {
         try {
             const { data  } = await external_axios_default().post("/api/auth/register", request);
             return data;
         } catch (error) {
-            var ref, ref2;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref2 = ref.data) === null || ref2 === void 0 ? void 0 : ref2.error) || "Error");
+            var ref, ref3;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref3 = ref.data) === null || ref3 === void 0 ? void 0 : ref3.error) || "Error");
             return error.response.data;
         }
     }
@@ -55,8 +64,8 @@ class AuthService {
             });
             return data;
         } catch (error) {
-            var ref, ref3;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref3 = ref.data) === null || ref3 === void 0 ? void 0 : ref3.error) || "Error");
+            var ref, ref4;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref4 = ref.data) === null || ref4 === void 0 ? void 0 : ref4.error) || "Error");
             return error.response.data;
         }
     }
@@ -65,8 +74,8 @@ class AuthService {
             const { data  } = await external_axios_default().get(`/api/auth/verify?token=${token}`);
             return data;
         } catch (error) {
-            var ref, ref4;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref4 = ref.data) === null || ref4 === void 0 ? void 0 : ref4.error) || "Error");
+            var ref, ref5;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref5 = ref.data) === null || ref5 === void 0 ? void 0 : ref5.error) || "Error");
             return error.response.data;
         }
     }
@@ -75,8 +84,8 @@ class AuthService {
             const { data  } = await external_axios_default().post("/api/auth/forgotpassword", request);
             return data;
         } catch (error) {
-            var ref, ref5;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref5 = ref.data) === null || ref5 === void 0 ? void 0 : ref5.error) || "Error");
+            var ref, ref6;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref6 = ref.data) === null || ref6 === void 0 ? void 0 : ref6.error) || "Error");
             return error.response.data;
         }
     }
@@ -85,8 +94,8 @@ class AuthService {
             const { data  } = await external_axios_default().post(`/api/auth/resetpassword?token=${token}`, request);
             return data;
         } catch (error) {
-            var ref, ref6;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref6 = ref.data) === null || ref6 === void 0 ? void 0 : ref6.error) || "Error");
+            var ref, ref7;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref7 = ref.data) === null || ref7 === void 0 ? void 0 : ref7.error) || "Error");
             return error.response.data;
         }
     }
@@ -220,6 +229,7 @@ const AuthProvider = (props)=>{
         return loginResponse;
     };
     const logout = async ()=>{
+        await auth.logout();
         dispatch({
             type: ActionType.LOGOUT
         });

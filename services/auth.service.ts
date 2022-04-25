@@ -24,6 +24,15 @@ class AuthService {
     }
   }
 
+  async logout(): Promise<void> {
+    try {
+      await axios.post("/api/auth/logout");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error || "Error");
+      return error.response.data;
+    }
+  }
+
   async register(request: RegisterRequest): Promise<RegisterResponse> {
     try {
       const { data } = await axios.post("/api/auth/register", request);

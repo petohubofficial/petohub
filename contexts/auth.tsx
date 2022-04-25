@@ -212,6 +212,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
 
   const logout = async (): Promise<void> => {
+    await auth.logout();
     dispatch({ type: ActionType.LOGOUT });
     toast.success("Logged out successfully");
   };

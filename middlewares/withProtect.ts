@@ -15,7 +15,7 @@ const withProtect =
     let token;
     if (req.headers.cookie) {
       const cookies = req.headers.cookie.split(";");
-      const cookie = cookies.find((c) => c.trim().startsWith("token="));
+      const cookie = cookies.find((c) => c.trim().startsWith("at="));
       if (cookie) token = cookie.split("=")[1];
     }
     if (!token) return res.status(401).json({ success: false, error: "Unauthorized" });

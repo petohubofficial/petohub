@@ -21,7 +21,7 @@ const withProtect = (handler)=>async (req, res)=>{
         let token;
         if (req.headers.cookie) {
             const cookies = req.headers.cookie.split(";");
-            const cookie = cookies.find((c)=>c.trim().startsWith("token=")
+            const cookie = cookies.find((c)=>c.trim().startsWith("at=")
             );
             if (cookie) token = cookie.split("=")[1];
         }

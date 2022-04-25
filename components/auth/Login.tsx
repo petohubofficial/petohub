@@ -36,7 +36,7 @@ const Login = () => {
       setSubmitting(true);
       login(values).then((res) => {
         setSubmitting(false);
-        if (res.success) router.push("/");
+        if (res.success) router.push((router.query.redirect as string) || "/");
       });
     },
   });

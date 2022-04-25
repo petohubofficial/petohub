@@ -14,6 +14,7 @@
   "/api/admin/user": "pages/api/admin/user.js",
   "/api/auth/forgotpassword": "pages/api/auth/forgotpassword.js",
   "/api/auth/login": "pages/api/auth/login.js",
+  "/api/auth/logout": "pages/api/auth/logout.js",
   "/api/auth/register": "pages/api/auth/register.js",
   "/api/auth/resetpassword": "pages/api/auth/resetpassword.js",
   "/api/auth/verify": "pages/api/auth/verify.js",

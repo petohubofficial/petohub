@@ -38,6 +38,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { useGetCategoriesQuery } from "services/api.service";
+import { Role } from "types/user";
 
 const HeaderBar = () => {
   return (
@@ -133,6 +134,7 @@ const HeaderNavLink = ({ href, text, ...other }: HeaderNavLinkProps) => {
 };
 
 const HeaderNav = () => {
+  const { user } = useAuth();
   return (
     <Container maxWidth="lg">
       <Box
@@ -146,6 +148,8 @@ const HeaderNav = () => {
         <HeaderNavLink href="/shop" text="Shop" />
         <HeaderNavLink href="/about" text="About Us" />
         <HeaderNavLink href="/contact" text="Contact" />
+        {user?.role === Role.ADMIN && <HeaderNavLink href="/admin" text="Admin" />}
+        {user?.role === Role.CLIENT && <HeaderNavLink href="/dashboard" text="Dashboard" />}
       </Box>
     </Container>
   );
@@ -305,10 +309,16 @@ export const Header: FC = () => {
               }}
             >
               <Box sx={{ px: 3, py: 2 }} display="flex" alignItems="center" gap={2}>
-                <Avatar alt="Profile" src={user?.profileImage} />
+                <Avatar sx={{ bgcolor: "transparent" }} alt="Profile" src={user?.profileImage} />
                 <Box>
                   <Typography variant="h6">{user?.name}</Typography>
                   <Typography color="text.secondary">{user?.email}</Typography>
+                  <Typography component="span" color="text.secondary">
+                    Account Type:{" "}
+                  </Typography>
+                  <Typography component="span" color="primary.main" fontWeight={600}>
+                    {user?.role?.toLocaleUpperCase()}
+                  </Typography>
                 </Box>
               </Box>
               <Divider sx={{ mb: 1 }} />
@@ -316,10 +326,12 @@ export const Header: FC = () => {
                 <SettingsOutlined color="action" sx={{ mr: 0.5 }} />
                 <Typography color="text.secondary">Settings</Typography>
               </MenuItem>
-              <MenuItem onClick={() => handleProfileMenuClick("/dashboard")}>
-                <DashboardOutlined color="action" sx={{ mr: 0.5 }} />
-                <Typography color="text.secondary">Dashboard</Typography>
-              </MenuItem>
+              {user?.role !== Role.CUSTOMER && (
+                <MenuItem onClick={() => handleProfileMenuClick("/dashboard")}>
+                  <DashboardOutlined color="action" sx={{ mr: 0.5 }} />
+                  <Typography color="text.secondary">Dashboard</Typography>
+                </MenuItem>
+              )}
               <MenuItem onClick={() => handleProfileMenuClick("/")}>
                 <FavoriteBorderOutlined color="action" sx={{ mr: 0.5 }} />
                 <Typography color="text.secondary">Favorites</Typography>
