@@ -71,12 +71,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2970);
 /* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9598);
-/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4818);
-/* harmony import */ var models_User_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(881);
-/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1957);
-/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4035);
-/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8738);
-
+/* harmony import */ var models_User_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(881);
+/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1957);
+/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4035);
+/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8738);
 
 
 
@@ -84,15 +82,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const handler = async (req, res)=>{
-    if (req.method !== "PUT") return res.status(405).json({
+    if (req.method !== "POST") return res.status(405).json({
         success: false,
         error: "Method not allowed"
     });
-    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)();
+    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z)();
     try {
-        const user = await models_User_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.user.id).populate("directory");
+        const user = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.user.id).populate("directory");
         // Controlling customer update profile request
-        if (req.user.role === types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CUSTOMER */ .u.CUSTOMER) {
+        if (req.user.role === types_user__WEBPACK_IMPORTED_MODULE_3__/* .Role.CUSTOMER */ .u.CUSTOMER) {
             if (req.body.name) user.name = req.body.name;
             if (req.files) {
                 const profileImage = req.files.find((file)=>file.fieldname === "profileImage"
@@ -100,63 +98,11 @@ const handler = async (req, res)=>{
                 if (profileImage) user.profileImage = `/uploads/${profileImage.filename}`;
             }
             await user.save();
-        } else if (req.user.role === types_user__WEBPACK_IMPORTED_MODULE_4__/* .Role.CLIENT */ .u.CLIENT) {
+        } else if (req.user.role === types_user__WEBPACK_IMPORTED_MODULE_3__/* .Role.CLIENT */ .u.CLIENT) {
             // Getting the directory profile
             const directory = user.directory;
-            // Checking for username
-            if (req.body.username) {
-                if (await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findOne */ .Z.findOne({
-                    username: req.body.username
-                })) return res.status(400).json({
-                    success: false,
-                    error: "Username already exists"
-                });
-                const lookups = [
-                    "shop",
-                    "username",
-                    "directory",
-                    "directories",
-                    "profile",
-                    "profiles",
-                    "account",
-                    "accounts",
-                    "ngo",
-                    "ngos",
-                    "service",
-                    "services",
-                    "home",
-                    "contact",
-                    "contactus",
-                    "feedback",
-                    "help",
-                    "terms",
-                    "conditions",
-                    "donate",
-                    "product",
-                    "products",
-                    "purchase",
-                    "sell",
-                    "seller",
-                    "buyer",
-                    "purchases",
-                    "tnc",
-                    "privacy",
-                    "policy",
-                    "privacypolicy",
-                    "privacy-policy",
-                    "terms-and-conditions",
-                    "tnc",
-                    "api", 
-                ];
-                for (const lookup of lookups){
-                    if (req.body.username.toLowerCase().indexOf(lookup) !== -1) return res.status(400).json({
-                        success: false,
-                        error: "Username not allowed"
-                    });
-                }
-                directory.username = req.body.username;
-            }
             // Plain text fields
+            if (req.body.username) directory.username = req.body.username;
             if (req.body.name) user.name = req.body.name;
             if (req.body.storeName) directory.storeName = req.body.storeName;
             if (req.body.number) directory.number = req.body.number;
@@ -203,7 +149,7 @@ const handler = async (req, res)=>{
             user
         });
     } catch (error) {
-        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z)(error, res);
+        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z)(error, res);
     }
 };
 const config = {
@@ -223,7 +169,7 @@ const config = {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,4818,2970], () => (__webpack_exec__(1257)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,2970], () => (__webpack_exec__(1257)));
 module.exports = __webpack_exports__;
 
 })();

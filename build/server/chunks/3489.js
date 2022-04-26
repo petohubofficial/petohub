@@ -748,7 +748,7 @@ const Header = ()=>{
                                             }
                                         }),
                                         /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
-                                            onClick: ()=>handleProfileMenuClick("/")
+                                            onClick: ()=>handleProfileMenuClick("/profile")
                                             ,
                                             children: [
                                                 /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.SettingsOutlined, {
@@ -791,7 +791,7 @@ const Header = ()=>{
                                                 }),
                                                 /*#__PURE__*/ jsx_runtime_.jsx(material_.Typography, {
                                                     color: "text.secondary",
-                                                    children: "Favorites"
+                                                    children: "Wishlist"
                                                 })
                                             ]
                                         }),

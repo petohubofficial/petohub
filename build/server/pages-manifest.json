@@ -41,6 +41,7 @@
   "/": "pages/index.html",
   "/login": "pages/login.html",
   "/member": "pages/member.html",
+  "/profile": "pages/profile.html",
   "/resetpassword": "pages/resetpassword.html",
   "/shop": "pages/shop.html",
   "/signup": "pages/signup.html",

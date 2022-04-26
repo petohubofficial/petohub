@@ -1,24 +1,34 @@
 "use strict";
-exports.id = 4818;
-exports.ids = [4818];
+exports.id = 682;
+exports.ids = [682];
 exports.modules = {
 
-/***/ 4818:
+/***/ 682:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7147);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1017);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_2__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "Z": () => (/* binding */ Directory_model)
+});
+
+// EXTERNAL MODULE: external "mongoose"
+var external_mongoose_ = __webpack_require__(1185);
+var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(7147);
+var external_fs_default = /*#__PURE__*/__webpack_require__.n(external_fs_);
+// EXTERNAL MODULE: external "path"
+var external_path_ = __webpack_require__(1017);
+var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
+;// CONCATENATED MODULE: ./data/lookups.json
+const lookups_namespaceObject = JSON.parse('["shop","username","directory","directories","profile","profiles","account","accounts","ngo","ngos","service","services","home","contact","contactus","feedback","help","terms","conditions","donate","product","products","purchase","sell","seller","buyer","purchases","tnc","privacy","policy","privacypolicy","privacy-policy","terms-and-conditions","tnc","api"]');
+;// CONCATENATED MODULE: ./models/Directory.model.ts
 
 
 
-const DirectorySchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+
+const DirectorySchema = new (external_mongoose_default()).Schema({
     storeName: {
         type: String,
         trim: true,
@@ -36,7 +46,7 @@ const DirectorySchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sch
         ]
     },
     user: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().SchemaTypes.ObjectId),
+        type: (external_mongoose_default()).SchemaTypes.ObjectId,
         ref: "User",
         default: null,
         select: false
@@ -338,6 +348,13 @@ const DirectorySchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sch
 DirectorySchema.pre("save", async function(next) {
     // Handling username
     if (!this.username) this.username = this._id.toString();
+    if (this.isModified("username")) {
+        for(const lookup in lookups_namespaceObject){
+            if (this.username.toLowerCase().indexOf(lookup) !== -1) {
+                return next(new Error("Invalid username"));
+            }
+        }
+    }
     // Deleting preious directory images
     if (this.isModified("directoryImages")) {
         // @ts-ignore
@@ -347,9 +364,9 @@ DirectorySchema.pre("save", async function(next) {
             const deletedImages = previous.filter((x)=>!this.directoryImages.includes(x)
             );
             for (const image of deletedImages){
-                const previousPath = path__WEBPACK_IMPORTED_MODULE_2___default().join(__dirname, "..", "client", "public", image);
-                if (fs__WEBPACK_IMPORTED_MODULE_1___default().existsSync(previousPath)) {
-                    fs__WEBPACK_IMPORTED_MODULE_1___default().unlink(previousPath, (err)=>err && console.error(err)
+                const previousPath = external_path_default().join(__dirname, "..", "client", "public", image);
+                if (external_fs_default().existsSync(previousPath)) {
+                    external_fs_default().unlink(previousPath, (err)=>err && console.error(err)
                     );
                 }
             }
@@ -393,7 +410,7 @@ DirectorySchema.virtual("averageRating").get(function() {
     // @ts-ignore
     return (total / this.reviews.length).toFixed(1);
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Directory) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Directory", DirectorySchema));
+/* harmony default export */ const Directory_model = ((external_mongoose_default()).models.Directory || external_mongoose_default().model("Directory", DirectorySchema));
 
 
 /***/ })

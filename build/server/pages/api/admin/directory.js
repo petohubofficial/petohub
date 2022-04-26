@@ -85,7 +85,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9598);
 /* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6097);
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4035);
-/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4818);
+/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(682);
 /* harmony import */ var models_User_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(881);
 /* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8738);
 /* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1957);
@@ -202,60 +202,8 @@ const handler = async (req, res)=>{
                     directory.user = user._id;
                 }
             }
-            // Updating fields
-            if (req.body.username) {
-                if (await models_Directory_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findOne */ .Z.findOne({
-                    username: req.body.username
-                })) return res.status(400).json({
-                    success: false,
-                    error: "Username already exists"
-                });
-                const lookups = [
-                    "shop",
-                    "username",
-                    "directory",
-                    "directories",
-                    "profile",
-                    "profiles",
-                    "account",
-                    "accounts",
-                    "ngo",
-                    "ngos",
-                    "service",
-                    "services",
-                    "home",
-                    "contact",
-                    "contactus",
-                    "feedback",
-                    "help",
-                    "terms",
-                    "conditions",
-                    "donate",
-                    "product",
-                    "products",
-                    "purchase",
-                    "sell",
-                    "seller",
-                    "buyer",
-                    "purchases",
-                    "tnc",
-                    "privacy",
-                    "policy",
-                    "privacypolicy",
-                    "privacy-policy",
-                    "terms-and-conditions",
-                    "tnc",
-                    "api", 
-                ];
-                for (const lookup of lookups){
-                    if (req.body.username.toLowerCase() === lookup) return res.status(400).json({
-                        success: false,
-                        error: "Username not allowed"
-                    });
-                }
-                directory.username = req.body.username;
-            }
-            // Plain text fields
+            // Updating field
+            if (req.body.username) directory.username = req.body.username;
             if (req.body.storeName) directory.storeName = req.body.storeName;
             if (req.body.number) directory.number = req.body.number;
             if (req.body.address) directory.address = req.body.address;
@@ -341,7 +289,7 @@ const config = {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,4818], () => (__webpack_exec__(3153)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,682], () => (__webpack_exec__(3153)));
 module.exports = __webpack_exports__;
 
 })();

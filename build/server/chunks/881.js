@@ -117,10 +117,9 @@ const UserSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)(
 UserSchema.pre("save", async function(next) {
     // Delete the previous image if it's modified
     if (this.isModified("profileImage")) {
-        // @ts-ignore
         const previous = this._previousProfileImage;
         if (previous) {
-            const previousPath = path__WEBPACK_IMPORTED_MODULE_5___default().join(__dirname, "..", "client", "public", previous);
+            const previousPath = path__WEBPACK_IMPORTED_MODULE_5___default().join("public", previous);
             if (fs__WEBPACK_IMPORTED_MODULE_4___default().existsSync(previousPath)) {
                 fs__WEBPACK_IMPORTED_MODULE_4___default().unlink(previousPath, (err)=>err && console.error(err)
                 );

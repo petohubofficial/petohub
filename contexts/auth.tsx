@@ -11,6 +11,7 @@ import {
   RegisterResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
+  UpdateProfileResponse,
   VerifyResponse,
 } from "types/auth";
 import toast from "react-hot-toast";
@@ -29,6 +30,7 @@ export interface AuthContextValue extends State {
   verify: (token: string) => Promise<VerifyResponse>;
   forgotPassword: (request: ForgotPasswordRequest) => Promise<ForgotPasswordRespose>;
   resetPassword: (token: string, request: ResetPasswordRequest) => Promise<ResetPasswordResponse>;
+  updateProfile: (request: FormData) => Promise<UpdateProfileResponse>;
 }
 
 interface AuthProviderProps {
@@ -43,6 +45,7 @@ enum ActionType {
   VERIFY = "VERIFY",
   FORGOT_PASSWORD = "FORGOT_PASSWORD",
   RESET_PASSWORD = "RESET_PASSWORD",
+  UPDATE_PROFILE = "UPDATE_PROFILE",
 }
 
 type InitializeAction = {
@@ -82,6 +85,11 @@ type ResetPasswordAction = {
   payload: ResetPasswordResponse;
 };
 
+type UpdateProfileAction = {
+  type: ActionType.UPDATE_PROFILE;
+  payload: UpdateProfileResponse;
+};
+
 type Action =
   | InitializeAction
   | LoginAction
@@ -89,7 +97,8 @@ type Action =
   | RegisterAction
   | VerifyAction
   | ForgotPasswordAction
-  | ResetPasswordAction;
+  | ResetPasswordAction
+  | UpdateProfileAction;
 
 type Handler = (state: State, action: any) => State;
 
@@ -100,46 +109,30 @@ const initialState: State = {
 };
 
 const handlers: Record<ActionType, Handler> = {
-  INITIALIZE: (state: State, action: InitializeAction): State => {
-    const { isAuthenticated, user } = action.payload;
-    return {
-      ...state,
-      isAuthenticated,
-      isInitialized: true,
-      user,
-    };
-  },
-
-  LOGIN: (state: State, action: LoginAction): State => {
-    const { user } = action.payload;
-    return {
-      ...state,
-      isAuthenticated: true,
-      user,
-    };
-  },
-
+  INITIALIZE: (state: State, action: InitializeAction): State => ({
+    ...state,
+    isAuthenticated: action.payload.isAuthenticated,
+    isInitialized: true,
+    user: action.payload.user,
+  }),
+  LOGIN: (state: State, action: LoginAction): State => ({
+    ...state,
+    isAuthenticated: true,
+    user: action.payload.user,
+  }),
   LOGOUT: (state: State): State => ({
     ...state,
     isAuthenticated: false,
     user: null,
   }),
-
-  REGISTER: (state: State): State => {
-    return state;
-  },
-
-  VERIFY: (state: State): State => {
-    return state;
-  },
-
-  FORGOT_PASSWORD: (state: State): State => {
-    return state;
-  },
-
-  RESET_PASSWORD: (state: State): State => {
-    return state;
-  },
+  REGISTER: (state: State): State => state,
+  VERIFY: (state: State): State => state,
+  FORGOT_PASSWORD: (state: State): State => state,
+  RESET_PASSWORD: (state: State): State => state,
+  UPDATE_PROFILE: (state: State, action: UpdateProfileAction): State => ({
+    ...state,
+    user: action.payload.user,
+  }),
 };
 
 const reducer = (state: State, action: Action): State =>
@@ -159,6 +152,8 @@ export const AuthContext = createContext<AuthContextValue>({
   forgotPassword: () => Promise.resolve(),
   // @ts-ignore
   resetPassword: () => Promise.resolve(),
+  // @ts-ignore
+  updateProfile: () => Promise.resolve(),
 });
 
 export const AuthProvider: FC<AuthProviderProps> = (props) => {
@@ -256,6 +251,15 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     return resetPasswordResponse;
   };
 
+  const updateProfile = async (request: FormData): Promise<UpdateProfileResponse> => {
+    const updateProfileResponse = await auth.updateProfile(request);
+    dispatch({
+      type: ActionType.UPDATE_PROFILE,
+      payload: updateProfileResponse,
+    });
+    return updateProfileResponse;
+  };
+
   return (
     <AuthContext.Provider
       value={
@@ -268,6 +272,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
           verify,
           forgotPassword,
           resetPassword,
+          updateProfile,
         } as AuthContextValue
       }
     >

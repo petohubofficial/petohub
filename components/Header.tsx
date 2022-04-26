@@ -322,7 +322,7 @@ export const Header: FC = () => {
                 </Box>
               </Box>
               <Divider sx={{ mb: 1 }} />
-              <MenuItem onClick={() => handleProfileMenuClick("/")}>
+              <MenuItem onClick={() => handleProfileMenuClick("/profile")}>
                 <SettingsOutlined color="action" sx={{ mr: 0.5 }} />
                 <Typography color="text.secondary">Settings</Typography>
               </MenuItem>
@@ -334,7 +334,7 @@ export const Header: FC = () => {
               )}
               <MenuItem onClick={() => handleProfileMenuClick("/")}>
                 <FavoriteBorderOutlined color="action" sx={{ mr: 0.5 }} />
-                <Typography color="text.secondary">Favorites</Typography>
+                <Typography color="text.secondary">Wishlist</Typography>
               </MenuItem>
               <MenuItem
                 onClick={() => {

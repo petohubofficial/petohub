@@ -99,55 +99,8 @@ const handler = async (
           directory.user = user._id;
         }
       }
-
-      // Updating fields
-      if (req.body.username) {
-        if (await Directory.findOne({ username: req.body.username }))
-          return res.status(400).json({ success: false, error: "Username already exists" });
-        const lookups = [
-          "shop",
-          "username",
-          "directory",
-          "directories",
-          "profile",
-          "profiles",
-          "account",
-          "accounts",
-          "ngo",
-          "ngos",
-          "service",
-          "services",
-          "home",
-          "contact",
-          "contactus",
-          "feedback",
-          "help",
-          "terms",
-          "conditions",
-          "donate",
-          "product",
-          "products",
-          "purchase",
-          "sell",
-          "seller",
-          "buyer",
-          "purchases",
-          "tnc",
-          "privacy",
-          "policy",
-          "privacypolicy",
-          "privacy-policy",
-          "terms-and-conditions",
-          "tnc",
-          "api",
-        ];
-        for (const lookup of lookups) {
-          if (req.body.username.toLowerCase() === lookup)
-            return res.status(400).json({ success: false, error: "Username not allowed" });
-        }
-        directory.username = req.body.username;
-      }
-      // Plain text fields
+      // Updating field
+      if (req.body.username) directory.username = req.body.username;
       if (req.body.storeName) directory.storeName = req.body.storeName;
       if (req.body.number) directory.number = req.body.number;
       if (req.body.address) directory.address = req.body.address;

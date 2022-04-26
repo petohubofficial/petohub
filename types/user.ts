@@ -15,6 +15,7 @@ export interface User extends mongoose.Document {
   password: string;
   number: string;
   profileImage: string;
+  _previousProfileImage: string;
   role: Role;
   directory: mongoose.Schema.Types.ObjectId | Directory | null;
   isVerified: boolean;

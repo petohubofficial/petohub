@@ -1,6 +1,5 @@
 import withMulter, { MulterNextApiRequest } from "middlewares/withMulter";
 import withProtect, { ProtectedNextApiRequest } from "middlewares/withProtect";
-import Directory from "models/Directory.model";
 import User from "models/User.model";
 import { NextApiResponse } from "next";
 import { Role } from "types/user";
@@ -11,7 +10,7 @@ const handler = async (
   req: ProtectedNextApiRequest & MulterNextApiRequest,
   res: NextApiResponse
 ) => {
-  if (req.method !== "PUT")
+  if (req.method !== "POST")
     return res.status(405).json({ success: false, error: "Method not allowed" });
 
   await connect();
@@ -30,54 +29,8 @@ const handler = async (
     else if (req.user.role === Role.CLIENT) {
       // Getting the directory profile
       const directory = user.directory;
-      // Checking for username
-      if (req.body.username) {
-        if (await Directory.findOne({ username: req.body.username }))
-          return res.status(400).json({ success: false, error: "Username already exists" });
-        const lookups = [
-          "shop",
-          "username",
-          "directory",
-          "directories",
-          "profile",
-          "profiles",
-          "account",
-          "accounts",
-          "ngo",
-          "ngos",
-          "service",
-          "services",
-          "home",
-          "contact",
-          "contactus",
-          "feedback",
-          "help",
-          "terms",
-          "conditions",
-          "donate",
-          "product",
-          "products",
-          "purchase",
-          "sell",
-          "seller",
-          "buyer",
-          "purchases",
-          "tnc",
-          "privacy",
-          "policy",
-          "privacypolicy",
-          "privacy-policy",
-          "terms-and-conditions",
-          "tnc",
-          "api",
-        ];
-        for (const lookup of lookups) {
-          if (req.body.username.toLowerCase().indexOf(lookup) !== -1)
-            return res.status(400).json({ success: false, error: "Username not allowed" });
-        }
-        directory.username = req.body.username;
-      }
       // Plain text fields
+      if (req.body.username) directory.username = req.body.username;
       if (req.body.name) user.name = req.body.name;
       if (req.body.storeName) directory.storeName = req.body.storeName;
       if (req.body.number) directory.number = req.body.number;

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "rm -rf build && next build",
+    "commit": "rm -rf build && next build && git add . && git commit -m",
     "start": "next start",
     "lint": "next lint"
   },
@@ -15,6 +15,7 @@
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.5.1",
+    "@mui/lab": "^5.0.0-alpha.79",
     "@mui/material": "^5.5.1",
     "@reduxjs/toolkit": "^1.8.0",
     "axios": "^0.26.1",
@@ -29,6 +30,7 @@
     "nprogress": "^0.2.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-dropzone": "^12.1.0",
     "react-hot-toast": "^2.2.0",
     "react-redux": "^7.2.6",
     "simplebar": "^5.3.6",

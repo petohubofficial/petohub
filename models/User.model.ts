@@ -78,10 +78,9 @@ const UserSchema = new mongoose.Schema<User>(
 UserSchema.pre("save", async function (next) {
   // Delete the previous image if it's modified
   if (this.isModified("profileImage")) {
-    // @ts-ignore
-    const previous: string = this._previousProfileImage;
+    const previous = this._previousProfileImage;
     if (previous) {
-      const previousPath = path.join(__dirname, "..", "client", "public", previous);
+      const previousPath = path.join("public", previous);
       if (fs.existsSync(previousPath)) {
         fs.unlink(previousPath, (err) => err && console.error(err));
       }

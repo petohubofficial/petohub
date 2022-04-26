@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
+import lookups from "data/lookups.json";
 import type { Details, Directory, FAQ, Timings } from "types/directory";
 import type { Rating } from "types/review";
 
@@ -209,6 +210,13 @@ const DirectorySchema = new mongoose.Schema<Directory>(
 DirectorySchema.pre("save", async function (next) {
   // Handling username
   if (!this.username) this.username = this._id.toString();
+  if (this.isModified("username")) {
+    for (const lookup in lookups) {
+      if (this.username.toLowerCase().indexOf(lookup) !== -1) {
+        return next(new Error("Invalid username"));
+      }
+    }
+  }
 
   // Deleting preious directory images
   if (this.isModified("directoryImages")) {

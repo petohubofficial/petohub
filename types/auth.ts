@@ -55,3 +55,7 @@ export interface ResetPasswordRequest {
 export interface ResetPasswordResponse extends Response {
   data?: string;
 }
+
+export interface UpdateProfileResponse extends Response {
+  user: User;
+}

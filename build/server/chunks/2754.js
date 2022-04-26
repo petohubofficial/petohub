@@ -99,6 +99,19 @@ class AuthService {
             return error.response.data;
         }
     }
+    async updateProfile(request) {
+        try {
+            const { data  } = await external_axios_default().post("/api/user/updateprofile", request, {
+                withCredentials: true
+            });
+            if (data.success) external_react_hot_toast_default().success("Profile updated successfully");
+            return data;
+        } catch (error) {
+            var ref, ref8;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref8 = ref.data) === null || ref8 === void 0 ? void 0 : ref8.error) || "Error");
+            return error.response.data;
+        }
+    }
 }
 const auth = new AuthService();
 
@@ -116,6 +129,7 @@ var ActionType;
     ActionType["VERIFY"] = "VERIFY";
     ActionType["FORGOT_PASSWORD"] = "FORGOT_PASSWORD";
     ActionType["RESET_PASSWORD"] = "RESET_PASSWORD";
+    ActionType["UPDATE_PROFILE"] = "UPDATE_PROFILE";
 })(ActionType || (ActionType = {}));
 const initialState = {
     isAuthenticated: false,
@@ -123,41 +137,37 @@ const initialState = {
     user: null
 };
 const handlers = {
-    INITIALIZE: (state, action)=>{
-        const { isAuthenticated , user  } = action.payload;
-        return {
+    INITIALIZE: (state, action)=>({
             ...state,
-            isAuthenticated,
+            isAuthenticated: action.payload.isAuthenticated,
             isInitialized: true,
-            user
-        };
-    },
-    LOGIN: (state, action)=>{
-        const { user  } = action.payload;
-        return {
+            user: action.payload.user
+        })
+    ,
+    LOGIN: (state, action)=>({
             ...state,
             isAuthenticated: true,
-            user
-        };
-    },
+            user: action.payload.user
+        })
+    ,
     LOGOUT: (state)=>({
             ...state,
             isAuthenticated: false,
             user: null
         })
     ,
-    REGISTER: (state)=>{
-        return state;
-    },
-    VERIFY: (state)=>{
-        return state;
-    },
-    FORGOT_PASSWORD: (state)=>{
-        return state;
-    },
-    RESET_PASSWORD: (state)=>{
-        return state;
-    }
+    REGISTER: (state)=>state
+    ,
+    VERIFY: (state)=>state
+    ,
+    FORGOT_PASSWORD: (state)=>state
+    ,
+    RESET_PASSWORD: (state)=>state
+    ,
+    UPDATE_PROFILE: (state, action)=>({
+            ...state,
+            user: action.payload.user
+        })
 };
 const reducer = (state, action)=>handlers[action.type] ? handlers[action.type](state, action) : state
 ;
@@ -180,6 +190,9 @@ const AuthContext = /*#__PURE__*/ (0,external_react_.createContext)({
     ,
     // @ts-ignore
     resetPassword: ()=>Promise.resolve()
+    ,
+    // @ts-ignore
+    updateProfile: ()=>Promise.resolve()
 });
 const AuthProvider = (props)=>{
     const { children  } = props;
@@ -267,6 +280,14 @@ const AuthProvider = (props)=>{
         });
         return resetPasswordResponse;
     };
+    const updateProfile = async (request)=>{
+        const updateProfileResponse = await auth.updateProfile(request);
+        dispatch({
+            type: ActionType.UPDATE_PROFILE,
+            payload: updateProfileResponse
+        });
+        return updateProfileResponse;
+    };
     return(/*#__PURE__*/ jsx_runtime_.jsx(AuthContext.Provider, {
         value: {
             ...state,
@@ -276,7 +297,8 @@ const AuthProvider = (props)=>{
             register,
             verify,
             forgotPassword,
-            resetPassword
+            resetPassword,
+            updateProfile
         },
         children: children
     }));

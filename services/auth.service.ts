@@ -11,6 +11,7 @@ import {
   ForgotPasswordRespose,
   ResetPasswordResponse,
   ResetPasswordRequest,
+  UpdateProfileResponse,
 } from "types/auth";
 
 class AuthService {
@@ -79,6 +80,19 @@ class AuthService {
   ): Promise<ResetPasswordResponse> {
     try {
       const { data } = await axios.post(`/api/auth/resetpassword?token=${token}`, request);
+      return data;
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error || "Error");
+      return error.response.data;
+    }
+  }
+
+  async updateProfile(request: FormData): Promise<UpdateProfileResponse> {
+    try {
+      const { data } = await axios.post("/api/user/updateprofile", request, {
+        withCredentials: true,
+      });
+      if (data.success) toast.success("Profile updated successfully");
       return data;
     } catch (error: any) {
       toast.error(error?.response?.data?.error || "Error");
