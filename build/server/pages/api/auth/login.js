@@ -69,7 +69,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const JWT_EXPIRE = process.env.JWT_EXPIRE;
 const NODE_ENV = "production";
 const handler = async (req, res)=>{
     if (req.method !== "POST") return res.status(405).json({
@@ -108,16 +107,17 @@ const handler = async (req, res)=>{
         const _user = user.toJSON();
         delete _user.password;
         // Setting the Access Token in the cookie
-        (0,utils_setCookie__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)(res, "at", user.generateAuthToken(), {
+        (0,utils_setCookie__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)(res, "at", user.generateAccessToken(), {
             httpOnly: true,
             path: "/",
             sameSite: "strict",
             secure: NODE_ENV === "production",
-            maxAge: parseInt(JWT_EXPIRE) * 1000
+            maxAge: 2 * 24 * 60 * 60 * 1000
         });
         // Success response
         return res.status(200).json({
             success: true,
+            rt: user.generateRefreshToken(),
             user: _user
         });
     } catch (error) {

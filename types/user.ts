@@ -27,6 +27,7 @@ export interface User extends mongoose.Document {
   updatedAt: Date;
   getVerificationToken: () => string;
   matchPasswords: (password: string) => boolean;
-  generateAuthToken: () => string;
+  generateAccessToken: () => string;
+  generateRefreshToken: () => string;
   getResetToken: () => string;
 }

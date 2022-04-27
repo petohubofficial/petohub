@@ -4,7 +4,6 @@ import connect from "utils/connectDb";
 import setCookie from "utils/setCookie";
 import errorHandler from "utils/errorHandler";
 
-const JWT_EXPIRE = process.env.JWT_EXPIRE as string;
 const NODE_ENV = process.env.NODE_ENV as string;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -39,15 +38,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     delete _user.password;
 
     // Setting the Access Token in the cookie
-    setCookie(res, "at", user.generateAuthToken(), {
+    setCookie(res, "at", user.generateAccessToken(), {
       httpOnly: true,
       path: "/",
       sameSite: "strict",
       secure: NODE_ENV === "production",
-      maxAge: parseInt(JWT_EXPIRE) * 1000,
+      maxAge: 2 * 24 * 60 * 60 * 1000,
     });
     // Success response
-    return res.status(200).json({ success: true, user: _user });
+    return res.status(200).json({ success: true, rt: user.generateRefreshToken(), user: _user });
   } catch (error) {
     errorHandler(error, res);
   }

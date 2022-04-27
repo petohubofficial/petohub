@@ -1734,11 +1734,18 @@ UserSchema.methods.matchPasswords = async function(password) {
     return await external_bcryptjs_default().compare(password, this.password);
 };
 // Generating a signed JWT token to give authorization
-UserSchema.methods.generateAuthToken = function() {
+UserSchema.methods.generateAccessToken = function() {
     return external_jsonwebtoken_default().sign({
         id: this._id
     }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE
+        expiresIn: "2d"
+    });
+};
+UserSchema.methods.generateRefreshToken = function() {
+    return external_jsonwebtoken_default().sign({
+        id: this._id
+    }, process.env.JWT_SECRET, {
+        expiresIn: "7d"
     });
 };
 // Generating a password reset token
