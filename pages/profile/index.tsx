@@ -1,6 +1,6 @@
 import { Box, Container, Tab, Typography } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
-import { Layout } from "components/Layout";
+import PublicLayout from "components/layouts/PublicLayout";
 import Head from "next/head";
 import React, { ReactElement } from "react";
 import { AuthGuard } from "components/auth/AuthGuard";
@@ -49,7 +49,7 @@ const Account = () => {
 
 Account.getLayout = (page: ReactElement) => (
   <AuthGuard>
-    <Layout>{page}</Layout>
+    <PublicLayout>{page}</PublicLayout>
   </AuthGuard>
 );
 export default Account;

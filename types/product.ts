@@ -73,3 +73,29 @@ export interface PaginatedResponse {
 export interface GetProductsResponse extends Response {
   data: PaginatedResponse;
 }
+
+export interface CreateProductRequest {
+  seller: string | mongoose.Schema.Types.ObjectId;
+  name: string;
+  brand: string;
+  category: string;
+  petType: string[];
+  keywords: string[];
+  breedType: string;
+  description: string;
+  weight: number;
+  size: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  countInStock: number;
+  price: number;
+  isVeg: boolean;
+  ageRange: {
+    min: number;
+    max: number;
+  };
+  affiliateLinks: AffiliateLink[];
+  productImages: string[];
+}

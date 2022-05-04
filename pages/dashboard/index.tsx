@@ -1,24 +1,23 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { AuthGuard } from "components/auth/AuthGuard";
-import { Layout } from "components/Layout";
-import Head from "next/head";
+import DashboardLayout from "components/layouts/DashboardLayout";
+import PublicLayout from "components/layouts/PublicLayout";
 import { ReactElement } from "react";
 import { Role } from "types/user";
 
 const ClientDashboard = () => {
   return (
-    <Box width="100%" display="flex" justifyContent="center">
-      <Head>
-        <title>Petohub | Member&apos;s Area</title>
-      </Head>
-      <h1>Client secret area</h1>
+    <Box sx={{ p: 1 }}>
+      <Typography>Dashboard will be available soon</Typography>
     </Box>
   );
 };
 
 ClientDashboard.getLayout = (page: ReactElement) => (
   <AuthGuard role={Role.CLIENT}>
-    <Layout>{page}</Layout>
+    <PublicLayout>
+      <DashboardLayout>{page}</DashboardLayout>
+    </PublicLayout>
   </AuthGuard>
 );
 export default ClientDashboard;

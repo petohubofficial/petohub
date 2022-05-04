@@ -264,6 +264,14 @@ export const baseTheme: ThemeOptions = {
         },
       },
     },
+    MuiTypography: {
+      variants: [
+        {
+          props: { variant: "link" },
+          style: { textDecoration: "underline", cursor: "pointer" },
+        },
+      ],
+    },
   },
   direction: "ltr",
   shape: {

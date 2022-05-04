@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
-import { Layout } from "components/Layout";
+import PublicLayout from "components/layouts/PublicLayout";
 import Head from "next/head";
 import { ReactElement } from "react";
 
@@ -32,5 +32,5 @@ const About = () => {
   );
 };
 
-About.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+About.getLayout = (page: ReactElement) => <PublicLayout>{page}</PublicLayout>;
 export default About;

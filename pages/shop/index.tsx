@@ -39,11 +39,15 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Layout } from "components/Layout";
+import PublicLayout from "components/layouts/PublicLayout";
 import Head from "next/head";
 import Image from "next/image";
 import { ChangeEvent, ReactElement, useEffect, useState } from "react";
-import { useGetCategoriesQuery, useGetPetsQuery, useGetProductsQuery } from "services/api.service";
+import {
+  useGetCategoriesQuery,
+  useGetPetsQuery,
+  useGetProductsQuery,
+} from "services/public.service";
 import { GetProductsFilters } from "types/product";
 
 interface AffiliateLinksProps {
@@ -385,5 +389,5 @@ const Shop = () => {
   );
 };
 
-Shop.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+Shop.getLayout = (page: ReactElement) => <PublicLayout>{page}</PublicLayout>;
 export default Shop;

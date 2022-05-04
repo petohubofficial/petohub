@@ -26,6 +26,12 @@ declare module "@mui/material/styles" {
   }
 }
 
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    link: true;
+  }
+}
+
 interface ThemeConfig {
   responsiveFontSizes?: boolean;
   theme: "light" | "dark";

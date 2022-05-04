@@ -37,7 +37,7 @@ import { useSettings } from "hooks/settings";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { useGetCategoriesQuery } from "services/api.service";
+import { useGetCategoriesQuery } from "services/public.service";
 import { Role } from "types/user";
 
 const HeaderBar = () => {
@@ -112,17 +112,17 @@ interface HeaderNavLinkProps {
 
 const HeaderNavLink = ({ href, text, ...other }: HeaderNavLinkProps) => {
   const router = useRouter();
+  const isActive = href !== "/" && router.pathname.startsWith(href);
   return (
     <Link href={href} passHref {...other}>
       <Typography
         component="a"
-        color={router.pathname === href ? "primary.main" : "text.secondary"}
+        color={isActive ? "primary.main" : "text.secondary"}
         sx={{
           "&:hover": { color: "primary.main" },
           py: 1,
-          borderBottom: 1,
-          borderColor: "primary.main",
-          borderWidth: router.pathname === href ? "2px !important" : 0,
+          borderBottom: "2px solid transparent",
+          ...(isActive && { borderColor: "primary.main" }),
           textDecoration: "none",
         }}
         variant="subtitle2"
@@ -279,11 +279,14 @@ export const Header: FC = () => {
                 <FavoriteBorder color="primary" />
               </Badge>
             </IconButton>
-            <IconButton sx={{ border: 1, borderColor: "primary.main", mx: 1 }}>
+            <IconButton
+              sx={{ border: 1, borderColor: "primary.main", mx: 1 }}
+              onClick={handleToggleTheme}
+            >
               {settings.theme === "light" ? (
-                <DarkModeIcon color="primary" onClick={handleToggleTheme} />
+                <DarkModeIcon color="primary" />
               ) : (
-                <LightModeIcon color="primary" onClick={handleToggleTheme} />
+                <LightModeIcon color="primary" />
               )}
             </IconButton>
             <IconButton

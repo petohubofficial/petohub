@@ -8,13 +8,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Layout } from "components/Layout";
+import PublicLayout from "components/layouts/PublicLayout";
 import { Scrollbar } from "components/Scrollbar";
 import { ReactElement, useState } from "react";
 import { useGetProductsQuery } from "services/admin.service";
 import { GetProductsFilters } from "types/product";
 
-const ProductsDashboard = () => {
+const Products = () => {
   const [filters, setFilters] = useState<GetProductsFilters>({});
   const { data, isLoading, refetch } = useGetProductsQuery(filters);
 
@@ -61,5 +61,5 @@ const ProductsDashboard = () => {
   );
 };
 
-ProductsDashboard.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
-export default ProductsDashboard;
+Products.getLayout = (page: ReactElement) => <PublicLayout>{page}</PublicLayout>;
+export default Products;

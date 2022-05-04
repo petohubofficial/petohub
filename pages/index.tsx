@@ -1,7 +1,7 @@
 import { Search, ShoppingBag } from "@mui/icons-material";
 import { Box, Button, Container, Typography } from "@mui/material";
 import Illustration from "components/Illustration";
-import { Layout } from "components/Layout";
+import PublicLayout from "components/layouts/PublicLayout";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
@@ -14,18 +14,6 @@ const HomePage = () => {
         <title>Petohub</title>
         <meta name="description" content="Official website of Petohub - Pet lover's community" />
       </Head>
-      {/* <Swiper>
-        <SwiperSlide>
-          <Box sx={{ width: "100vw", height: 400 }}>
-            <Image
-              src="/assets/images/veterinary-care.jpg"
-              layout="fill"
-              objectFit="cover"
-              alt="slide1"
-            />
-          </Box>
-        </SwiperSlide>
-      </Swiper> */}
       <Container maxWidth="md">
         <Box
           display="flex"
@@ -63,5 +51,5 @@ const HomePage = () => {
   );
 };
 
-HomePage.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+HomePage.getLayout = (page: ReactElement) => <PublicLayout>{page}</PublicLayout>;
 export default HomePage;

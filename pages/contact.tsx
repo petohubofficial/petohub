@@ -1,9 +1,9 @@
 import { Box, Container, Typography } from "@mui/material";
-import { Layout } from "components/Layout";
+import PublicLayout from "components/layouts/PublicLayout";
 import Head from "next/head";
 import { ReactElement } from "react";
 
-const Shop = () => {
+const Contact = () => {
   return (
     <Container maxWidth="lg">
       <Box
@@ -39,5 +39,5 @@ const Shop = () => {
   );
 };
 
-Shop.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
-export default Shop;
+Contact.getLayout = (page: ReactElement) => <PublicLayout>{page}</PublicLayout>;
+export default Contact;

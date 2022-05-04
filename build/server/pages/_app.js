@@ -51,13 +51,13 @@ var admin_service = __webpack_require__(3481);
 
 
 const rootReducer = (0,toolkit_namespaceObject.combineReducers)({
-    [api_service/* api.reducerPath */.hi.reducerPath]: api_service/* api.reducer */.hi.reducer,
+    [api_service/* api.reducerPath */.h.reducerPath]: api_service/* api.reducer */.h.reducer,
     [admin_service/* admin.reducerPath */.S.reducerPath]: admin_service/* admin.reducer */.S.reducer
 });
 const store = (0,toolkit_namespaceObject.configureStore)({
     reducer: rootReducer,
     devTools: "production" !== "production",
-    middleware: (getDefaultMiddleware)=>getDefaultMiddleware().concat(api_service/* api.middleware */.hi.middleware, admin_service/* admin.middleware */.S.middleware)
+    middleware: (getDefaultMiddleware)=>getDefaultMiddleware().concat(api_service/* api.middleware */.h.middleware, admin_service/* admin.middleware */.S.middleware)
 });
 const useSelector = (/* unused pure expression or super */ null && (useReduxSelector));
 const useDispatch = ()=>useReduxDispatch()
@@ -327,6 +327,19 @@ const baseTheme = {
                     }
                 }
             }
+        },
+        MuiTypography: {
+            variants: [
+                {
+                    props: {
+                        variant: "link"
+                    },
+                    style: {
+                        textDecoration: "underline",
+                        cursor: "pointer"
+                    }
+                }, 
+            ]
         }
     },
     direction: "ltr",
@@ -1037,7 +1050,7 @@ module.exports = require("react/jsx-runtime");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [2754,9850,5120,3481], () => (__webpack_exec__(6488)));
+var __webpack_exports__ = __webpack_require__.X(0, [2754,1316,3481], () => (__webpack_exec__(6488)));
 module.exports = __webpack_exports__;
 
 })();

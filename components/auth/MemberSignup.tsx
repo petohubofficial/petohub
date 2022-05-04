@@ -25,7 +25,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { MouseEventHandler, SyntheticEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useGetCategoriesQuery } from "services/api.service";
+import { useGetCategoriesQuery } from "services/public.service";
 import { Category, CategoryType } from "types/category";
 import { User } from "types/user";
 import * as Yup from "yup";
