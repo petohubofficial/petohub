@@ -14,7 +14,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "mongoose"
 var external_mongoose_ = __webpack_require__(1185);
-var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __webpack_require__(7147);
 var external_fs_default = /*#__PURE__*/__webpack_require__.n(external_fs_);
@@ -28,7 +27,7 @@ const lookups_namespaceObject = JSON.parse('["shop","username","directory","dire
 
 
 
-const DirectorySchema = new (external_mongoose_default()).Schema({
+const DirectorySchema = new external_mongoose_.Schema({
     storeName: {
         type: String,
         trim: true,
@@ -46,7 +45,7 @@ const DirectorySchema = new (external_mongoose_default()).Schema({
         ]
     },
     user: {
-        type: (external_mongoose_default()).SchemaTypes.ObjectId,
+        type: external_mongoose_.Types.ObjectId,
         ref: "User",
         default: null,
         select: false
@@ -410,7 +409,7 @@ DirectorySchema.virtual("averageRating").get(function() {
     // @ts-ignore
     return (total / this.reviews.length).toFixed(1);
 });
-/* harmony default export */ const Directory_model = ((external_mongoose_default()).models.Directory || external_mongoose_default().model("Directory", DirectorySchema));
+/* harmony default export */ const Directory_model = (external_mongoose_.models.Directory || (0,external_mongoose_.model)("Directory", DirectorySchema));
 
 
 /***/ })

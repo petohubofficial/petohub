@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import { Edit } from "types/edit";
 import { Question } from "types/question";
 import { Review, Rating } from "types/review";
@@ -6,18 +6,34 @@ import { Directory } from "types/directory";
 import { Category } from "types/category";
 import { Response } from "types/common";
 
-export interface AffiliateLink {
-  productId: string;
-  productLink: string;
-  productProvider: string;
-  productPrice: number;
+export enum AffiliateProvider {
+  AMAZON = "Amazon",
+  FLIPKART = "Flipkart",
+  EBAY = "Ebay",
+  SNAPDEAL = "Snapdeal",
+  OTHER = "Other",
 }
 
-export interface Product extends mongoose.Document {
-  _id: mongoose.Schema.Types.ObjectId;
+export interface AffiliateLink {
+  id: string;
+  link: string;
+  provider: AffiliateProvider;
+  price: number;
+}
+
+export enum FoodClassification {
+  VEGETARIAN = "Vegetarian",
+  NON_VEGETARIAN = "Non-Vegetarian",
+  VEGAN = "Vegan",
+  OTHER = "Other",
+  NOT_APPLICABLE = "Not Applicable",
+}
+
+export interface Product {
+  _id: Types.ObjectId;
   name: string;
   alias: string[];
-  seller: mongoose.Schema.Types.ObjectId | Directory | null;
+  seller: Types.ObjectId | Directory | null;
   category: string | Category;
   brand: string;
   keywords: string[];
@@ -32,7 +48,7 @@ export interface Product extends mongoose.Document {
   };
   countInStock: number;
   price: number;
-  isVeg: boolean;
+  foodClassification: FoodClassification;
   ageRange: {
     min: number;
     max: number;
@@ -40,7 +56,7 @@ export interface Product extends mongoose.Document {
   productImages: string[];
   link: string;
   affiliateLinks: AffiliateLink[];
-  edits: mongoose.Schema.Types.ObjectId[] | Edit[];
+  edits: Types.ObjectId[] | Edit[];
   lastEdit: Edit | null;
   isApproved: boolean;
   approvedAt: Date;
@@ -75,7 +91,7 @@ export interface GetProductsResponse extends Response {
 }
 
 export interface CreateProductRequest {
-  seller: string | mongoose.Schema.Types.ObjectId;
+  seller: string | Types.ObjectId;
   name: string;
   brand: string;
   category: string;
@@ -91,7 +107,7 @@ export interface CreateProductRequest {
   };
   countInStock: number;
   price: number;
-  isVeg: boolean;
+  foodClassification: FoodClassification;
   ageRange: {
     min: number;
     max: number;

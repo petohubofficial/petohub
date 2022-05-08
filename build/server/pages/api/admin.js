@@ -100,7 +100,7 @@ const handler = async (req, res)=>{
     });
     await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z)();
     try {
-        const user = await models_User_model__WEBPACK_IMPORTED_MODULE_1__/* ["default"].findById */ .Z.findById(req.user.id);
+        const user = await models_User_model__WEBPACK_IMPORTED_MODULE_1__/* ["default"].findById */ .Z.findById(req.user._id);
         return res.status(200).json({
             success: true,
             user

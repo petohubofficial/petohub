@@ -1,15 +1,15 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import type { Edit } from "types/edit";
 
-const EditSchema = new mongoose.Schema<Edit>(
+const EditSchema = new Schema<Edit>(
   {
     date: Date,
     product: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "Product",
     },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "User",
     },
     changes: Object,
@@ -17,4 +17,4 @@ const EditSchema = new mongoose.Schema<Edit>(
   { timestamps: true }
 );
 
-export default mongoose.models.Edit || mongoose.model<Edit>("Edit", EditSchema);
+export default models.Edit || model<Edit>("Edit", EditSchema);

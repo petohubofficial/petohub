@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import path from "path";
 import fs from "fs";
-import type { Product } from "types/product";
+import { AffiliateProvider, FoodClassification, Product } from "types/product";
 import type { Rating } from "types/review";
 
-const ProductSchema = new mongoose.Schema<Product>(
+const ProductSchema = new Schema<Product>(
   {
     name: {
       type: String,
@@ -17,7 +17,7 @@ const ProductSchema = new mongoose.Schema<Product>(
       type: [String],
     },
     seller: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "Directory",
       default: null,
     },
@@ -90,9 +90,10 @@ const ProductSchema = new mongoose.Schema<Product>(
       default: 0,
       min: [0, "Price can't be lower than 0"],
     },
-    isVeg: {
-      type: Boolean,
-      default: false,
+    foodClassification: {
+      type: String,
+      enum: Object.values(FoodClassification),
+      default: FoodClassification.NOT_APPLICABLE,
     },
     ageRange: {
       min: {
@@ -123,10 +124,13 @@ const ProductSchema = new mongoose.Schema<Product>(
       type: [
         {
           _id: false,
-          productId: String,
-          productLink: String,
-          productProvider: String,
-          productPrice: Number,
+          id: String,
+          link: String,
+          provider: {
+            type: String,
+            enum: Object.values(AffiliateProvider),
+          },
+          price: Number,
         },
       ],
       default: [],
@@ -134,7 +138,7 @@ const ProductSchema = new mongoose.Schema<Product>(
     edits: {
       type: [
         {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Types.ObjectId,
           ref: "Edit",
         },
       ],
@@ -142,7 +146,7 @@ const ProductSchema = new mongoose.Schema<Product>(
       select: false,
     },
     lastEdit: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "Edit",
       default: null,
       select: false,
@@ -227,4 +231,4 @@ ProductSchema.virtual("averageRating").get(function (): number {
   return (total / this.reviews.length).toFixed(1);
 });
 
-export default mongoose.models.Product || mongoose.model<Product>("Product", ProductSchema);
+export default models.Product || model<Product>("Product", ProductSchema);

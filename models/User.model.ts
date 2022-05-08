@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 import { Role, User } from "types/user";
 
-const UserSchema = new mongoose.Schema<User>(
+const UserSchema = new Schema<User>(
   {
     name: {
       type: String,
@@ -51,7 +51,7 @@ const UserSchema = new mongoose.Schema<User>(
       enum: Role,
     },
     directory: {
-      type: mongoose.SchemaTypes.ObjectId,
+      type: Types.ObjectId,
       ref: "Directory",
       default: null,
     },
@@ -130,4 +130,4 @@ UserSchema.methods.getResetToken = function () {
   return resetToken;
 };
 
-export default mongoose.models.User || mongoose.model<User>("User", UserSchema);
+export default models.User || model<User>("User", UserSchema);

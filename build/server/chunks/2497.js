@@ -26,9 +26,10 @@ const useAuth = ()=>(0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(contexts_a
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "NL": () => (/* binding */ useGetCategoriesQuery),
 /* harmony export */   "Eh": () => (/* binding */ useGetPetsQuery),
+/* harmony export */   "hY": () => (/* binding */ useGetBrandsQuery),
 /* harmony export */   "C$": () => (/* binding */ useGetProductsQuery)
 /* harmony export */ });
-/* unused harmony exports Tags, publicApi, useGetBrandsQuery */
+/* unused harmony exports Tags, publicApi */
 /* harmony import */ var _api_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9850);
 
 var Tags;

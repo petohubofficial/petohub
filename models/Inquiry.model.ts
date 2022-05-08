@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import type { Inquiry } from "types/inquiry";
 
-const InquirySchema = new mongoose.Schema<Inquiry>(
+const InquirySchema = new Schema<Inquiry>(
   {
     directory: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "Directory",
       required: true,
     },
@@ -42,4 +42,4 @@ const InquirySchema = new mongoose.Schema<Inquiry>(
   { timestamps: true }
 );
 
-export default mongoose.models.Inquiry || mongoose.model<Inquiry>("Inquiry", InquirySchema);
+export default models.Inquiry || model<Inquiry>("Inquiry", InquirySchema);

@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import type { Pet } from "types/pet";
 
-const PetSchema = new mongoose.Schema<Pet>(
+const PetSchema = new Schema<Pet>(
   {
     name: {
       type: String,
@@ -23,4 +23,4 @@ PetSchema.virtual("categories", {
   foreignField: "pet",
 });
 
-export default mongoose.models.Pet || mongoose.model<Pet>("Pet", PetSchema);
+export default models.Pet || model<Pet>("Pet", PetSchema);

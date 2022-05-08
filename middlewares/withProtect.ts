@@ -2,12 +2,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import User from "models/User.model";
 import connect from "utils/connectDb";
-import type { User as UserType } from "types/user";
+import { HydratedDocument } from "mongoose"
+import { User as IUser } from "types/user"
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export interface ProtectedNextApiRequest extends NextApiRequest {
-  user: UserType;
+  user: HydratedDocument<IUser>;
 }
 
 const withProtect =

@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import type { Brand } from "types/brand";
 
-const BrandSchema = new mongoose.Schema<Brand>(
+const BrandSchema = new Schema<Brand>(
   {
     name: {
       type: String,
@@ -15,7 +15,7 @@ const BrandSchema = new mongoose.Schema<Brand>(
     sellers: {
       type: [
         {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Types.ObjectId,
           ref: "Directory",
         },
       ],
@@ -32,4 +32,4 @@ BrandSchema.virtual("products", {
   foreignField: "brand",
 });
 
-export default mongoose.models.Brand || mongoose.model<Brand>("Brand", BrandSchema);
+export default models.Brand || model<Brand>("Brand", BrandSchema);

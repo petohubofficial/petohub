@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 
 export interface Newsletter {
-  _id: mongoose.Schema.Types.ObjectId;
+  _id: Types.ObjectId;
   email: string;
   subscriptions: string[];
   isSubscribed: boolean;

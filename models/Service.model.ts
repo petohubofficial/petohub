@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import path from "path";
 import fs from "fs";
 import type { Service } from "types/service";
 
-const ServiceSchema = new mongoose.Schema<Service>(
+const ServiceSchema = new Schema<Service>(
   {
     name: {
       type: String,
@@ -16,7 +16,7 @@ const ServiceSchema = new mongoose.Schema<Service>(
       type: [String],
     },
     seller: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "Directory",
       default: null,
     },
@@ -158,4 +158,4 @@ ServiceSchema.pre("remove", async function (next) {
   next();
 });
 
-export default mongoose.models.Service || mongoose.model("Service", ServiceSchema);
+export default models.Service || model("Service", ServiceSchema);

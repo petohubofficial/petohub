@@ -44,7 +44,9 @@ const HomePage = () => {
               </Button>
             </Box>
           </Box>
-          <Illustration />
+          <Box sx={{ p: 1 }}>
+            <Illustration />
+          </Box>
         </Box>
       </Container>
     </Box>

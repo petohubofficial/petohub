@@ -1,15 +1,15 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import type { Question } from "types/question";
 
-const QuestionSchema = new mongoose.Schema<Question>(
+const QuestionSchema = new Schema<Question>(
   {
     product: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "Product",
       required: true,
     },
     askedBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -32,7 +32,7 @@ const QuestionSchema = new mongoose.Schema<Question>(
             maxlength: [1024, "Answer is too long"],
           },
           answeredBy: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Types.ObjectId,
             ref: "User",
             required: true,
           },
@@ -48,4 +48,4 @@ const QuestionSchema = new mongoose.Schema<Question>(
   { timestamps: true }
 );
 
-export default mongoose.models.Question || mongoose.model<Question>("Question", QuestionSchema);
+export default models.Question || model<Question>("Question", QuestionSchema);

@@ -434,7 +434,7 @@ const HeaderBar = ()=>{
 };
 const HeaderNavLink = ({ href , text , ...other })=>{
     const router = (0,router_.useRouter)();
-    const isActive = href !== "/" && router.pathname.startsWith(href);
+    const isActive = router.pathname === href;
     return(/*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
         href: href,
         passHref: true,
@@ -555,7 +555,7 @@ const Header = ()=>{
                 sx: {
                     backgroundColor: "background.paper",
                     color: "text.secondary",
-                    zIndex: 1000
+                    zIndex: "appBar"
                 },
                 children: [
                     /*#__PURE__*/ jsx_runtime_.jsx(material_.Container, {
@@ -566,12 +566,9 @@ const Header = ()=>{
                                 minHeight: 64
                             },
                             children: [
-                                /*#__PURE__*/ jsx_runtime_.jsx(next_link["default"], {
-                                    href: "/",
-                                    passHref: true,
-                                    children: /*#__PURE__*/ jsx_runtime_.jsx(Logo/* Logo */.T, {
-                                        width: "60px"
-                                    })
+                                /*#__PURE__*/ jsx_runtime_.jsx(Logo/* Logo */.T, {
+                                    width: "60px",
+                                    onClick: ()=>router.push("/")
                                 }),
                                 /*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
                                     sx: {
@@ -628,7 +625,7 @@ const Header = ()=>{
                                                                     value: category.name,
                                                                     onClick: handleClose,
                                                                     children: category.name
-                                                                }, category.id)
+                                                                }, category.name)
                                                             )
                                                         ]
                                                     })

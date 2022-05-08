@@ -63,7 +63,7 @@ module.exports = require("path");
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const PetSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const PetSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     name: {
         type: String,
         required: true,
@@ -99,7 +99,7 @@ PetSchema.virtual("categories", {
     localField: "name",
     foreignField: "pet"
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Pet) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Pet", PetSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Pet || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Pet", PetSchema));
 
 
 /***/ }),

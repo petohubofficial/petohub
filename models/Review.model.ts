@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import { Review, RevieweeModel } from "types/review";
 
-const ReviewSchema = new mongoose.Schema<Review>(
+const ReviewSchema = new Schema<Review>(
   {
     reviewer: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -13,10 +13,7 @@ const ReviewSchema = new mongoose.Schema<Review>(
       enum: RevieweeModel,
       required: true,
     },
-    revieweeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-    },
+    revieweeId: Types.ObjectId,
     subject: {
       type: String,
       required: [true, "Please provide a review subject"],
@@ -47,4 +44,4 @@ ReviewSchema.virtual("reviewee", {
   justOne: true,
 });
 
-export default mongoose.models.Review || mongoose.model<Review>("Review", ReviewSchema);
+export default models.Review || model<Review>("Review", ReviewSchema);

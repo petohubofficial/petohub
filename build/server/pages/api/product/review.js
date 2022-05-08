@@ -61,7 +61,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var models_Product_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5916);
+/* harmony import */ var models_Product_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6226);
 /* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4035);
 /* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9598);
 /* harmony import */ var models_Review_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2378);
@@ -153,7 +153,7 @@ const handler = async (req, res)=>{
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,5916,2378], () => (__webpack_exec__(2077)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,6226,2378], () => (__webpack_exec__(2077)));
 module.exports = __webpack_exports__;
 
 })();

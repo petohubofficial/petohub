@@ -1,24 +1,49 @@
 "use strict";
-exports.id = 5916;
-exports.ids = [5916];
+exports.id = 6226;
+exports.ids = [6226];
 exports.modules = {
 
-/***/ 5916:
+/***/ 6226:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1017);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7147);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "Z": () => (/* binding */ Product_model)
+});
+
+// EXTERNAL MODULE: external "mongoose"
+var external_mongoose_ = __webpack_require__(1185);
+// EXTERNAL MODULE: external "path"
+var external_path_ = __webpack_require__(1017);
+var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(7147);
+var external_fs_default = /*#__PURE__*/__webpack_require__.n(external_fs_);
+;// CONCATENATED MODULE: ./types/product.ts
+var AffiliateProvider;
+(function(AffiliateProvider) {
+    AffiliateProvider["AMAZON"] = "Amazon";
+    AffiliateProvider["FLIPKART"] = "Flipkart";
+    AffiliateProvider["EBAY"] = "Ebay";
+    AffiliateProvider["SNAPDEAL"] = "Snapdeal";
+    AffiliateProvider["OTHER"] = "Other";
+})(AffiliateProvider || (AffiliateProvider = {}));
+var FoodClassification;
+(function(FoodClassification) {
+    FoodClassification["VEGETARIAN"] = "Vegetarian";
+    FoodClassification["NON_VEGETARIAN"] = "Non-Vegetarian";
+    FoodClassification["VEGAN"] = "Vegan";
+    FoodClassification["OTHER"] = "Other";
+    FoodClassification["NOT_APPLICABLE"] = "Not Applicable";
+})(FoodClassification || (FoodClassification = {}));
+
+;// CONCATENATED MODULE: ./models/Product.model.ts
 
 
 
-const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+
+const ProductSchema = new external_mongoose_.Schema({
     name: {
         type: String,
         required: [
@@ -41,7 +66,7 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
         ]
     },
     seller: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: external_mongoose_.Types.ObjectId,
         ref: "Directory",
         default: null
     },
@@ -165,9 +190,10 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
             "Price can't be lower than 0"
         ]
     },
-    isVeg: {
-        type: Boolean,
-        default: false
+    foodClassification: {
+        type: String,
+        enum: Object.values(FoodClassification),
+        default: FoodClassification.NOT_APPLICABLE
     },
     ageRange: {
         min: {
@@ -206,10 +232,13 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
         type: [
             {
                 _id: false,
-                productId: String,
-                productLink: String,
-                productProvider: String,
-                productPrice: Number
+                id: String,
+                link: String,
+                provider: {
+                    type: String,
+                    enum: Object.values(AffiliateProvider)
+                },
+                price: Number
             }, 
         ],
         default: []
@@ -217,7 +246,7 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
     edits: {
         type: [
             {
-                type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+                type: external_mongoose_.Types.ObjectId,
                 ref: "Edit"
             }, 
         ],
@@ -225,7 +254,7 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
         select: false
     },
     lastEdit: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: external_mongoose_.Types.ObjectId,
         ref: "Edit",
         default: null,
         select: false
@@ -256,9 +285,9 @@ ProductSchema.pre("save", async function(next) {
             const deletedImages = previous.filter((x)=>!this.productImages.includes(x)
             );
             for (const image of deletedImages){
-                const previousPath = path__WEBPACK_IMPORTED_MODULE_1___default().join(__dirname, "..", "client", "public", image);
-                if (fs__WEBPACK_IMPORTED_MODULE_2___default().existsSync(previousPath)) {
-                    fs__WEBPACK_IMPORTED_MODULE_2___default().unlink(previousPath, (err)=>err && console.error(err)
+                const previousPath = external_path_default().join(__dirname, "..", "client", "public", image);
+                if (external_fs_default().existsSync(previousPath)) {
+                    external_fs_default().unlink(previousPath, (err)=>err && console.error(err)
                     );
                 }
             }
@@ -271,9 +300,9 @@ ProductSchema.pre("save", async function(next) {
 ProductSchema.pre("remove", async function(next) {
     // Deleting all images if the product is deleted
     for (const image of this.productImages){
-        const imagePath = path__WEBPACK_IMPORTED_MODULE_1___default().join(__dirname, "..", "client", "public", image);
-        if (fs__WEBPACK_IMPORTED_MODULE_2___default().existsSync(imagePath)) {
-            fs__WEBPACK_IMPORTED_MODULE_2___default().unlink(imagePath, (err)=>err && console.error(err)
+        const imagePath = external_path_default().join(__dirname, "..", "client", "public", image);
+        if (external_fs_default().existsSync(imagePath)) {
+            external_fs_default().unlink(imagePath, (err)=>err && console.error(err)
             );
         }
     }
@@ -319,7 +348,7 @@ ProductSchema.virtual("averageRating").get(function() {
     // @ts-ignore
     return (total / this.reviews.length).toFixed(1);
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Product) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Product", ProductSchema));
+/* harmony default export */ const Product_model = (external_mongoose_.models.Product || (0,external_mongoose_.model)("Product", ProductSchema));
 
 
 /***/ })

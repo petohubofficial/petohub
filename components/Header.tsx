@@ -112,7 +112,7 @@ interface HeaderNavLinkProps {
 
 const HeaderNavLink = ({ href, text, ...other }: HeaderNavLinkProps) => {
   const router = useRouter();
-  const isActive = href !== "/" && router.pathname.startsWith(href);
+  const isActive = router.pathname === href;
   return (
     <Link href={href} passHref {...other}>
       <Typography
@@ -213,14 +213,12 @@ export const Header: FC = () => {
         sx={{
           backgroundColor: "background.paper",
           color: "text.secondary",
-          zIndex: 1000,
+          zIndex: "appBar",
         }}
       >
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ minHeight: 64 }}>
-            <Link href="/" passHref>
-              <Logo width="60px" />
-            </Link>
+            <Logo width="60px" onClick={() => router.push("/")} />
             <Box sx={{ flexGrow: 1 }} />
             <TextField
               fullWidth
@@ -259,7 +257,7 @@ export const Header: FC = () => {
                           All categories
                         </MenuItem>
                         {data?.categories?.map((category) => (
-                          <MenuItem key={category.id} value={category.name} onClick={handleClose}>
+                          <MenuItem key={category.name} value={category.name} onClick={handleClose}>
                             {category.name}
                           </MenuItem>
                         ))}

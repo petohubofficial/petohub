@@ -63,7 +63,7 @@ module.exports = require("path");
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const BrandSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const BrandSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     name: {
         type: String,
         required: true,
@@ -87,7 +87,7 @@ const BrandSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)
     sellers: {
         type: [
             {
-                type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+                type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
                 ref: "Directory"
             }, 
         ],
@@ -108,7 +108,7 @@ BrandSchema.virtual("products", {
     localField: "name",
     foreignField: "brand"
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Brand) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Brand", BrandSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Brand || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Brand", BrandSchema));
 
 
 /***/ }),

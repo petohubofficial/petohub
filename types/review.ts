@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import { User } from "types/user";
 
 export interface Rating {
@@ -15,11 +15,11 @@ export enum RevieweeModel {
   SERVICE = "Service",
 }
 
-export interface Review extends mongoose.Document {
-  _id: mongoose.Schema.Types.ObjectId;
-  reviewer: mongoose.Schema.Types.ObjectId | User;
+export interface Review {
+  _id: Types.ObjectId;
+  reviewer: Types.ObjectId | User;
   revieweeModel: RevieweeModel;
-  revieweeId: mongoose.Schema.Types.ObjectId;
+  revieweeId: Types.ObjectId;
   subject: string;
   comment: string;
   rating: number;

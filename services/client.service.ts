@@ -10,7 +10,7 @@ export const clientApi = api
   .injectEndpoints({
     endpoints: (builder) => ({
       getClientProducts: builder.query<GetProductsResponse, GetProductsFilters>({
-        query: (params) => ({ url: "client/products", params }),
+        query: (params) => ({ url: "client/product", params }),
         providesTags: [Tags.PRODUCTS],
       }),
     }),

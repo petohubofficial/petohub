@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import fs from "fs";
 import path from "path";
 import lookups from "data/lookups.json";
 import type { Details, Directory, FAQ, Timings } from "types/directory";
 import type { Rating } from "types/review";
 
-const DirectorySchema = new mongoose.Schema<Directory>(
+const DirectorySchema = new Schema<Directory>(
   {
     storeName: {
       type: String,
@@ -15,7 +15,7 @@ const DirectorySchema = new mongoose.Schema<Directory>(
       minlength: [3, "Store name is too short"],
     },
     user: {
-      type: mongoose.SchemaTypes.ObjectId,
+      type: Types.ObjectId,
       ref: "User",
       default: null,
       select: false,
@@ -268,4 +268,4 @@ DirectorySchema.virtual("averageRating").get(function (): number {
   return (total / this.reviews.length).toFixed(1);
 });
 
-export default mongoose.models.Directory || mongoose.model<Directory>("Directory", DirectorySchema);
+export default models.Directory || model<Directory>("Directory", DirectorySchema);

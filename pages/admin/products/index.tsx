@@ -11,12 +11,12 @@ import {
 import PublicLayout from "components/layouts/PublicLayout";
 import { Scrollbar } from "components/Scrollbar";
 import { ReactElement, useState } from "react";
-import { useGetProductsQuery } from "services/admin.service";
+import { useGetAdminProductsQuery } from "services/admin.service";
 import { GetProductsFilters } from "types/product";
 
 const Products = () => {
   const [filters, setFilters] = useState<GetProductsFilters>({});
-  const { data, isLoading, refetch } = useGetProductsQuery(filters);
+  const { data, isLoading } = useGetAdminProductsQuery(filters);
 
   return (
     <Container maxWidth="lg">
@@ -40,7 +40,7 @@ const Products = () => {
               </TableHead>
               <TableBody>
                 {data?.data?.results?.map((product) => (
-                  <TableRow key={product.id}>
+                  <TableRow key={product._id.toString()}>
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.description}</TableCell>
                     <TableCell>{product.price}</TableCell>

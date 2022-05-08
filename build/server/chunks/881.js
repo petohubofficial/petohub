@@ -29,7 +29,7 @@ exports.modules = {
 
 
 
-const UserSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const UserSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     name: {
         type: String,
         required: [
@@ -91,7 +91,7 @@ const UserSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)(
         enum: types_user__WEBPACK_IMPORTED_MODULE_6__/* .Role */ .u
     },
     directory: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().SchemaTypes.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "Directory",
         default: null
     },
@@ -168,7 +168,7 @@ UserSchema.methods.getResetToken = function() {
     this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
     return resetToken;
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.User) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("User", UserSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.User || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("User", UserSchema));
 
 
 /***/ }),

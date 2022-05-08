@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import type { Newsletter } from "types/newsletter";
 
-const NewsletterSchema = new mongoose.Schema<Newsletter>(
+const NewsletterSchema = new Schema<Newsletter>(
   {
     email: {
       type: String,
@@ -33,5 +33,4 @@ const NewsletterSchema = new mongoose.Schema<Newsletter>(
   { timestamps: true }
 );
 
-export default mongoose.models.Newsletter ||
-  mongoose.model<Newsletter>("Newsletter", NewsletterSchema);
+export default models.Newsletter || model<Newsletter>("Newsletter", NewsletterSchema);

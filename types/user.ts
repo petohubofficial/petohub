@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import { Directory } from "types/directory";
 
 export enum Role {
@@ -8,8 +8,8 @@ export enum Role {
   PRODUCT_ADMIN = "Product Admin",
 }
 
-export interface User extends mongoose.Document {
-  _id: mongoose.Schema.Types.ObjectId;
+export interface User {
+  _id: Types.ObjectId;
   name: string;
   email: string;
   password: string;
@@ -17,7 +17,7 @@ export interface User extends mongoose.Document {
   profileImage: string;
   _previousProfileImage: string;
   role: Role;
-  directory: mongoose.Schema.Types.ObjectId | Directory | null;
+  directory: Types.ObjectId | Directory | null;
   isVerified: boolean;
   verificationToken: string;
   resetPasswordToken: string;

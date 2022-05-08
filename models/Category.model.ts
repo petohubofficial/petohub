@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, Types, models, model } from "mongoose";
 import { Category, CategoryType } from "types/category";
 
-const CategorySchema = new mongoose.Schema<Category>(
+const CategorySchema = new Schema<Category>(
   {
     name: {
       type: String,
@@ -37,4 +37,4 @@ CategorySchema.virtual("docs", {
   foreignField: "category",
 });
 
-export default mongoose.models.Category || mongoose.model<Category>("Category", CategorySchema);
+export default models.Category || model<Category>("Category", CategorySchema);

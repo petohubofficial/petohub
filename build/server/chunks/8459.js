@@ -20,8 +20,8 @@ var map = {
 	"./Newsletter.model.ts": 7928,
 	"./Pet.model": 5227,
 	"./Pet.model.ts": 5227,
-	"./Product.model": 5412,
-	"./Product.model.ts": 5412,
+	"./Product.model": 6214,
+	"./Product.model.ts": 6214,
 	"./Question.model": 2404,
 	"./Question.model.ts": 2404,
 	"./Review.model": 8985,
@@ -65,7 +65,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const BrandSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const BrandSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     name: {
         type: String,
         required: true,
@@ -89,7 +89,7 @@ const BrandSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)
     sellers: {
         type: [
             {
-                type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+                type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
                 ref: "Directory"
             }, 
         ],
@@ -110,7 +110,7 @@ BrandSchema.virtual("products", {
     localField: "name",
     foreignField: "brand"
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Brand) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Brand", BrandSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Brand || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Brand", BrandSchema));
 
 
 /***/ }),
@@ -129,7 +129,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "mongoose"
 var external_mongoose_ = __webpack_require__(1185);
-var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
 ;// CONCATENATED MODULE: ./types/category.ts
 var CategoryType;
 (function(CategoryType) {
@@ -141,7 +140,7 @@ var CategoryType;
 ;// CONCATENATED MODULE: ./models/Category.model.ts
 
 
-const CategorySchema = new (external_mongoose_default()).Schema({
+const CategorySchema = new external_mongoose_.Schema({
     name: {
         type: String,
         required: true,
@@ -192,7 +191,7 @@ CategorySchema.virtual("docs", {
     localField: "name",
     foreignField: "category"
 });
-/* harmony default export */ const Category_model = ((external_mongoose_default()).models.Category || external_mongoose_default().model("Category", CategorySchema));
+/* harmony default export */ const Category_model = (external_mongoose_.models.Category || (0,external_mongoose_.model)("Category", CategorySchema));
 
 
 /***/ }),
@@ -211,7 +210,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "mongoose"
 var external_mongoose_ = __webpack_require__(1185);
-var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __webpack_require__(7147);
 var external_fs_default = /*#__PURE__*/__webpack_require__.n(external_fs_);
@@ -225,7 +223,7 @@ const lookups_namespaceObject = JSON.parse('["shop","username","directory","dire
 
 
 
-const DirectorySchema = new (external_mongoose_default()).Schema({
+const DirectorySchema = new external_mongoose_.Schema({
     storeName: {
         type: String,
         trim: true,
@@ -243,7 +241,7 @@ const DirectorySchema = new (external_mongoose_default()).Schema({
         ]
     },
     user: {
-        type: (external_mongoose_default()).SchemaTypes.ObjectId,
+        type: external_mongoose_.Types.ObjectId,
         ref: "User",
         default: null,
         select: false
@@ -607,7 +605,7 @@ DirectorySchema.virtual("averageRating").get(function() {
     // @ts-ignore
     return (total / this.reviews.length).toFixed(1);
 });
-/* harmony default export */ const Directory_model = ((external_mongoose_default()).models.Directory || external_mongoose_default().model("Directory", DirectorySchema));
+/* harmony default export */ const Directory_model = (external_mongoose_.models.Directory || (0,external_mongoose_.model)("Directory", DirectorySchema));
 
 
 /***/ }),
@@ -623,21 +621,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const EditSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const EditSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     date: Date,
     product: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "Product"
     },
     user: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "User"
     },
     changes: Object
 }, {
     timestamps: true
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Edit) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Edit", EditSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Edit || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Edit", EditSchema));
 
 
 /***/ }),
@@ -653,9 +651,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const InquirySchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const InquirySchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     directory: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "Directory",
         required: true
     },
@@ -713,7 +711,7 @@ const InquirySchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
 }, {
     timestamps: true
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Inquiry) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Inquiry", InquirySchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Inquiry || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Inquiry", InquirySchema));
 
 
 /***/ }),
@@ -729,7 +727,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const NewsletterSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const NewsletterSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     email: {
         type: String,
         lowercase: true,
@@ -764,7 +762,7 @@ const NewsletterSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sc
 }, {
     timestamps: true
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Newsletter) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Newsletter", NewsletterSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Newsletter || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Newsletter", NewsletterSchema));
 
 
 /***/ }),
@@ -780,7 +778,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const PetSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const PetSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     name: {
         type: String,
         required: true,
@@ -816,29 +814,55 @@ PetSchema.virtual("categories", {
     localField: "name",
     foreignField: "pet"
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Pet) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Pet", PetSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Pet || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Pet", PetSchema));
 
 
 /***/ }),
 
-/***/ 5412:
+/***/ 6214:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1017);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7147);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (/* binding */ Product_model)
+});
+
+// EXTERNAL MODULE: external "mongoose"
+var external_mongoose_ = __webpack_require__(1185);
+// EXTERNAL MODULE: external "path"
+var external_path_ = __webpack_require__(1017);
+var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(7147);
+var external_fs_default = /*#__PURE__*/__webpack_require__.n(external_fs_);
+;// CONCATENATED MODULE: ./types/product.ts
+var AffiliateProvider;
+(function(AffiliateProvider) {
+    AffiliateProvider["AMAZON"] = "Amazon";
+    AffiliateProvider["FLIPKART"] = "Flipkart";
+    AffiliateProvider["EBAY"] = "Ebay";
+    AffiliateProvider["SNAPDEAL"] = "Snapdeal";
+    AffiliateProvider["OTHER"] = "Other";
+})(AffiliateProvider || (AffiliateProvider = {}));
+var FoodClassification;
+(function(FoodClassification) {
+    FoodClassification["VEGETARIAN"] = "Vegetarian";
+    FoodClassification["NON_VEGETARIAN"] = "Non-Vegetarian";
+    FoodClassification["VEGAN"] = "Vegan";
+    FoodClassification["OTHER"] = "Other";
+    FoodClassification["NOT_APPLICABLE"] = "Not Applicable";
+})(FoodClassification || (FoodClassification = {}));
+
+;// CONCATENATED MODULE: ./models/Product.model.ts
 
 
 
-const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+
+const ProductSchema = new external_mongoose_.Schema({
     name: {
         type: String,
         required: [
@@ -861,7 +885,7 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
         ]
     },
     seller: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: external_mongoose_.Types.ObjectId,
         ref: "Directory",
         default: null
     },
@@ -985,9 +1009,10 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
             "Price can't be lower than 0"
         ]
     },
-    isVeg: {
-        type: Boolean,
-        default: false
+    foodClassification: {
+        type: String,
+        enum: Object.values(FoodClassification),
+        default: FoodClassification.NOT_APPLICABLE
     },
     ageRange: {
         min: {
@@ -1026,10 +1051,13 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
         type: [
             {
                 _id: false,
-                productId: String,
-                productLink: String,
-                productProvider: String,
-                productPrice: Number
+                id: String,
+                link: String,
+                provider: {
+                    type: String,
+                    enum: Object.values(AffiliateProvider)
+                },
+                price: Number
             }, 
         ],
         default: []
@@ -1037,7 +1065,7 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
     edits: {
         type: [
             {
-                type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+                type: external_mongoose_.Types.ObjectId,
                 ref: "Edit"
             }, 
         ],
@@ -1045,7 +1073,7 @@ const ProductSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
         select: false
     },
     lastEdit: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: external_mongoose_.Types.ObjectId,
         ref: "Edit",
         default: null,
         select: false
@@ -1076,9 +1104,9 @@ ProductSchema.pre("save", async function(next) {
             const deletedImages = previous.filter((x)=>!this.productImages.includes(x)
             );
             for (const image of deletedImages){
-                const previousPath = path__WEBPACK_IMPORTED_MODULE_1___default().join(__dirname, "..", "client", "public", image);
-                if (fs__WEBPACK_IMPORTED_MODULE_2___default().existsSync(previousPath)) {
-                    fs__WEBPACK_IMPORTED_MODULE_2___default().unlink(previousPath, (err)=>err && console.error(err)
+                const previousPath = external_path_default().join(__dirname, "..", "client", "public", image);
+                if (external_fs_default().existsSync(previousPath)) {
+                    external_fs_default().unlink(previousPath, (err)=>err && console.error(err)
                     );
                 }
             }
@@ -1091,9 +1119,9 @@ ProductSchema.pre("save", async function(next) {
 ProductSchema.pre("remove", async function(next) {
     // Deleting all images if the product is deleted
     for (const image of this.productImages){
-        const imagePath = path__WEBPACK_IMPORTED_MODULE_1___default().join(__dirname, "..", "client", "public", image);
-        if (fs__WEBPACK_IMPORTED_MODULE_2___default().existsSync(imagePath)) {
-            fs__WEBPACK_IMPORTED_MODULE_2___default().unlink(imagePath, (err)=>err && console.error(err)
+        const imagePath = external_path_default().join(__dirname, "..", "client", "public", image);
+        if (external_fs_default().existsSync(imagePath)) {
+            external_fs_default().unlink(imagePath, (err)=>err && console.error(err)
             );
         }
     }
@@ -1139,7 +1167,7 @@ ProductSchema.virtual("averageRating").get(function() {
     // @ts-ignore
     return (total / this.reviews.length).toFixed(1);
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Product) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Product", ProductSchema));
+/* harmony default export */ const Product_model = (external_mongoose_.models.Product || (0,external_mongoose_.model)("Product", ProductSchema));
 
 
 /***/ }),
@@ -1155,14 +1183,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const QuestionSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const QuestionSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     product: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "Product",
         required: true
     },
     askedBy: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "User",
         required: true
     },
@@ -1203,7 +1231,7 @@ const QuestionSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sche
                     ]
                 },
                 answeredBy: {
-                    type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+                    type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
                     ref: "User",
                     required: true
                 },
@@ -1218,7 +1246,7 @@ const QuestionSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sche
 }, {
     timestamps: true
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Question) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Question", QuestionSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Question || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Question", QuestionSchema));
 
 
 /***/ }),
@@ -1237,7 +1265,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "mongoose"
 var external_mongoose_ = __webpack_require__(1185);
-var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
 ;// CONCATENATED MODULE: ./types/review.ts
 var RevieweeModel;
 (function(RevieweeModel) {
@@ -1249,9 +1276,9 @@ var RevieweeModel;
 ;// CONCATENATED MODULE: ./models/Review.model.ts
 
 
-const ReviewSchema = new (external_mongoose_default()).Schema({
+const ReviewSchema = new external_mongoose_.Schema({
     reviewer: {
-        type: (external_mongoose_default()).Schema.Types.ObjectId,
+        type: external_mongoose_.Types.ObjectId,
         ref: "User",
         required: true
     },
@@ -1260,10 +1287,7 @@ const ReviewSchema = new (external_mongoose_default()).Schema({
         enum: RevieweeModel,
         required: true
     },
-    revieweeId: {
-        type: (external_mongoose_default()).Schema.Types.ObjectId,
-        required: true
-    },
+    revieweeId: external_mongoose_.Types.ObjectId,
     subject: {
         type: String,
         required: [
@@ -1326,7 +1350,7 @@ ReviewSchema.virtual("reviewee", {
     foreignField: "_id",
     justOne: true
 });
-/* harmony default export */ const Review_model = ((external_mongoose_default()).models.Review || external_mongoose_default().model("Review", ReviewSchema));
+/* harmony default export */ const Review_model = (external_mongoose_.models.Review || (0,external_mongoose_.model)("Review", ReviewSchema));
 
 
 /***/ }),
@@ -1348,7 +1372,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const ServiceSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const ServiceSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     name: {
         type: String,
         minlength: [
@@ -1371,7 +1395,7 @@ const ServiceSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schem
         ]
     },
     seller: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "Directory",
         default: null
     },
@@ -1564,7 +1588,7 @@ ServiceSchema.pre("remove", async function(next) {
     }
     next();
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Service) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Service", ServiceSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Service || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Service", ServiceSchema));
 
 
 /***/ }),
@@ -1583,7 +1607,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "mongoose"
 var external_mongoose_ = __webpack_require__(1185);
-var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
 // EXTERNAL MODULE: external "bcryptjs"
 var external_bcryptjs_ = __webpack_require__(8432);
 var external_bcryptjs_default = /*#__PURE__*/__webpack_require__.n(external_bcryptjs_);
@@ -1616,7 +1639,7 @@ var Role;
 
 
 
-const UserSchema = new (external_mongoose_default()).Schema({
+const UserSchema = new external_mongoose_.Schema({
     name: {
         type: String,
         required: [
@@ -1678,7 +1701,7 @@ const UserSchema = new (external_mongoose_default()).Schema({
         enum: Role
     },
     directory: {
-        type: (external_mongoose_default()).SchemaTypes.ObjectId,
+        type: external_mongoose_.Types.ObjectId,
         ref: "Directory",
         default: null
     },
@@ -1755,7 +1778,7 @@ UserSchema.methods.getResetToken = function() {
     this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
     return resetToken;
 };
-/* harmony default export */ const User_model = ((external_mongoose_default()).models.User || external_mongoose_default().model("User", UserSchema));
+/* harmony default export */ const User_model = (external_mongoose_.models.User || (0,external_mongoose_.model)("User", UserSchema));
 
 
 /***/ }),

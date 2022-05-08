@@ -1,4 +1,7 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
+import { Directory } from "./directory";
+import { Product } from "./product";
+import { Service } from "./service";
 
 export enum CategoryType {
   PRODUCT = "Product",
@@ -6,8 +9,8 @@ export enum CategoryType {
   SERVICE = "Service",
 }
 
-export interface Category extends mongoose.Document {
-  _id: mongoose.Schema.Types.ObjectId;
+export interface Category {
+  _id: Types.ObjectId;
   name: string;
   type: CategoryType;
   subCategories: string[] | Category[];
@@ -16,7 +19,7 @@ export interface Category extends mongoose.Document {
   description: string;
   createdAt: Date;
   updatedAt: Date;
-  docs: mongoose.Document[];
+  docs: Product[] | Directory[] | Service[];
 }
 
 export interface CategoryResponse {

@@ -43,21 +43,17 @@ var auth = __webpack_require__(2754);
 const toolkit_namespaceObject = require("@reduxjs/toolkit");
 // EXTERNAL MODULE: ./services/api.service.ts
 var api_service = __webpack_require__(9850);
-// EXTERNAL MODULE: ./services/admin.service.ts
-var admin_service = __webpack_require__(3481);
 ;// CONCATENATED MODULE: ./store/index.ts
 
 
 
-
 const rootReducer = (0,toolkit_namespaceObject.combineReducers)({
-    [api_service/* api.reducerPath */.h.reducerPath]: api_service/* api.reducer */.h.reducer,
-    [admin_service/* admin.reducerPath */.S.reducerPath]: admin_service/* admin.reducer */.S.reducer
+    [api_service/* api.reducerPath */.h.reducerPath]: api_service/* api.reducer */.h.reducer
 });
 const store = (0,toolkit_namespaceObject.configureStore)({
     reducer: rootReducer,
     devTools: "production" !== "production",
-    middleware: (getDefaultMiddleware)=>getDefaultMiddleware().concat(api_service/* api.middleware */.h.middleware, admin_service/* admin.middleware */.S.middleware)
+    middleware: (getDefaultMiddleware)=>getDefaultMiddleware().concat(api_service/* api.middleware */.h.middleware)
 });
 const useSelector = (/* unused pure expression or super */ null && (useReduxSelector));
 const useDispatch = ()=>useReduxDispatch()
@@ -512,6 +508,11 @@ const darkTheme = {
                     "&::placeholder": {
                         opacity: 1,
                         color: dark_text.secondary
+                    },
+                    // Customizing the chrome autofill input colors
+                    "&:-webkit-autofill": {
+                        WebkitBoxShadow: `0 0 0 100px ${background.default} inset !important`,
+                        WebkitTextFillColor: `${dark_text.primary} !important`
                     }
                 }
             }
@@ -1050,7 +1051,7 @@ module.exports = require("react/jsx-runtime");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [2754,1316,3481], () => (__webpack_exec__(6488)));
+var __webpack_exports__ = __webpack_require__.X(0, [2754,1316], () => (__webpack_exec__(6488)));
 module.exports = __webpack_exports__;
 
 })();

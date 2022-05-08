@@ -14,7 +14,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "mongoose"
 var external_mongoose_ = __webpack_require__(1185);
-var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
 ;// CONCATENATED MODULE: ./types/category.ts
 var CategoryType;
 (function(CategoryType) {
@@ -26,7 +25,7 @@ var CategoryType;
 ;// CONCATENATED MODULE: ./models/Category.model.ts
 
 
-const CategorySchema = new (external_mongoose_default()).Schema({
+const CategorySchema = new external_mongoose_.Schema({
     name: {
         type: String,
         required: true,
@@ -77,7 +76,7 @@ CategorySchema.virtual("docs", {
     localField: "name",
     foreignField: "category"
 });
-/* harmony default export */ const Category_model = ((external_mongoose_default()).models.Category || external_mongoose_default().model("Category", CategorySchema));
+/* harmony default export */ const Category_model = (external_mongoose_.models.Category || (0,external_mongoose_.model)("Category", CategorySchema));
 
 
 /***/ })

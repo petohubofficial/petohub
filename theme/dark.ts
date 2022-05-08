@@ -102,6 +102,11 @@ export const darkTheme: ThemeOptions = {
             opacity: 1,
             color: text.secondary,
           },
+          // Customizing the chrome autofill input colors
+          "&:-webkit-autofill": {
+            WebkitBoxShadow: `0 0 0 100px ${background.default} inset !important`,
+            WebkitTextFillColor: `${text.primary} !important`,
+          },
         },
       },
     },

@@ -1,8 +1,8 @@
 "use strict";
 (() => {
 var exports = {};
-exports.id = 1488;
-exports.ids = [1488];
+exports.id = 7022;
+exports.ids = [7022];
 exports.modules = {
 
 /***/ 8432:
@@ -23,13 +23,6 @@ module.exports = require("jsonwebtoken");
 /***/ ((module) => {
 
 module.exports = require("mongoose");
-
-/***/ }),
-
-/***/ 1738:
-/***/ ((module) => {
-
-module.exports = require("multer");
 
 /***/ }),
 
@@ -90,26 +83,26 @@ const withRoles = (...roles)=>(handler)=>(req, res)=>{
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const EditSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const EditSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     date: Date,
     product: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "Product"
     },
     user: {
-        type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
+        type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Types.ObjectId,
         ref: "User"
     },
     changes: Object
 }, {
     timestamps: true
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Edit) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Edit", EditSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Edit || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Edit", EditSchema));
 
 
 /***/ }),
 
-/***/ 975:
+/***/ 8628:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -117,12 +110,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "config": () => (/* binding */ config),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2970);
-/* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9598);
+/* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9598);
 /* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6097);
-/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4035);
-/* harmony import */ var models_Product_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5916);
-/* harmony import */ var models_Edit_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(102);
+/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4035);
+/* harmony import */ var models_Product_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6226);
+/* harmony import */ var models_Edit_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(102);
+/* harmony import */ var models_Directory_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(682);
 /* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8738);
 /* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1957);
 
@@ -144,13 +137,13 @@ const handler = async (req, res)=>{
         success: false,
         error: "Method not allowed"
     });
-    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)();
+    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)();
     try {
-        // Get own products
+        // Get products
         if (req.method === "GET") {
             // Get a single product
             if (req.query.id) {
-                const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).where("seller").equals(req.user.directory);
+                const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id);
                 if (!product) return res.status(404).json({
                     success: false,
                     error: "Product not found"
@@ -159,53 +152,124 @@ const handler = async (req, res)=>{
                     success: true,
                     product
                 });
+            } else {
+                const page = parseInt(req.query.page) || 1;
+                const limit = Math.min(parseInt(req.query.limit) || 20, 20);
+                const query = req.query.q || "";
+                const sort = req.query.sort || "";
+                const category = req.query.category || "";
+                const pet = req.query.pet || "";
+                const brand = req.query.brand || "";
+                const min = parseInt(req.query.min) || 0;
+                const max = parseInt(req.query.max) || Number.MAX_SAFE_INTEGER;
+                const startIndex = (page - 1) * limit;
+                const endIndex = page * limit;
+                // Building the query
+                const productQuery = models_Product_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].find */ .Z.find({
+                    $and: [
+                        {
+                            name: {
+                                $regex: query,
+                                $options: "i"
+                            }
+                        },
+                        {
+                            category: {
+                                $regex: category,
+                                $options: "i"
+                            }
+                        },
+                        {
+                            brand: {
+                                $regex: brand,
+                                $options: "i"
+                            }
+                        },
+                        {
+                            petType: {
+                                $regex: pet,
+                                $options: "i"
+                            }
+                        },
+                        {
+                            description: {
+                                $regex: query,
+                                $options: "i"
+                            }
+                        },
+                        {
+                            price: {
+                                $gte: min,
+                                $lte: max
+                            }
+                        }, 
+                    ]
+                });
+                // Populating reviews
+                productQuery.populate({
+                    path: "reviews",
+                    populate: {
+                        path: "reviewer",
+                        select: "name profileImage _id"
+                    }
+                });
+                // Sorting the query
+                if (sort === "price") productQuery.sort({
+                    price: -1
+                });
+                if (sort === "-price") productQuery.sort({
+                    price: 1
+                });
+                if (sort === "rating") productQuery.sort({
+                    averageRating: 1
+                });
+                if (sort === "-rating") productQuery.sort({
+                    averageRating: -1
+                });
+                if (sort === "newest") productQuery.sort({
+                    createdAt: -1
+                });
+                if (sort === "oldest") productQuery.sort({
+                    createdAt: 1
+                });
+                // Pagination
+                productQuery.skip(startIndex).limit(limit);
+                // Executing the query
+                const products = await productQuery;
+                // Making the results object along with some metadata
+                const results = {
+                    total: 0,
+                    pages: 0,
+                    results: [],
+                    next: {
+                        page: 0,
+                        limit: 0
+                    },
+                    prev: {
+                        page: 0,
+                        limit: 0
+                    }
+                };
+                results.total = products.length;
+                results.pages = Math.ceil(results.total / limit);
+                results.results = products;
+                // Metadata for next and prev pages
+                if (endIndex < results.total) results.next = {
+                    page: page + 1,
+                    limit: limit
+                };
+                if (startIndex > 0) results.prev = {
+                    page: page - 1,
+                    limit: limit
+                };
+                return res.status(200).json({
+                    success: true,
+                    data: results
+                });
             }
-            // Get all products
-            const page = parseInt(req.query.page) || 1;
-            const limit = Math.min(parseInt(req.query.limit) || 20, 20);
-            const startIndex = (page - 1) * limit;
-            const endIndex = page * limit;
-            const productQuery = models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({
-                seller: req.user.directory
-            });
-            // Pagination
-            productQuery.skip(startIndex).limit(limit);
-            // Executing the query
-            const products = await productQuery;
-            // Making the results object along with some metadata
-            const results = {
-                total: 0,
-                pages: 0,
-                results: [],
-                next: {
-                    page: 0,
-                    limit: 0
-                },
-                prev: {
-                    page: 0,
-                    limit: 0
-                }
-            };
-            results.total = products.length;
-            results.pages = Math.ceil(results.total / limit);
-            results.results = products;
-            // Metadata for next and prev pages
-            if (endIndex < results.total) results.next = {
-                page: page + 1,
-                limit: limit
-            };
-            if (startIndex > 0) results.prev = {
-                page: page - 1,
-                limit: limit
-            };
-            return res.status(200).json({
-                success: true,
-                data: results
-            });
         } else if (req.method === "POST") {
             var ref, ref1, ref2;
-            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].create */ .Z.create({
-                seller: req.user.directory,
+            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].create */ .Z.create({
                 name: req.body.name,
                 brand: req.body.brand,
                 category: req.body.category,
@@ -232,7 +296,7 @@ const handler = async (req, res)=>{
                 }
             }
             // Tracking edits
-            const edit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
+            const edit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].create */ .Z.create({
                 user: req.user._id,
                 product: product._id,
                 date: Date.now(),
@@ -241,27 +305,36 @@ const handler = async (req, res)=>{
             product.lastEdit = edit._id;
             product.edits.unshift(edit._id);
             await product.save();
+            // Manually populating edits and lastEdit
+            product.lastEdit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(product.lastEdit).populate("user");
+            product.edits = await models_Edit_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({
+                product: product._id
+            }).sort({
+                date: -1
+            }).populate("user");
             res.status(200).json({
                 success: true,
                 product
             });
         } else if (req.method === "PUT") {
             // Check if the product exists
-            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).select("+edits");
+            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id).select("+edits");
             if (!product) return res.status(404).json({
                 success: false,
                 error: "Product not found"
             });
-            // Check if the current user is editing a non-seller product
-            if (!product.seller) return res.status(400).json({
-                success: false,
-                error: "Unable to edit this product"
-            });
-            // Check if the current user is the seller of that product
-            if (product.seller.toString() !== req.user._id.toString()) return res.status(400).json({
-                success: false,
-                error: "Unable to edit this product"
-            });
+            // Check if the seller ref is passed
+            if (req.body.seller !== undefined) {
+                // To remove the seller ref
+                if (req.body.seller === "") product.seller = null;
+                else {
+                    if (!await models_Directory_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].findById */ .Z.findById(req.body.seller)) return res.status(404).json({
+                        success: false,
+                        error: "Directory not found"
+                    });
+                    product.seller = req.body.seller;
+                }
+            }
             // Updating the product
             if (req.body.name) product.name = req.body.name;
             if (req.body.brand) product.brand = req.body.brand;
@@ -289,7 +362,7 @@ const handler = async (req, res)=>{
             if (req.body.productImages) product.productImages = req.body.productImages.split(",");
             if (req.body.productImages === "") product.productImages = [];
             // Tracking edits
-            const edit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
+            const edit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].create */ .Z.create({
                 user: req.user._id,
                 product: product._id,
                 date: Date.now(),
@@ -298,6 +371,13 @@ const handler = async (req, res)=>{
             product.lastEdit = edit._id;
             product.edits.unshift(edit._id);
             await product.save();
+            // Manually populating edits and lastEdit
+            product.lastEdit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(product.lastEdit).populate("user");
+            product.edits = await models_Edit_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({
+                product: product._id
+            }).sort({
+                date: -1
+            }).populate("user");
             // Returning the updated product
             return res.status(200).json({
                 success: true,
@@ -305,20 +385,10 @@ const handler = async (req, res)=>{
             });
         } else if (req.method === "DELETE") {
             // Check if the product exists
-            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id);
+            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findById */ .Z.findById(req.query.id);
             if (!product) return res.status(404).json({
                 success: false,
                 error: "Product not found"
-            });
-            // Check if the current user is removing a non-seller product
-            if (!product.seller) return res.status(400).json({
-                success: false,
-                error: "Unable to remove this product"
-            });
-            // Check if the current user is the seller of that product or an admin
-            if (product.seller.toString() != req.user._id.toString()) return res.status(400).json({
-                success: false,
-                error: "Unable to remove this product"
             });
             // Delete the product
             await product.remove();
@@ -336,7 +406,7 @@ const config = {
         bodyParser: false
     }
 }; // Disallow body parsing, since we're using multer
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z)(types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.CLIENT */ .u.CLIENT)((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler))));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z)(types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.ADMIN */ .u.ADMIN, types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.PRODUCT_ADMIN */ .u.PRODUCT_ADMIN)(handler)));
 
 
 /***/ })
@@ -348,7 +418,7 @@ const config = {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,5916,2970], () => (__webpack_exec__(975)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,682,6226], () => (__webpack_exec__(8628)));
 module.exports = __webpack_exports__;
 
 })();

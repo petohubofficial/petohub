@@ -14,7 +14,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "mongoose"
 var external_mongoose_ = __webpack_require__(1185);
-var external_mongoose_default = /*#__PURE__*/__webpack_require__.n(external_mongoose_);
 ;// CONCATENATED MODULE: ./types/review.ts
 var RevieweeModel;
 (function(RevieweeModel) {
@@ -26,9 +25,9 @@ var RevieweeModel;
 ;// CONCATENATED MODULE: ./models/Review.model.ts
 
 
-const ReviewSchema = new (external_mongoose_default()).Schema({
+const ReviewSchema = new external_mongoose_.Schema({
     reviewer: {
-        type: (external_mongoose_default()).Schema.Types.ObjectId,
+        type: external_mongoose_.Types.ObjectId,
         ref: "User",
         required: true
     },
@@ -37,10 +36,7 @@ const ReviewSchema = new (external_mongoose_default()).Schema({
         enum: RevieweeModel,
         required: true
     },
-    revieweeId: {
-        type: (external_mongoose_default()).Schema.Types.ObjectId,
-        required: true
-    },
+    revieweeId: external_mongoose_.Types.ObjectId,
     subject: {
         type: String,
         required: [
@@ -103,7 +99,7 @@ ReviewSchema.virtual("reviewee", {
     foreignField: "_id",
     justOne: true
 });
-/* harmony default export */ const Review_model = ((external_mongoose_default()).models.Review || external_mongoose_default().model("Review", ReviewSchema));
+/* harmony default export */ const Review_model = (external_mongoose_.models.Review || (0,external_mongoose_.model)("Review", ReviewSchema));
 
 
 /***/ })

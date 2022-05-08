@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import { User } from "types/user";
 import { Category } from "types/category";
 import { Review, Rating } from "types/review";
@@ -23,10 +23,10 @@ export interface Details {
   content: string;
 }
 
-export interface Directory extends mongoose.Document {
-  _id: mongoose.Schema.Types.ObjectId;
+export interface Directory {
+  _id: Types.ObjectId;
   storeName: string;
-  user: mongoose.Schema.Types.ObjectId | User | null;
+  user: Types.ObjectId | User | null;
   email: string;
   address: string;
   category: string[] | Category[];

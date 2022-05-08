@@ -10,7 +10,7 @@ const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
 
   await connect();
   try {
-    const user = await User.findById(req.user.id).populate("directory");
+    const user = await User.findById(req.user._id).populate("directory");
     return res.status(200).json({ success: true, user });
   } catch (error) {
     errorHandler(error, res);

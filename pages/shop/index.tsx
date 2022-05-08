@@ -48,7 +48,7 @@ import {
   useGetPetsQuery,
   useGetProductsQuery,
 } from "services/public.service";
-import { GetProductsFilters } from "types/product";
+import { AffiliateProvider, GetProductsFilters } from "types/product";
 
 interface AffiliateLinksProps {
   icon: string;
@@ -321,7 +321,7 @@ const Shop = () => {
             ) : (
               <Grid container>
                 {productsResponse?.data?.results?.map((product) => (
-                  <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
+                  <Grid item key={product._id.toString()} xs={12} sm={6} md={4} lg={3}>
                     <Card sx={{ m: 1 }}>
                       <CardMedia
                         component="img"
@@ -357,8 +357,8 @@ const Shop = () => {
                             icon="/assets/icons/amazon.svg"
                             price={
                               product.affiliateLinks.find(
-                                (link) => link.productProvider === "Amazon"
-                              )?.productPrice || -1
+                                (link) => link.provider === AffiliateProvider.AMAZON
+                              )?.price || -1
                             }
                             sx={{
                               ...(theme.palette.mode === "dark" && {
@@ -371,8 +371,8 @@ const Shop = () => {
                             icon="/assets/icons/flipkart.svg"
                             price={
                               product.affiliateLinks.find(
-                                (link) => link.productProvider === "Flipkart"
-                              )?.productPrice || -1
+                                (link) => link.provider === AffiliateProvider.FLIPKART
+                              )?.price || -1
                             }
                           />
                         </Box>

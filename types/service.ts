@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import { Category } from "types/category";
 import { Directory } from "types/directory";
 import { Pet } from "types/pet";
 
 export interface Service {
-  _id: mongoose.Schema.Types.ObjectId;
+  _id: Types.ObjectId;
   name: string;
   alias: string[];
-  seller: mongoose.Schema.Types.ObjectId | Directory | null;
+  seller: Types.ObjectId | Directory | null;
   address: string;
   nameOfIncharge: string;
   numberOfIncharge: string;

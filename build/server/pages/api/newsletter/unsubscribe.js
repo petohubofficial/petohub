@@ -63,7 +63,7 @@ module.exports = require("path");
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 
-const NewsletterSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const NewsletterSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     email: {
         type: String,
         lowercase: true,
@@ -98,7 +98,7 @@ const NewsletterSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Sc
 }, {
     timestamps: true
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((mongoose__WEBPACK_IMPORTED_MODULE_0___default().models.Newsletter) || mongoose__WEBPACK_IMPORTED_MODULE_0___default().model("Newsletter", NewsletterSchema));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Newsletter || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Newsletter", NewsletterSchema));
 
 
 /***/ }),

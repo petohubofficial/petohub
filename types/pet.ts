@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import { Category } from "types/category";
 
 export interface Pet {
-  _id: mongoose.Schema.Types.ObjectId;
+  _id: Types.ObjectId;
   name: string;
   image: string;
   description: string;
