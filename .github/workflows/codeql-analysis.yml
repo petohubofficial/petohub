@@ -10,6 +10,8 @@
 # supported CodeQL languages.
 #
 name: "CodeQL"
+paths-ignore:
+  - build
 
 on:
   push:
