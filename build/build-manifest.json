@@ -5,9 +5,9 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/pu5IZwsJ9oz-wuk-fL1ZJ/_buildManifest.js",
-    "static/pu5IZwsJ9oz-wuk-fL1ZJ/_ssgManifest.js",
-    "static/pu5IZwsJ9oz-wuk-fL1ZJ/_middlewareManifest.js"
+    "static/LLsRj6SbSF2JhoFWVio7j/_buildManifest.js",
+    "static/LLsRj6SbSF2JhoFWVio7j/_ssgManifest.js",
+    "static/LLsRj6SbSF2JhoFWVio7j/_middlewareManifest.js"
   ],
   "pages": {
     "/": [
@@ -83,7 +83,7 @@
       "static/chunks/99-a5e75d5ded7d4b04.js",
       "static/chunks/300-77eb5a6e51233224.js",
       "static/chunks/836-73390c39de8ee5dd.js",
-      "static/chunks/pages/dashboard/products-975804f54e92331c.js"
+      "static/chunks/pages/dashboard/products-bf196b8ef21bad05.js"
     ],
     "/dashboard/products/new": [
       "static/chunks/webpack-42cdea76c8170223.js",
@@ -96,7 +96,7 @@
       "static/chunks/429-86ed2573337d76f4.js",
       "static/chunks/333-b478b5ae90c01d90.js",
       "static/chunks/836-73390c39de8ee5dd.js",
-      "static/chunks/pages/dashboard/products/new-80e5fe79e7da51c4.js"
+      "static/chunks/pages/dashboard/products/new-6602a32f59642502.js"
     ],
     "/forgotpassword": [
       "static/chunks/webpack-42cdea76c8170223.js",

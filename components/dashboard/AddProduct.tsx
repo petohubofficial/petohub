@@ -17,14 +17,17 @@ import {
 import { FormikErrors, FormikTouched, useFormik } from "formik";
 import { useAuth } from "hooks/auth";
 import React, { SyntheticEvent } from "react";
+import toast from "react-hot-toast";
+import { useAddClientProductMutation } from "services/client.service";
 import { useGetBrandsQuery, useGetCategoriesQuery, useGetPetsQuery } from "services/public.service";
 import { CategoryType } from "types/category";
 import {
+  AddProductRequest,
   AffiliateLink,
   AffiliateProvider,
-  CreateProductRequest,
   FoodClassification,
 } from "types/product";
+import createFormData from "utils/createFormData";
 import * as Yup from "yup";
 
 export default function AddProduct() {
@@ -33,7 +36,9 @@ export default function AddProduct() {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
   const { data: petsData, isLoading: isPetsLoading } = useGetPetsQuery();
 
-  const formik = useFormik<CreateProductRequest>({
+  const [addProduct] = useAddClientProductMutation();
+
+  const formik = useFormik<AddProductRequest>({
     initialValues: {
       seller: user?._id || "",
       name: "",
@@ -97,8 +102,17 @@ export default function AddProduct() {
       ),
       productImages: Yup.array().of(Yup.string().required("Product image link is required")),
     }),
-    onSubmit: (values) => {
-      window.alert(values);
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      const request = createFormData(values);
+      try {
+        const response = await addProduct(request).unwrap();
+        if (response.success) toast.success("Product added successfully");
+      } catch (error: any) {
+        toast.error(error?.data?.message || "Something went wrong");
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -131,34 +145,6 @@ export default function AddProduct() {
           sx={{ my: 1 }}
         />
         <Box display={{ xs: "block", md: "flex" }} gap={1}>
-          {isBrandsLoading ? (
-            <Box display="flex" gap={2}>
-              <CircularProgress size={20} />
-              <Typography>Loading brands...</Typography>
-            </Box>
-          ) : (
-            <Autocomplete
-              fullWidth
-              options={brandsData?.brands?.map((brand) => brand.name) || []}
-              onChange={(event: SyntheticEvent<Element, Event>, value: string | null) => {
-                formik.setFieldValue("brand", value);
-              }}
-              value={formik.values.brand}
-              filterSelectedOptions
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Brand"
-                  size="small"
-                  name="brand"
-                  onBlur={formik.handleBlur}
-                  error={Boolean(formik.touched.brand && formik.errors.brand)}
-                  helperText={formik.touched.brand && formik.errors.brand}
-                  sx={{ my: 1 }}
-                />
-              )}
-            />
-          )}
           {isCategoriesLoading ? (
             <Box display="flex" gap={2}>
               <CircularProgress size={20} />
@@ -186,6 +172,34 @@ export default function AddProduct() {
                   onBlur={formik.handleBlur}
                   error={Boolean(formik.touched.category && formik.errors.category)}
                   helperText={formik.touched.category && formik.errors.category}
+                  sx={{ my: 1 }}
+                />
+              )}
+            />
+          )}
+          {isBrandsLoading ? (
+            <Box display="flex" gap={2}>
+              <CircularProgress size={20} />
+              <Typography>Loading brands...</Typography>
+            </Box>
+          ) : (
+            <Autocomplete
+              fullWidth
+              options={brandsData?.brands?.map((brand) => brand.name) || []}
+              onChange={(event: SyntheticEvent<Element, Event>, value: string | null) => {
+                formik.setFieldValue("brand", value);
+              }}
+              value={formik.values.brand}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Brand"
+                  size="small"
+                  name="brand"
+                  onBlur={formik.handleBlur}
+                  error={Boolean(formik.touched.brand && formik.errors.brand)}
+                  helperText={formik.touched.brand && formik.errors.brand}
                   sx={{ my: 1 }}
                 />
               )}
@@ -652,8 +666,14 @@ export default function AddProduct() {
             </Box>
           ))
         )}
-        <Button fullWidth variant="outlined" startIcon={<PublishIcon />} type="submit">
-          Submit
+        <Button
+          fullWidth
+          disabled={formik.isSubmitting}
+          variant="outlined"
+          startIcon={<PublishIcon />}
+          type="submit"
+        >
+          {formik.isSubmitting ? "Submitting..." : "Submit"}
         </Button>
       </form>
     </Box>

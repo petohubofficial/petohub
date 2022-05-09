@@ -7,7 +7,8 @@ import Product from "models/Product.model";
 import Edit from "models/Edit.model";
 import errorHandler from "utils/errorHandler";
 import { Role } from "types/user";
-import { PaginatedResponse } from "types/product";
+import { AddProductResponse, GetProductsResponse, PaginatedResponse } from "types/product";
+import parseFormData from "utils/parseFormData";
 
 const handler = async (
   req: ProtectedNextApiRequest & MulterNextApiRequest,
@@ -58,29 +59,17 @@ const handler = async (
       if (endIndex < results.total) results.next = { page: page + 1, limit: limit };
       if (startIndex > 0) results.prev = { page: page - 1, limit: limit };
 
-      return res.status(200).json({ success: true, data: results });
+      return (res as NextApiResponse<GetProductsResponse>)
+        .status(200)
+        .json({ success: true, data: results });
     }
 
     // Adding a new product
     else if (req.method === "POST") {
-      const product = await Product.create({
-        seller: req.user.directory,
-        name: req.body.name,
-        brand: req.body.brand,
-        category: req.body.category,
-        petType: req.body.petType?.split(","),
-        keywords: req.body.keywords ? req.body.keywords?.split(",") : [],
-        breedType: req.body.breedType,
-        description: req.body.description,
-        weight: req.body.weight,
-        size: JSON.parse(req.body.size || "{}"),
-        countInStock: req.body.countInStock,
-        price: req.body.price,
-        isVeg: req.body.isVeg,
-        ageRange: JSON.parse(req.body.ageRange || "{}"),
-        affiliateLinks: JSON.parse(req.body.affiliateLinks || "{}"),
-        productImages: req.body.productImages?.split(","),
+      const request = parseFormData(req.body, {
+        objects: ["affiliateLinks", "productImages", "size", "ageRange", "petType", "keywords"],
       });
+      const product = await Product.create(request);
 
       if (req.files) {
         const productImages = req.files.filter((file) => file.fieldname === "productImages");
@@ -101,7 +90,9 @@ const handler = async (
       product.edits.unshift(edit._id);
       await product.save();
 
-      res.status(200).json({ success: true, product });
+      return (res as NextApiResponse<AddProductResponse>)
+        .status(200)
+        .json({ success: true, product });
     }
 
     // Updating product

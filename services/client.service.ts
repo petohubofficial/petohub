@@ -1,5 +1,5 @@
 import { api } from "./api.service";
-import type { GetProductsFilters, GetProductsResponse } from "types/product";
+import type { AddProductResponse, GetProductsFilters, GetProductsResponse } from "types/product";
 
 export enum Tags {
   PRODUCTS = "client/products",
@@ -11,9 +11,13 @@ export const clientApi = api
     endpoints: (builder) => ({
       getClientProducts: builder.query<GetProductsResponse, GetProductsFilters>({
         query: (params) => ({ url: "client/product", params }),
-        providesTags: [Tags.PRODUCTS],
+        providesTags: [{ type: Tags.PRODUCTS, id: "list" }],
+      }),
+      addClientProduct: builder.mutation<AddProductResponse, FormData>({
+        query: (body) => ({ url: "client/product", method: "POST", body }),
+        invalidatesTags: [{ type: Tags.PRODUCTS, id: "list" }],
       }),
     }),
   });
 
-export const { useGetClientProductsQuery } = clientApi;
+export const { useGetClientProductsQuery, useAddClientProductMutation } = clientApi;

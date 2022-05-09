@@ -109,22 +109,54 @@ const EditSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
 
 /***/ }),
 
-/***/ 3736:
+/***/ 8955:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "config": () => (/* binding */ config),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2970);
-/* harmony import */ var middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9598);
-/* harmony import */ var middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6097);
-/* harmony import */ var utils_connectDb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4035);
-/* harmony import */ var models_Product_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6226);
-/* harmony import */ var models_Edit_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(102);
-/* harmony import */ var utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8738);
-/* harmony import */ var types_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1957);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "config": () => (/* binding */ config),
+  "default": () => (/* binding */ product)
+});
+
+// EXTERNAL MODULE: ./middlewares/withMulter.ts
+var withMulter = __webpack_require__(2970);
+// EXTERNAL MODULE: ./middlewares/withProtect.ts
+var withProtect = __webpack_require__(9598);
+// EXTERNAL MODULE: ./middlewares/withRoles.ts
+var withRoles = __webpack_require__(6097);
+// EXTERNAL MODULE: ./utils/connectDb.ts
+var connectDb = __webpack_require__(4035);
+// EXTERNAL MODULE: ./models/Product.model.ts + 1 modules
+var Product_model = __webpack_require__(6226);
+// EXTERNAL MODULE: ./models/Edit.model.ts
+var Edit_model = __webpack_require__(102);
+// EXTERNAL MODULE: ./utils/errorHandler.ts
+var errorHandler = __webpack_require__(8738);
+// EXTERNAL MODULE: ./types/user.ts
+var user = __webpack_require__(1957);
+;// CONCATENATED MODULE: ./utils/parseFormData.ts
+function parseFormData(obj, config) {
+    const data = JSON.parse(JSON.stringify(obj));
+    const keys = Object.keys(data);
+    if (keys.length === 0) return data;
+    keys.forEach((key)=>{
+        const value = obj[key];
+        if ((config === null || config === void 0 ? void 0 : config.exclude) && (config === null || config === void 0 ? void 0 : config.exclude.includes(key))) return;
+        if ((config === null || config === void 0 ? void 0 : config.include) && !(config === null || config === void 0 ? void 0 : config.include.includes(key))) return;
+        if ((config === null || config === void 0 ? void 0 : config.files) && (config === null || config === void 0 ? void 0 : config.files.includes(key))) {
+            data[key] = value;
+        } else if ((config === null || config === void 0 ? void 0 : config.objects) && (config === null || config === void 0 ? void 0 : config.objects.includes(key))) {
+            data[key] = JSON.parse(value);
+        }
+    });
+    return data;
+};
+
+;// CONCATENATED MODULE: ./pages/api/client/product.ts
+
 
 
 
@@ -144,13 +176,13 @@ const handler = async (req, res)=>{
         success: false,
         error: "Method not allowed"
     });
-    await (0,utils_connectDb__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)();
+    await (0,connectDb/* default */.Z)();
     try {
         // Get own products
         if (req.method === "GET") {
             // Get a single product
             if (req.query.id) {
-                const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).where("seller").equals(req.user.directory);
+                const product = await Product_model/* default.findById */.Z.findById(req.query.id).where("seller").equals(req.user.directory);
                 if (!product) return res.status(404).json({
                     success: false,
                     error: "Product not found"
@@ -165,7 +197,7 @@ const handler = async (req, res)=>{
             const limit = Math.min(parseInt(req.query.limit) || 20, 20);
             const startIndex = (page - 1) * limit;
             const endIndex = page * limit;
-            const productQuery = models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].find */ .Z.find({
+            const productQuery = Product_model/* default.find */.Z.find({
                 seller: req.user.directory
             });
             // Pagination
@@ -203,25 +235,17 @@ const handler = async (req, res)=>{
                 data: results
             });
         } else if (req.method === "POST") {
-            var ref, ref1, ref2;
-            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].create */ .Z.create({
-                seller: req.user.directory,
-                name: req.body.name,
-                brand: req.body.brand,
-                category: req.body.category,
-                petType: (ref = req.body.petType) === null || ref === void 0 ? void 0 : ref.split(","),
-                keywords: req.body.keywords ? (ref1 = req.body.keywords) === null || ref1 === void 0 ? void 0 : ref1.split(",") : [],
-                breedType: req.body.breedType,
-                description: req.body.description,
-                weight: req.body.weight,
-                size: JSON.parse(req.body.size || "{}"),
-                countInStock: req.body.countInStock,
-                price: req.body.price,
-                isVeg: req.body.isVeg,
-                ageRange: JSON.parse(req.body.ageRange || "{}"),
-                affiliateLinks: JSON.parse(req.body.affiliateLinks || "{}"),
-                productImages: (ref2 = req.body.productImages) === null || ref2 === void 0 ? void 0 : ref2.split(",")
+            const request = parseFormData(req.body, {
+                objects: [
+                    "affiliateLinks",
+                    "productImages",
+                    "size",
+                    "ageRange",
+                    "petType",
+                    "keywords"
+                ]
             });
+            const product = await Product_model/* default.create */.Z.create(request);
             if (req.files) {
                 const productImages = req.files.filter((file)=>file.fieldname === "productImages"
                 );
@@ -232,7 +256,7 @@ const handler = async (req, res)=>{
                 }
             }
             // Tracking edits
-            const edit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
+            const edit = await Edit_model/* default.create */.Z.create({
                 user: req.user._id,
                 product: product._id,
                 date: Date.now(),
@@ -241,13 +265,13 @@ const handler = async (req, res)=>{
             product.lastEdit = edit._id;
             product.edits.unshift(edit._id);
             await product.save();
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 product
             });
         } else if (req.method === "PUT") {
             // Check if the product exists
-            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id).select("+edits");
+            const product = await Product_model/* default.findById */.Z.findById(req.query.id).select("+edits");
             if (!product) return res.status(404).json({
                 success: false,
                 error: "Product not found"
@@ -289,7 +313,7 @@ const handler = async (req, res)=>{
             if (req.body.productImages) product.productImages = req.body.productImages.split(",");
             if (req.body.productImages === "") product.productImages = [];
             // Tracking edits
-            const edit = await models_Edit_model__WEBPACK_IMPORTED_MODULE_4__/* ["default"].create */ .Z.create({
+            const edit = await Edit_model/* default.create */.Z.create({
                 user: req.user._id,
                 product: product._id,
                 date: Date.now(),
@@ -305,7 +329,7 @@ const handler = async (req, res)=>{
             });
         } else if (req.method === "DELETE") {
             // Check if the product exists
-            const product = await models_Product_model__WEBPACK_IMPORTED_MODULE_3__/* ["default"].findById */ .Z.findById(req.query.id);
+            const product = await Product_model/* default.findById */.Z.findById(req.query.id);
             if (!product) return res.status(404).json({
                 success: false,
                 error: "Product not found"
@@ -328,7 +352,7 @@ const handler = async (req, res)=>{
             });
         }
     } catch (error) {
-        (0,utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z)(error, res);
+        (0,errorHandler/* default */.Z)(error, res);
     }
 };
 const config = {
@@ -336,7 +360,7 @@ const config = {
         bodyParser: false
     }
 }; // Disallow body parsing, since we're using multer
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,middlewares_withProtect__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z)((0,middlewares_withRoles__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z)(types_user__WEBPACK_IMPORTED_MODULE_5__/* .Role.CLIENT */ .u.CLIENT)((0,middlewares_withMulter__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)(handler))));
+/* harmony default export */ const product = ((0,withProtect/* default */.Z)((0,withRoles/* default */.Z)(user/* Role.CLIENT */.u.CLIENT)((0,withMulter/* default */.Z)(handler))));
 
 
 /***/ })
@@ -348,7 +372,7 @@ const config = {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,6226,2970], () => (__webpack_exec__(3736)));
+var __webpack_exports__ = __webpack_require__.X(0, [8459,881,9598,6226,2970], () => (__webpack_exec__(8955)));
 module.exports = __webpack_exports__;
 
 })();

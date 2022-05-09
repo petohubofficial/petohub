@@ -90,7 +90,7 @@ export interface GetProductsResponse extends Response {
   data: PaginatedResponse;
 }
 
-export interface CreateProductRequest {
+export interface AddProductRequest {
   seller: string | Types.ObjectId;
   name: string;
   brand: string;
@@ -114,4 +114,8 @@ export interface CreateProductRequest {
   };
   affiliateLinks: AffiliateLink[];
   productImages: string[];
+}
+
+export interface AddProductResponse extends Response {
+  product: Product;
 }
