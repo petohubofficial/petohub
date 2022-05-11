@@ -6,7 +6,7 @@ import User from "models/User.model";
 import connect from "utils/connectDb";
 import Directory from "models/Directory.model";
 import errorHandler from "utils/errorHandler";
-import { Role } from "types/user";
+import { PaginatedResponse, Role, GetUsersResponse } from "types/user";
 
 const handler = async (
   req: ProtectedNextApiRequest & MulterNextApiRequest,
@@ -28,8 +28,34 @@ const handler = async (
       }
       // Get all users
       else {
-        const users = await User.find().populate("directory");
-        return res.status(200).json({ success: true, users });
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = Math.min(parseInt(req.query.limit as string) || 20, 20);
+
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const usersQuery = User.find().populate("directory");
+        usersQuery.skip(startIndex).limit(limit);
+
+        const users = await usersQuery;
+        const results: PaginatedResponse = {
+          total: 0,
+          pages: 0,
+          results: [],
+          next: { page: 0, limit: 0 },
+          prev: { page: 0, limit: 0 },
+        };
+
+        results.total = await User.countDocuments();
+        results.pages = Math.ceil(results.total / limit);
+        results.results = users;
+
+        if (endIndex < results.total) results.next = { page: page + 1, limit: limit };
+        if (startIndex > 0) results.prev = { page: page - 1, limit: limit };
+
+        return (res as NextApiResponse<GetUsersResponse>)
+          .status(200)
+          .json({ success: true, data: results });
       }
     }
 

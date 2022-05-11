@@ -132,10 +132,40 @@ const handler = async (req, res)=>{
                     user
                 });
             } else {
-                const users = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].find */ .Z.find().populate("directory");
+                const page = parseInt(req.query.page) || 1;
+                const limit = Math.min(parseInt(req.query.limit) || 20, 20);
+                const startIndex = (page - 1) * limit;
+                const endIndex = page * limit;
+                const usersQuery = models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].find */ .Z.find().populate("directory");
+                usersQuery.skip(startIndex).limit(limit);
+                const users = await usersQuery;
+                const results = {
+                    total: 0,
+                    pages: 0,
+                    results: [],
+                    next: {
+                        page: 0,
+                        limit: 0
+                    },
+                    prev: {
+                        page: 0,
+                        limit: 0
+                    }
+                };
+                results.total = await models_User_model__WEBPACK_IMPORTED_MODULE_2__/* ["default"].countDocuments */ .Z.countDocuments();
+                results.pages = Math.ceil(results.total / limit);
+                results.results = users;
+                if (endIndex < results.total) results.next = {
+                    page: page + 1,
+                    limit: limit
+                };
+                if (startIndex > 0) results.prev = {
+                    page: page - 1,
+                    limit: limit
+                };
                 return res.status(200).json({
                     success: true,
-                    users
+                    data: results
                 });
             }
         } else if (req.method === "POST") {

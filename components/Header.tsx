@@ -148,7 +148,7 @@ const HeaderNav = () => {
         <HeaderNavLink href="/shop" text="Shop" />
         <HeaderNavLink href="/about" text="About Us" />
         <HeaderNavLink href="/contact" text="Contact" />
-        {user?.role === Role.ADMIN && <HeaderNavLink href="/admin" text="Admin" />}
+        {user?.role === Role.ADMIN && <HeaderNavLink href="/admin/user" text="Admin" />}
         {user?.role === Role.CLIENT && <HeaderNavLink href="/dashboard" text="Dashboard" />}
       </Box>
     </Container>

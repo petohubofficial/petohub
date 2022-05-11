@@ -15,7 +15,7 @@ exports.modules = {
 
 var Tags;
 (function(Tags) {
-    Tags["PRODUCTS"] = "client/products";
+    Tags["PRODUCTS"] = "client/product";
 })(Tags || (Tags = {}));
 const clientApi = _api_service__WEBPACK_IMPORTED_MODULE_0__/* .api.enhanceEndpoints */ .h.enhanceEndpoints({
     addTagTypes: Object.values(Tags)

@@ -15,6 +15,7 @@ import {
   VerifyResponse,
 } from "types/auth";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 interface State {
   isInitialized: boolean;
@@ -159,6 +160,7 @@ export const AuthContext = createContext<AuthContextValue>({
 export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
+  const router = useRouter();
 
   useEffect(() => {
     const initialize = async (): Promise<void> => {
@@ -210,6 +212,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     await auth.logout();
     dispatch({ type: ActionType.LOGOUT });
     toast.success("Logged out successfully");
+    router.push("/");
   };
 
   const register = async (request: RegisterRequest): Promise<RegisterResponse> => {

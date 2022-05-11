@@ -355,7 +355,7 @@ const SecondStep = ({
           Previous
         </Button>
         <Button fullWidth variant="contained" type="submit" disabled={submitting}>
-          Signup
+          {submitting ? "Signing up..." : "Sign up"}
         </Button>
       </Box>
     </Box>

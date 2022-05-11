@@ -115,7 +115,10 @@ class AuthService {
 }
 const auth = new AuthService();
 
+// EXTERNAL MODULE: external "next/router"
+var router_ = __webpack_require__(1853);
 ;// CONCATENATED MODULE: ./contexts/auth.tsx
+
 
 
 
@@ -197,6 +200,7 @@ const AuthContext = /*#__PURE__*/ (0,external_react_.createContext)({
 const AuthProvider = (props)=>{
     const { children  } = props;
     const { 0: state , 1: dispatch  } = (0,external_react_.useReducer)(reducer, initialState);
+    const router = (0,router_.useRouter)();
     (0,external_react_.useEffect)(()=>{
         const initialize = async ()=>{
             try {
@@ -247,6 +251,7 @@ const AuthProvider = (props)=>{
             type: ActionType.LOGOUT
         });
         external_react_hot_toast_default().success("Logged out successfully");
+        router.push("/");
     };
     const register = async (request)=>{
         const registerResponse = await auth.register(request);

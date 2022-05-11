@@ -14,7 +14,7 @@ const ClientDashboard = () => {
 };
 
 ClientDashboard.getLayout = (page: ReactElement) => (
-  <AuthGuard role={Role.CLIENT}>
+  <AuthGuard roles={[Role.CLIENT]}>
     <PublicLayout>
       <DashboardLayout>{page}</DashboardLayout>
     </PublicLayout>

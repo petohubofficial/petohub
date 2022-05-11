@@ -2,7 +2,7 @@ import { api } from "./api.service";
 import type { AddProductResponse, GetProductsFilters, GetProductsResponse } from "types/product";
 
 export enum Tags {
-  PRODUCTS = "client/products",
+  PRODUCTS = "client/product",
 }
 
 export const clientApi = api

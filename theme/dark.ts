@@ -95,6 +95,19 @@ export const darkTheme: ThemeOptions = {
         },
       },
     },
+    MuiCssBaseline: {
+      styleOverrides: {
+        "*::-webkit-scrollbar": {
+          background: "transparent",
+          width: "7px",
+        },
+        "*::-webkit-scrollbar-thumb": {
+          background: "#B94F94",
+          borderRadius: "2px",
+          width: "7px",
+        },
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         input: {

@@ -544,7 +544,7 @@ DirectorySchema.pre("save", async function(next) {
     // Handling username
     if (!this.username) this.username = this._id.toString();
     if (this.isModified("username")) {
-        for(const lookup in lookups_namespaceObject){
+        for (const lookup of lookups_namespaceObject){
             if (this.username.toLowerCase().indexOf(lookup) !== -1) {
                 return next(new Error("Invalid username"));
             }

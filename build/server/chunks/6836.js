@@ -494,7 +494,7 @@ const HeaderNav = ()=>{
                     text: "Contact"
                 }),
                 (user === null || user === void 0 ? void 0 : user.role) === types_user/* Role.ADMIN */.u.ADMIN && /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
-                    href: "/admin",
+                    href: "/admin/user",
                     text: "Admin"
                 }),
                 (user === null || user === void 0 ? void 0 : user.role) === types_user/* Role.CLIENT */.u.CLIENT && /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {

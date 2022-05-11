@@ -86,6 +86,7 @@ export interface PaginatedResponse {
   next: { page: number; limit: number };
   prev: { page: number; limit: number };
 }
+
 export interface GetProductsResponse extends Response {
   data: PaginatedResponse;
 }
