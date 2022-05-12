@@ -8,7 +8,7 @@ import errorHandler from "utils/errorHandler";
 import { Role } from "types/user";
 
 const handler = async (req: ProtectedNextApiRequest, res: NextApiResponse) => {
-  if (req.method !== "PUT")
+  if (req.method !== "POST")
     return res.status(405).json({ success: false, error: "Method not allowed" });
 
   // Checking the body

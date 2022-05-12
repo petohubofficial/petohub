@@ -10,7 +10,7 @@ interface AuthGuardProps {
   roles?: Role[];
 }
 
-export const AuthGuard: FC<AuthGuardProps> = (props) => {
+const AuthGuard: FC<AuthGuardProps> = (props) => {
   const { children, roles } = props;
   const auth = useAuth();
   const router = useRouter();
@@ -42,3 +42,5 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
   if (!checked) return null;
   return <>{children}</>;
 };
+
+export default AuthGuard;

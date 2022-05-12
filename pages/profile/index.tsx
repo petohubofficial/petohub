@@ -3,7 +3,7 @@ import { TabPanel, TabContext, TabList } from "@mui/lab";
 import PublicLayout from "components/layouts/PublicLayout";
 import Head from "next/head";
 import React, { ReactElement } from "react";
-import { AuthGuard } from "components/auth/AuthGuard";
+import AuthGuard from "components/auth/AuthGuard";
 import Profile from "components/profile/Profile";
 
 enum ProfileTabs {

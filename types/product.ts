@@ -69,8 +69,8 @@ export interface Product {
 }
 
 export interface GetProductsFilters {
-  page?: number;
-  limit?: number;
+  page: number;
+  limit: number;
   q?: string;
   sort?: string;
   category?: string;
@@ -118,5 +118,13 @@ export interface AddProductRequest {
 }
 
 export interface AddProductResponse extends Response {
+  product: Product;
+}
+
+export interface GetProductResponse extends Response {
+  product: Product;
+}
+
+export interface ApproveProductResponse extends Response {
   product: Product;
 }

@@ -109,7 +109,7 @@ export default function AddProduct() {
         const response = await addProduct(request).unwrap();
         if (response.success) toast.success("Product added successfully");
       } catch (error: any) {
-        toast.error(error?.data?.message || "Something went wrong");
+        toast.error(error?.data?.error || "Something went wrong");
       } finally {
         setSubmitting(false);
       }

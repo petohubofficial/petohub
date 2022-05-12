@@ -1,6 +1,6 @@
 import { AddBox } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import { AuthGuard } from "components/auth/AuthGuard";
+import AuthGuard from "components/auth/AuthGuard";
 import AddProduct from "components/dashboard/AddProduct";
 import DashboardLayout from "components/layouts/DashboardLayout";
 import PublicLayout from "components/layouts/PublicLayout";

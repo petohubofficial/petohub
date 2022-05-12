@@ -49,3 +49,11 @@ export interface PaginatedResponse {
 export interface GetUsersResponse extends Response {
   data: PaginatedResponse;
 }
+
+export interface GetUserResponse extends Response {
+  user: User;
+}
+
+export interface VerifyUserResponse extends Response {
+  user: User;
+}

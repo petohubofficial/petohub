@@ -148,8 +148,6 @@ const HeaderNav = () => {
         <HeaderNavLink href="/shop" text="Shop" />
         <HeaderNavLink href="/about" text="About Us" />
         <HeaderNavLink href="/contact" text="Contact" />
-        {user?.role === Role.ADMIN && <HeaderNavLink href="/admin/user" text="Admin" />}
-        {user?.role === Role.CLIENT && <HeaderNavLink href="/dashboard" text="Dashboard" />}
       </Box>
     </Container>
   );
@@ -328,7 +326,11 @@ export const Header: FC = () => {
                 <Typography color="text.secondary">Settings</Typography>
               </MenuItem>
               {user?.role !== Role.CUSTOMER && (
-                <MenuItem onClick={() => handleProfileMenuClick("/dashboard")}>
+                <MenuItem
+                  onClick={() =>
+                    handleProfileMenuClick(user?.role === Role.CLIENT ? "/dashboard" : "/admin")
+                  }
+                >
                   <DashboardOutlined color="action" sx={{ mr: 0.5 }} />
                   <Typography color="text.secondary">Dashboard</Typography>
                 </MenuItem>

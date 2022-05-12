@@ -492,14 +492,6 @@ const HeaderNav = ()=>{
                 /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
                     href: "/contact",
                     text: "Contact"
-                }),
-                (user === null || user === void 0 ? void 0 : user.role) === types_user/* Role.ADMIN */.u.ADMIN && /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
-                    href: "/admin/user",
-                    text: "Admin"
-                }),
-                (user === null || user === void 0 ? void 0 : user.role) === types_user/* Role.CLIENT */.u.CLIENT && /*#__PURE__*/ jsx_runtime_.jsx(HeaderNavLink, {
-                    href: "/dashboard",
-                    text: "Dashboard"
                 })
             ]
         })
@@ -762,8 +754,9 @@ const Header = ()=>{
                                             ]
                                         }),
                                         (user === null || user === void 0 ? void 0 : user.role) !== types_user/* Role.CUSTOMER */.u.CUSTOMER && /*#__PURE__*/ (0,jsx_runtime_.jsxs)(material_.MenuItem, {
-                                            onClick: ()=>handleProfileMenuClick("/dashboard")
-                                            ,
+                                            onClick: ()=>{
+                                                return handleProfileMenuClick((user === null || user === void 0 ? void 0 : user.role) === types_user/* Role.CLIENT */.u.CLIENT ? "/dashboard" : "/admin");
+                                            },
                                             children: [
                                                 /*#__PURE__*/ jsx_runtime_.jsx(icons_material_.DashboardOutlined, {
                                                     color: "action",

@@ -76,6 +76,8 @@ const AffiliateLinks = ({ icon, price, ...other }: AffiliateLinksProps) => {
 };
 
 const initialFilters: GetProductsFilters = {
+  limit: 10,
+  page: 1,
   category: "",
   sort: "",
   pet: "",

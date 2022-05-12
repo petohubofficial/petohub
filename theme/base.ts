@@ -136,6 +136,9 @@ export const baseTheme: ThemeOptions = {
           width: "100%",
           zIndex: 2000,
         },
+        ".simplebar-scrollbar.simplebar-visible:before": {
+          opacity: 1,
+        },
       },
     },
     MuiFormControlLabel: {
@@ -262,6 +265,11 @@ export const baseTheme: ThemeOptions = {
             paddingBottom: 4,
           },
         },
+      },
+    },
+    MuiTooltip: {
+      defaultProps: {
+        placement: "top",
       },
     },
     MuiTypography: {

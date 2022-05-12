@@ -1,5 +1,5 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import toast from "react-hot-toast";
 
@@ -27,18 +27,20 @@ const CopyField: React.FC<CopyFieldProps> = (props) => {
           ? text.substring(0, truncate as number) + "..."
           : text}
       </Typography>
-      <Button
-        sx={{ cursor: "pointer", m: 0, p: 1, minWidth: 0 }}
-        color="primary"
-        variant="outlined"
-        onClick={(e: React.MouseEvent) => {
-          if (!propagate) e.stopPropagation();
-          navigator.clipboard.writeText(text);
-          toast.success(`Copied ${text}`);
-        }}
-      >
-        <ContentCopyIcon fontSize="small" />
-      </Button>
+      <Tooltip title="Click to copy">
+        <Button
+          sx={{ cursor: "pointer", m: 0, p: 1, minWidth: 0 }}
+          color="primary"
+          variant="outlined"
+          onClick={(e: React.MouseEvent) => {
+            if (!propagate) e.stopPropagation();
+            navigator.clipboard.writeText(text);
+            toast.success(`Copied ${text}`);
+          }}
+        >
+          <ContentCopyIcon fontSize="small" />
+        </Button>
+      </Tooltip>
     </Box>
   );
 };

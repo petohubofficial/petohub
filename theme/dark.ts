@@ -97,6 +97,9 @@ export const darkTheme: ThemeOptions = {
     },
     MuiCssBaseline: {
       styleOverrides: {
+        ".simplebar-scrollbar:before": {
+          background: "#B94F94",
+        },
         "*::-webkit-scrollbar": {
           background: "transparent",
           width: "7px",

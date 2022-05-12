@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { AuthGuard } from "components/auth/AuthGuard";
+import AuthGuard from "components/auth/AuthGuard";
 import DashboardLayout from "components/layouts/DashboardLayout";
 import PublicLayout from "components/layouts/PublicLayout";
 import { ReactElement } from "react";

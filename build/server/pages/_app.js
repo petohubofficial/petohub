@@ -195,6 +195,9 @@ const baseTheme = {
                     top: 0,
                     width: "100%",
                     zIndex: 2000
+                },
+                ".simplebar-scrollbar.simplebar-visible:before": {
+                    opacity: 1
                 }
             }
         },
@@ -322,6 +325,11 @@ const baseTheme = {
                         paddingBottom: 4
                     }
                 }
+            }
+        },
+        MuiTooltip: {
+            defaultProps: {
+                placement: "top"
             }
         },
         MuiTypography: {
@@ -504,6 +512,9 @@ const darkTheme = {
         },
         MuiCssBaseline: {
             styleOverrides: {
+                ".simplebar-scrollbar:before": {
+                    background: "#B94F94"
+                },
                 "*::-webkit-scrollbar": {
                     background: "transparent",
                     width: "7px"
@@ -720,6 +731,9 @@ const lightTheme = {
         },
         MuiCssBaseline: {
             styleOverrides: {
+                ".simplebar-scrollbar:before": {
+                    background: "#B94F94"
+                },
                 "*::-webkit-scrollbar": {
                     background: "transparent",
                     width: "7px"
