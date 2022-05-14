@@ -6,13 +6,13 @@ function errorHandler(err: any, res: NextApiResponse) {
 
   // Mongoose duplicate unique email/username error
   if (err.code == 11000) {
-    return res.status(400).json({ success: false, message: "Duplicate field value" });
+    return res.status(400).json({ success: false, error: "Duplicate field value" });
   }
 
   // Mongoose validation error for min, max, required fields
   if (err.name == "ValidationError") {
-    const message = Object.values(err.errors).map((val: any) => val.message)[0];
-    return res.status(400).json({ success: false, message });
+    const error = Object.values(err.errors).map((val: any) => val.message)[0];
+    return res.status(400).json({ success: false, error });
   }
 
   // Fallback to generic error

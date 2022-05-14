@@ -185,7 +185,6 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
           dispatch({ type: ActionType.LOGOUT });
         }
       } catch (err) {
-        console.error(err);
         dispatch({
           type: ActionType.INITIALIZE,
           payload: {

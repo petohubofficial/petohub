@@ -878,29 +878,6 @@ var Logo = __webpack_require__(5120);
 
 
 
-
-const bounce1 = react_namespaceObject.keyframes`
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, 1px, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-`;
-const bounce3 = react_namespaceObject.keyframes`
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, 3px, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-`;
 const SplashScreen = ()=>/*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
         sx: {
             alignItems: "center",
@@ -917,15 +894,7 @@ const SplashScreen = ()=>/*#__PURE__*/ jsx_runtime_.jsx(material_.Box, {
             zIndex: 2000
         },
         children: /*#__PURE__*/ jsx_runtime_.jsx(Logo/* Logo */.T, {
-            isDark: true,
-            sx: {
-                "& path:nth-child(1)": {
-                    animation: `${bounce1} 1s ease-in-out infinite`
-                },
-                "& path:nth-child(3)": {
-                    animation: `${bounce3} 1s ease-in-out infinite`
-                }
-            }
+            isDark: true
         })
     })
 ;

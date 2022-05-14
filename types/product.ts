@@ -3,7 +3,6 @@ import { Edit } from "types/edit";
 import { Question } from "types/question";
 import { Review, Rating } from "types/review";
 import { Directory } from "types/directory";
-import { Category } from "types/category";
 import { Response } from "types/common";
 
 export enum AffiliateProvider {
@@ -34,7 +33,7 @@ export interface Product {
   name: string;
   alias: string[];
   seller: Types.ObjectId | Directory | null;
-  category: string | Category;
+  category: string;
   brand: string;
   keywords: string[];
   petType: string[];
@@ -79,20 +78,8 @@ export interface GetProductsFilters {
   min?: number;
   max?: number;
 }
-export interface PaginatedResponse {
-  total: number;
-  pages: number;
-  results: Product[];
-  next: { page: number; limit: number };
-  prev: { page: number; limit: number };
-}
-
-export interface GetProductsResponse extends Response {
-  data: PaginatedResponse;
-}
-
-export interface AddProductRequest {
-  seller: string | Types.ObjectId;
+export interface ProductRequest {
+  seller: Types.ObjectId | Directory | null;
   name: string;
   brand: string;
   category: string;
@@ -117,7 +104,27 @@ export interface AddProductRequest {
   productImages: string[];
 }
 
+export interface PaginatedResponse {
+  total: number;
+  pages: number;
+  results: Product[];
+  next: { page: number; limit: number };
+  prev: { page: number; limit: number };
+}
+
+export interface GetProductsResponse extends Response {
+  data: PaginatedResponse;
+}
+
 export interface AddProductResponse extends Response {
+  product: Product;
+}
+
+export interface EditProductResponse extends Response {
+  product: Product;
+}
+
+export interface DeleteProductResponse extends Response {
   product: Product;
 }
 

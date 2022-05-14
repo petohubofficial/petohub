@@ -1,6 +1,6 @@
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import {
   Avatar,
   Box,
@@ -18,17 +18,17 @@ import {
   Typography,
 } from "@mui/material";
 import AuthGuard from "components/auth/AuthGuard";
+import CopyField from "components/CopyField";
 import PublicLayout from "components/layouts/PublicLayout";
-import { Scrollbar } from "components/Scrollbar";
+import Scrollbar from "components/Scrollbar";
+import { useRouter } from "next/router";
 import React from "react";
+import toast from "react-hot-toast";
 import { useApproveProductMutation, useGetAdminProductsQuery } from "services/admin.service";
 import { GetProductsFilters, Product } from "types/product";
-import placeholder, { Placeholder } from "utils/placeholder";
-import CopyField from "components/CopyField";
-import convertDate from "utils/convertDate";
-import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import { Role } from "types/user";
+import convertDate from "utils/convertDate";
+import placeholder, { Placeholder } from "utils/placeholder";
 import truncate from "utils/truncate";
 
 const Products = () => {
@@ -141,7 +141,6 @@ const Products = () => {
 const ProductRow = (props: { product: Product; index: number }) => {
   const { product, index } = props;
   const [approveOpen, setApproveOpen] = React.useState<boolean>(false);
-
   const [approveProduct, { isLoading }] = useApproveProductMutation();
 
   return (

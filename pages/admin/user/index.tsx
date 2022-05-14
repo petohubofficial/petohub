@@ -20,7 +20,7 @@ import {
 import AuthGuard from "components/auth/AuthGuard";
 import CopyField from "components/CopyField";
 import PublicLayout from "components/layouts/PublicLayout";
-import { Scrollbar } from "components/Scrollbar";
+import Scrollbar from "components/Scrollbar";
 import { useRouter } from "next/router";
 import React from "react";
 import toast from "react-hot-toast";

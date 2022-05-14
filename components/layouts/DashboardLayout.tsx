@@ -56,9 +56,9 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children }) => {
       <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} sx={{ my: 2 }} gap={2}>
         <Card sx={{ py: 2, height: "100%" }}>
           <DashboardLink href="/dashboard" label="Dashboard" icon={<Dashboard />} />
-          <DashboardLink href="/dashboard/products" label="Products" icon={<Assignment />} />
+          <DashboardLink href="/dashboard/product" label="Products" icon={<Assignment />} />
           <DashboardLink
-            href="/dashboard/products/new"
+            href="/dashboard/product/new"
             label="Add a new product"
             icon={<NoteAdd />}
           />

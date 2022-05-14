@@ -1,5 +1,12 @@
 import { api } from "./api.service";
-import type { AddProductResponse, GetProductsFilters, GetProductsResponse } from "types/product";
+import {
+  AddProductResponse,
+  DeleteProductResponse,
+  EditProductResponse,
+  GetProductResponse,
+  GetProductsFilters,
+  GetProductsResponse,
+} from "types/product";
 
 export enum Tags {
   PRODUCTS = "client/product",
@@ -11,13 +18,46 @@ export const clientApi = api
     endpoints: (builder) => ({
       getClientProducts: builder.query<GetProductsResponse, GetProductsFilters>({
         query: (params) => ({ url: "client/product", params }),
-        providesTags: [{ type: Tags.PRODUCTS, id: "list" }],
+        providesTags: (result) =>
+          result
+            ? [
+                ...result.data.results.map(({ _id }) => ({
+                  type: Tags.PRODUCTS as const,
+                  id: _id.toString(),
+                })),
+                { type: Tags.PRODUCTS, id: "LIST" },
+              ]
+            : [{ type: Tags.PRODUCTS, id: "LIST" }],
+      }),
+      getClientProduct: builder.query<GetProductResponse, string>({
+        query: (id) => ({ url: `client/product`, params: { id } }),
+        providesTags: (_result, _error, id) => [{ type: Tags.PRODUCTS, id }],
       }),
       addClientProduct: builder.mutation<AddProductResponse, FormData>({
         query: (body) => ({ url: "client/product", method: "POST", body }),
-        invalidatesTags: [{ type: Tags.PRODUCTS, id: "list" }],
+        invalidatesTags: [{ type: Tags.PRODUCTS, id: "LIST" }],
+      }),
+      editClientProduct: builder.mutation<EditProductResponse, { id: string; body: FormData }>({
+        query: ({ id, body }) => ({ url: "client/product", method: "PUT", params: { id }, body }),
+        invalidatesTags: (result) =>
+          result
+            ? [{ type: Tags.PRODUCTS, id: result.product._id.toString() }]
+            : [{ type: Tags.PRODUCTS, id: "LIST" }],
+      }),
+      deleteClientProduct: builder.mutation<DeleteProductResponse, string>({
+        query: (id) => ({ url: "client/product", method: "DELETE", params: { id } }),
+        invalidatesTags: (result) =>
+          result
+            ? [{ type: Tags.PRODUCTS, id: result.product._id.toString() }]
+            : [{ type: Tags.PRODUCTS, id: "LIST" }],
       }),
     }),
   });
 
-export const { useGetClientProductsQuery, useAddClientProductMutation } = clientApi;
+export const {
+  useGetClientProductsQuery,
+  useGetClientProductQuery,
+  useAddClientProductMutation,
+  useEditClientProductMutation,
+  useDeleteClientProductMutation,
+} = clientApi;

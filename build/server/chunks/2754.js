@@ -64,8 +64,6 @@ class AuthService {
             });
             return data;
         } catch (error) {
-            var ref, ref4;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref4 = ref.data) === null || ref4 === void 0 ? void 0 : ref4.error) || "Error");
             return error.response.data;
         }
     }
@@ -74,8 +72,8 @@ class AuthService {
             const { data  } = await external_axios_default().get(`/api/auth/verify?token=${token}`);
             return data;
         } catch (error) {
-            var ref, ref5;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref5 = ref.data) === null || ref5 === void 0 ? void 0 : ref5.error) || "Error");
+            var ref, ref4;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref4 = ref.data) === null || ref4 === void 0 ? void 0 : ref4.error) || "Error");
             return error.response.data;
         }
     }
@@ -84,8 +82,8 @@ class AuthService {
             const { data  } = await external_axios_default().post("/api/auth/forgotpassword", request);
             return data;
         } catch (error) {
-            var ref, ref6;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref6 = ref.data) === null || ref6 === void 0 ? void 0 : ref6.error) || "Error");
+            var ref, ref5;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref5 = ref.data) === null || ref5 === void 0 ? void 0 : ref5.error) || "Error");
             return error.response.data;
         }
     }
@@ -94,8 +92,8 @@ class AuthService {
             const { data  } = await external_axios_default().post(`/api/auth/resetpassword?token=${token}`, request);
             return data;
         } catch (error) {
-            var ref, ref7;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref7 = ref.data) === null || ref7 === void 0 ? void 0 : ref7.error) || "Error");
+            var ref, ref6;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref6 = ref.data) === null || ref6 === void 0 ? void 0 : ref6.error) || "Error");
             return error.response.data;
         }
     }
@@ -107,8 +105,8 @@ class AuthService {
             if (data.success) external_react_hot_toast_default().success("Profile updated successfully");
             return data;
         } catch (error) {
-            var ref, ref8;
-            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref8 = ref.data) === null || ref8 === void 0 ? void 0 : ref8.error) || "Error");
+            var ref, ref7;
+            external_react_hot_toast_default().error((error === null || error === void 0 ? void 0 : (ref = error.response) === null || ref === void 0 ? void 0 : (ref7 = ref.data) === null || ref7 === void 0 ? void 0 : ref7.error) || "Error");
             return error.response.data;
         }
     }
@@ -225,7 +223,6 @@ const AuthProvider = (props)=>{
                     });
                 }
             } catch (err) {
-                console.error(err);
                 dispatch({
                     type: ActionType.INITIALIZE,
                     payload: {

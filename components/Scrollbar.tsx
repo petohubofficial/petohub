@@ -13,9 +13,11 @@ interface ScrollbarProps extends SimpleBar.Props {
 
 const ScrollbarRoot = styled(SimpleBar)``;
 
-export const Scrollbar = forwardRef<MutableRefObject<SimpleBar>, ScrollbarProps>((props, ref) => {
+const Scrollbar = forwardRef<MutableRefObject<SimpleBar>, ScrollbarProps>((props, ref) => {
   return (
     // @ts-ignore
     <ScrollbarRoot ref={ref} {...props} />
   );
 });
+
+export default Scrollbar;

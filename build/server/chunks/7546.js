@@ -1,6 +1,6 @@
 "use strict";
-exports.id = 5678;
-exports.ids = [5678];
+exports.id = 7546;
+exports.ids = [7546];
 exports.modules = {
 
 /***/ 5678:
@@ -91,12 +91,12 @@ const DashboardLayout = ({ children  })=>{
                             icon: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_icons_material__WEBPACK_IMPORTED_MODULE_1__.Dashboard, {})
                         }),
                         /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(DashboardLink, {
-                            href: "/dashboard/products",
+                            href: "/dashboard/product",
                             label: "Products",
                             icon: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_icons_material__WEBPACK_IMPORTED_MODULE_1__.Assignment, {})
                         }),
                         /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(DashboardLink, {
-                            href: "/dashboard/products/new",
+                            href: "/dashboard/product/new",
                             label: "Add a new product",
                             icon: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_icons_material__WEBPACK_IMPORTED_MODULE_1__.NoteAdd, {})
                         })
@@ -113,6 +113,129 @@ const DashboardLayout = ({ children  })=>{
     }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DashboardLayout);
+
+
+/***/ }),
+
+/***/ 2437:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Lk": () => (/* binding */ useGetClientProductsQuery),
+/* harmony export */   "g3": () => (/* binding */ useGetClientProductQuery),
+/* harmony export */   "Ni": () => (/* binding */ useAddClientProductMutation),
+/* harmony export */   "W0": () => (/* binding */ useEditClientProductMutation),
+/* harmony export */   "dv": () => (/* binding */ useDeleteClientProductMutation)
+/* harmony export */ });
+/* unused harmony exports Tags, clientApi */
+/* harmony import */ var _api_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9850);
+
+var Tags;
+(function(Tags) {
+    Tags["PRODUCTS"] = "client/product";
+})(Tags || (Tags = {}));
+const clientApi = _api_service__WEBPACK_IMPORTED_MODULE_0__/* .api.enhanceEndpoints */ .h.enhanceEndpoints({
+    addTagTypes: Object.values(Tags)
+}).injectEndpoints({
+    endpoints: (builder)=>({
+            getClientProducts: builder.query({
+                query: (params)=>({
+                        url: "client/product",
+                        params
+                    })
+                ,
+                providesTags: (result)=>result ? [
+                        ...result.data.results.map(({ _id  })=>({
+                                type: Tags.PRODUCTS,
+                                id: _id.toString()
+                            })
+                        ),
+                        {
+                            type: Tags.PRODUCTS,
+                            id: "LIST"
+                        }, 
+                    ] : [
+                        {
+                            type: Tags.PRODUCTS,
+                            id: "LIST"
+                        }
+                    ]
+            }),
+            getClientProduct: builder.query({
+                query: (id)=>({
+                        url: `client/product`,
+                        params: {
+                            id
+                        }
+                    })
+                ,
+                providesTags: (_result, _error, id)=>[
+                        {
+                            type: Tags.PRODUCTS,
+                            id
+                        }
+                    ]
+            }),
+            addClientProduct: builder.mutation({
+                query: (body)=>({
+                        url: "client/product",
+                        method: "POST",
+                        body
+                    })
+                ,
+                invalidatesTags: [
+                    {
+                        type: Tags.PRODUCTS,
+                        id: "LIST"
+                    }
+                ]
+            }),
+            editClientProduct: builder.mutation({
+                query: ({ id , body  })=>({
+                        url: "client/product",
+                        method: "PUT",
+                        params: {
+                            id
+                        },
+                        body
+                    })
+                ,
+                invalidatesTags: (result)=>result ? [
+                        {
+                            type: Tags.PRODUCTS,
+                            id: result.product._id.toString()
+                        }
+                    ] : [
+                        {
+                            type: Tags.PRODUCTS,
+                            id: "LIST"
+                        }
+                    ]
+            }),
+            deleteClientProduct: builder.mutation({
+                query: (id)=>({
+                        url: "client/product",
+                        method: "DELETE",
+                        params: {
+                            id
+                        }
+                    })
+                ,
+                invalidatesTags: (result)=>result ? [
+                        {
+                            type: Tags.PRODUCTS,
+                            id: result.product._id.toString()
+                        }
+                    ] : [
+                        {
+                            type: Tags.PRODUCTS,
+                            id: "LIST"
+                        }
+                    ]
+            })
+        })
+});
+const { useGetClientProductsQuery , useGetClientProductQuery , useAddClientProductMutation , useEditClientProductMutation , useDeleteClientProductMutation ,  } = clientApi;
 
 
 /***/ })

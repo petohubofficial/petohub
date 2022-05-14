@@ -14,33 +14,38 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FormikErrors, FormikTouched, useFormik } from "formik";
+import { FormikErrors, FormikHelpers, FormikTouched, useFormik } from "formik";
 import { useAuth } from "hooks/auth";
 import React, { SyntheticEvent } from "react";
-import toast from "react-hot-toast";
-import { useAddClientProductMutation } from "services/client.service";
 import { useGetBrandsQuery, useGetCategoriesQuery, useGetPetsQuery } from "services/public.service";
 import { CategoryType } from "types/category";
 import {
-  AddProductRequest,
   AffiliateLink,
   AffiliateProvider,
   FoodClassification,
+  Product,
+  ProductRequest,
 } from "types/product";
-import createFormData from "utils/createFormData";
 import * as Yup from "yup";
 
-export default function AddProduct() {
+interface ProductFormProps {
+  product?: Product;
+  onSubmit: (
+    values: ProductRequest,
+    formikHelpers: FormikHelpers<ProductRequest>
+  ) => void | Promise<any>;
+}
+
+export default function ProductForm(props: ProductFormProps) {
+  const { product, onSubmit } = props;
   const { user } = useAuth();
   const { data: brandsData, isLoading: isBrandsLoading } = useGetBrandsQuery();
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
   const { data: petsData, isLoading: isPetsLoading } = useGetPetsQuery();
 
-  const [addProduct] = useAddClientProductMutation();
-
-  const formik = useFormik<AddProductRequest>({
-    initialValues: {
-      seller: user?._id || "",
+  const formik = useFormik<ProductRequest>({
+    initialValues: product || {
+      seller: user?.directory?._id || null,
       name: "",
       brand: "",
       category: "",
@@ -102,18 +107,7 @@ export default function AddProduct() {
       ),
       productImages: Yup.array().of(Yup.string().required("Product image link is required")),
     }),
-    onSubmit: async (values, { setSubmitting }) => {
-      setSubmitting(true);
-      const request = createFormData(values);
-      try {
-        const response = await addProduct(request).unwrap();
-        if (response.success) toast.success("Product added successfully");
-      } catch (error: any) {
-        toast.error(error?.data?.error || "Something went wrong");
-      } finally {
-        setSubmitting(false);
-      }
-    },
+    onSubmit,
   });
 
   return (
@@ -451,7 +445,7 @@ export default function AddProduct() {
           )}
         />
         <Box display="flex" justifyContent="space-between" sx={{ mt: 2, px: 1 }}>
-          <Box display="flex" sx={{ color: "secondary.main" }}>
+          <Box display="flex" sx={{ color: "secondary.main" }} gap={1}>
             <StorefrontIcon color="inherit" />
             <Typography variant="h6">Affiliate Links</Typography>
           </Box>
@@ -604,7 +598,7 @@ export default function AddProduct() {
           ))
         )}
         <Box display="flex" justifyContent="space-between" sx={{ mt: 2, px: 1 }}>
-          <Box display="flex" sx={{ color: "secondary.main" }}>
+          <Box display="flex" sx={{ color: "secondary.main" }} gap={1}>
             <CollectionsIcon color="inherit" />
             <Typography variant="h6">Product Images</Typography>
           </Box>
@@ -672,6 +666,7 @@ export default function AddProduct() {
           variant="outlined"
           startIcon={<PublishIcon />}
           type="submit"
+          sx={{ mt: 3 }}
         >
           {formik.isSubmitting ? "Submitting..." : "Submit"}
         </Button>

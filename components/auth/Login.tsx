@@ -130,7 +130,7 @@ const Login = () => {
                 variant="contained"
                 type="submit"
               >
-                Login
+                {submitting ? "Logging in..." : "Login"}
               </Button>
             </Box>
             <Box sx={{ mt: 3 }} width="100%">

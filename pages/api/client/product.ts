@@ -106,24 +106,15 @@ const handler = async (
         return res.status(400).json({ success: false, error: "Unable to edit this product" });
 
       // Check if the current user is the seller of that product
-      if (product.seller.toString() !== req.user._id.toString())
+      if (product.seller.toString() !== req.user.directory?.toString())
         return res.status(400).json({ success: false, error: "Unable to edit this product" });
 
       // Updating the product
-      if (req.body.name) product.name = req.body.name;
-      if (req.body.brand) product.brand = req.body.brand;
-      if (req.body.category) product.category = req.body.category;
-      if (req.body.petType) product.petType = req.body.petType.split(",");
-      if (req.body.keywords) product.keywords = req.body.keywords.split(",");
-      if (req.body.breedType) product.breedType = req.body.breedType;
-      if (req.body.description) product.description = req.body.description;
-      if (req.body.weight) product.weight = req.body.weight;
-      if (req.body.size) product.size = JSON.parse(req.body.size);
-      if (req.body.countInStock) product.countInStock = req.body.countInStock;
-      if (req.body.price) product.price = req.body.price;
-      if (req.body.isVeg) product.isVeg = req.body.isVeg;
-      if (req.body.ageRange) product.ageRange = JSON.parse(req.body.ageRange);
-      if (req.body.affiliateLinks) product.affiliateLinks = JSON.parse(req.body.affiliateLinks);
+      const request = parseFormData(req.body, {
+        objects: ["affiliateLinks", "productImages", "size", "ageRange", "petType", "keywords"],
+      });
+      await Product.findByIdAndUpdate(req.query.id, request, { new: true, runValidators: true });
+
       if (req.files) {
         const productImages = req.files.filter((file) => file.fieldname === "productImages");
         if (productImages.length > 0) {
@@ -131,8 +122,6 @@ const handler = async (
           product.productImages = product.productImages.concat(newImages);
         }
       }
-      if (req.body.productImages) product.productImages = req.body.productImages.split(",");
-      if (req.body.productImages === "") product.productImages = [];
 
       // Tracking edits
       const edit = await Edit.create({
@@ -160,7 +149,7 @@ const handler = async (
         return res.status(400).json({ success: false, error: "Unable to remove this product" });
 
       // Check if the current user is the seller of that product or an admin
-      if (product.seller.toString() != req.user._id.toString())
+      if (product.seller.toString() != req.user.directory?.toString())
         return res.status(400).json({ success: false, error: "Unable to remove this product" });
 
       // Delete the product

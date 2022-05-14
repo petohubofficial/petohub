@@ -49,7 +49,6 @@ class AuthService {
       const { data } = await axios.get("/api/user", { withCredentials: true });
       return data;
     } catch (error: any) {
-      toast.error(error?.response?.data?.error || "Error");
       return error.response.data;
     }
   }

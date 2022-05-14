@@ -1839,16 +1839,16 @@ function errorHandler(err, res) {
     if (err.code == 11000) {
         return res.status(400).json({
             success: false,
-            message: "Duplicate field value"
+            error: "Duplicate field value"
         });
     }
     // Mongoose validation error for min, max, required fields
     if (err.name == "ValidationError") {
-        const message = Object.values(err.errors).map((val)=>val.message
+        const error = Object.values(err.errors).map((val)=>val.message
         )[0];
         return res.status(400).json({
             success: false,
-            message
+            error
         });
     }
     // Fallback to generic error

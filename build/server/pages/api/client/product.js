@@ -270,6 +270,7 @@ const handler = async (req, res)=>{
                 product
             });
         } else if (req.method === "PUT") {
+            var ref;
             // Check if the product exists
             const product = await Product_model/* default.findById */.Z.findById(req.query.id).select("+edits");
             if (!product) return res.status(404).json({
@@ -282,25 +283,25 @@ const handler = async (req, res)=>{
                 error: "Unable to edit this product"
             });
             // Check if the current user is the seller of that product
-            if (product.seller.toString() !== req.user._id.toString()) return res.status(400).json({
+            if (product.seller.toString() !== ((ref = req.user.directory) === null || ref === void 0 ? void 0 : ref.toString())) return res.status(400).json({
                 success: false,
                 error: "Unable to edit this product"
             });
             // Updating the product
-            if (req.body.name) product.name = req.body.name;
-            if (req.body.brand) product.brand = req.body.brand;
-            if (req.body.category) product.category = req.body.category;
-            if (req.body.petType) product.petType = req.body.petType.split(",");
-            if (req.body.keywords) product.keywords = req.body.keywords.split(",");
-            if (req.body.breedType) product.breedType = req.body.breedType;
-            if (req.body.description) product.description = req.body.description;
-            if (req.body.weight) product.weight = req.body.weight;
-            if (req.body.size) product.size = JSON.parse(req.body.size);
-            if (req.body.countInStock) product.countInStock = req.body.countInStock;
-            if (req.body.price) product.price = req.body.price;
-            if (req.body.isVeg) product.isVeg = req.body.isVeg;
-            if (req.body.ageRange) product.ageRange = JSON.parse(req.body.ageRange);
-            if (req.body.affiliateLinks) product.affiliateLinks = JSON.parse(req.body.affiliateLinks);
+            const request = parseFormData(req.body, {
+                objects: [
+                    "affiliateLinks",
+                    "productImages",
+                    "size",
+                    "ageRange",
+                    "petType",
+                    "keywords"
+                ]
+            });
+            await Product_model/* default.findByIdAndUpdate */.Z.findByIdAndUpdate(req.query.id, request, {
+                new: true,
+                runValidators: true
+            });
             if (req.files) {
                 const productImages = req.files.filter((file)=>file.fieldname === "productImages"
                 );
@@ -310,8 +311,6 @@ const handler = async (req, res)=>{
                     product.productImages = product.productImages.concat(newImages);
                 }
             }
-            if (req.body.productImages) product.productImages = req.body.productImages.split(",");
-            if (req.body.productImages === "") product.productImages = [];
             // Tracking edits
             const edit = await Edit_model/* default.create */.Z.create({
                 user: req.user._id,
@@ -328,6 +327,7 @@ const handler = async (req, res)=>{
                 product
             });
         } else if (req.method === "DELETE") {
+            var ref1;
             // Check if the product exists
             const product = await Product_model/* default.findById */.Z.findById(req.query.id);
             if (!product) return res.status(404).json({
@@ -340,7 +340,7 @@ const handler = async (req, res)=>{
                 error: "Unable to remove this product"
             });
             // Check if the current user is the seller of that product or an admin
-            if (product.seller.toString() != req.user._id.toString()) return res.status(400).json({
+            if (product.seller.toString() != ((ref1 = req.user.directory) === null || ref1 === void 0 ? void 0 : ref1.toString())) return res.status(400).json({
                 success: false,
                 error: "Unable to remove this product"
             });
