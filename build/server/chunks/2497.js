@@ -66,7 +66,7 @@ const publicApi = _api_service__WEBPACK_IMPORTED_MODULE_0__/* .api.enhanceEndpoi
             }),
             getProducts: builder.query({
                 query: (params)=>({
-                        url: "products",
+                        url: "product",
                         params
                     })
             })

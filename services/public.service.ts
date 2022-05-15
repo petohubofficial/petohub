@@ -28,7 +28,7 @@ export const publicApi = api
         providesTags: [Tags.BRANDS],
       }),
       getProducts: builder.query<GetProductsResponse, GetProductsFilters>({
-        query: (params) => ({ url: "products", params }),
+        query: (params) => ({ url: "product", params }),
       }),
     }),
   });
