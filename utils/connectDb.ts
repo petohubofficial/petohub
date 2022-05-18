@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import fs from "fs/promises";
+import path from "path";
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
 
@@ -24,7 +25,9 @@ export default async function connect() {
         return mongoose;
       });
   }
-  fs.readdir("models").then((models) => models.forEach((model) => require(`models/${model}`)));
+  fs.readdir(path.resolve("models")).then((models) =>
+    models.forEach((model) => require(`models/${model}`))
+  );
   cached.conn = await cached.promise;
   return cached.conn;
 }

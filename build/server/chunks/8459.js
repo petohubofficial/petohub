@@ -1794,6 +1794,9 @@ UserSchema.methods.getResetToken = function() {
 /* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var fs_promises__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3292);
 /* harmony import */ var fs_promises__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(fs_promises__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1017);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -1813,7 +1816,7 @@ async function connect() {
             return mongoose1;
         });
     }
-    fs_promises__WEBPACK_IMPORTED_MODULE_1___default().readdir("models").then((models)=>models.forEach((model)=>__webpack_require__(6291)(`./${model}`)
+    fs_promises__WEBPACK_IMPORTED_MODULE_1___default().readdir(path__WEBPACK_IMPORTED_MODULE_2___default().resolve("models")).then((models)=>models.forEach((model)=>__webpack_require__(6291)(`./${model}`)
         )
     );
     cached.conn = await cached.promise;
