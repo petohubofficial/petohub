@@ -12,8 +12,8 @@
 /.next/
 /out/
 
-# production - not ignoring build because server has RAM bottleneck
-# /build
+# production build
+/build
 
 # misc
 .DS_Store
