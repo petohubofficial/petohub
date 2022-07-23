@@ -11,10 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install dependencies
-      uses: actions/checkout@v3
-     
-    - name: Setup Node
+    - uses: actions/checkout@v3
+    - name: Installing dependencies
       uses: actions/setup-node@v3
       with:
         node-version: 17.x
@@ -33,7 +31,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
+        key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         source: "deploy.tar"
         target: "~/root"
@@ -52,5 +50,5 @@ jobs:
           cd build
           yarn
           pm2 delete nextjs
-          pm2 start yarn --name "nextjs" -- start
+          pm2 start yarn --interpreter bash --name nextjs -- start
 
