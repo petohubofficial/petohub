@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "commit": "rm -rf build && next build && git add . && git commit -m",
     "start": "next start",
     "lint": "next lint"
   },
@@ -39,6 +38,8 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie": "^0.4.1",
     "@types/jsonwebtoken": "^8.5.8",
@@ -49,6 +50,9 @@
     "@types/react": "17.0.39",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
     "sass": "^1.49.10",
     "typescript": "4.6.2"
   }
