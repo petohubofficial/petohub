@@ -11,8 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      uses: actions/checkout@v3
     - name: Install dependencies
+      uses: actions/checkout@v3
+     
+    - name: Setup Node
       uses: actions/setup-node@v3
       with:
         node-version: 17.x
@@ -21,7 +23,6 @@ jobs:
     - run: yarn build
 
     - name: Create a tar file containing the build
-    - uses: actions/checkout@v3
       run: |
         mkdir ../build
         cp -TR . ../build
