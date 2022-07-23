@@ -55,5 +55,5 @@ jobs:
           rm deploy.tar
           cd build
           yarn
-          echo ${{ ENV_VARS }} >> .env.local
+          echo "$ENV_VARS" >> .env.local
           pm2 restart ecosystem.config.js
