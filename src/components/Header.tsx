@@ -216,7 +216,13 @@ export const Header: FC = () => {
       >
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ minHeight: 64 }}>
-            <Logo width="60px" onClick={() => router.push("/")} />
+            <Logo
+              width="60px"
+              onClick={() => router.push("/")}
+              style={{
+                cursor: "pointer",
+              }}
+            />
             <Box sx={{ flexGrow: 1 }} />
             <TextField
               fullWidth
