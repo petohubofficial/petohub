@@ -1,0 +1,22 @@
+name: Next.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      uses: actions/setup-node@v3
+      with:
+        node-version: 17.x
+    - run: npm i -g yarn
+    - run: yarn
+    - name: Lint code
+      run: yarn lint

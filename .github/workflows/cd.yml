@@ -1,0 +1,55 @@
+name: Next.js CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+
+    steps:
+      uses: actions/checkout@v3
+    - name: Install dependencies
+      uses: actions/setup-node@v3
+      with:
+        node-version: 17.x
+    - run: npm i -g yarn
+    - run: yarn
+    - run: yarn build
+
+    - name: Create a tar file containing the build
+    - uses: actions/checkout@v3
+      run: |
+        mkdir ../build
+        cp -TR . ../build
+        tar -cvf deploy.tar --exclude=".git" --exclude="node_modules" ../build/
+
+    - name: Copy the tar file via SCP to the remote server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: 22
+        source: "deploy.tar"
+        target: "~/root"
+
+    - name: Deploy the application
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd ~/root
+          tar -xvf deploy.tar
+          rm deploy.tar
+          cd build
+          yarn
+          pm2 delete nextjs
+          pm2 start yarn --name "nextjs" -- start
+
