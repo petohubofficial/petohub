@@ -38,11 +38,14 @@ jobs:
 
     - name: Deploy the application
       uses: appleboy/ssh-action@master
+      env:
+        ENV_VARS: ${{ secrets.ENV_VARS }}
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
+        env: ENV_VARS
         script: |
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
@@ -52,4 +55,5 @@ jobs:
           rm deploy.tar
           cd build
           yarn
+          echo ${{ ENV_VARS }} >> .env.local
           pm2 restart ecosystem.config.js
