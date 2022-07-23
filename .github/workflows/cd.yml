@@ -1,4 +1,4 @@
-name: Next.js CD
+name: CD
 
 on:
   push:
@@ -44,13 +44,12 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         script: |
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
           cd /root
+          rm -rf build
           tar -xvf deploy.tar
           rm deploy.tar
           cd build
-          export NVM_DIR=~/.nvm
-          source ~/.nvm/nvm.sh
           yarn
-          pm2 delete nextjs
-          pm2 start yarn --interpreter bash --name nextjs -- start
-
+          pm2 restart ecosystem.config.js
