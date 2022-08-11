@@ -16,7 +16,7 @@ jobs:
       with:
         node-version: 17.x
         cache: 'yarn'
-    - run: npm i -g yarn
+    - run: npm i --location=global yarn
     - run: yarn
     - run: yarn lint
       
@@ -47,7 +47,7 @@ jobs:
       with:
         node-version: 17.x
         cache: 'yarn'
-    - run: npm i -g yarn
+    - run: npm i --location=global yarn
     - run: yarn
     - run: yarn build
 
