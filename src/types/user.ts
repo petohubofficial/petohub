@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { Directory } from "types/directory";
-import { Response } from "./common";
+import { PaginatedResponse, Response } from "./common";
 
 export enum Role {
   ADMIN = "Admin",
@@ -38,16 +38,8 @@ export interface GetUsersFilters {
   page: number;
 }
 
-export interface PaginatedResponse {
-  total: number;
-  pages: number;
-  results: User[];
-  next: { page: number; limit: number };
-  prev: { page: number; limit: number };
-}
-
 export interface GetUsersResponse extends Response {
-  data: PaginatedResponse;
+  data: PaginatedResponse<User>;
 }
 
 export interface GetUserResponse extends Response {

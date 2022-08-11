@@ -168,10 +168,10 @@ const ProductRow = (props: { product: Product; index: number }) => {
         <Typography>{product.name}</Typography>
       </TableCell>
       <TableCell>
-        <Typography>{product.countInStock}</Typography>
+        <Typography>{product.baseVariant.countInStock}</Typography>
       </TableCell>
       <TableCell>
-        <Typography>₹{product.price}</Typography>
+        <Typography>₹{product.baseVariant.price}</Typography>
       </TableCell>
       <TableCell>
         {product.affiliateLinks.length > 0 ? (

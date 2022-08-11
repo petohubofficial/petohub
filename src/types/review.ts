@@ -1,13 +1,8 @@
 import { Types } from "mongoose";
 import { User } from "types/user";
 
-export interface Rating {
-  ["1"]: number;
-  ["2"]: number;
-  ["3"]: number;
-  ["4"]: number;
-  ["5"]: number;
-}
+export type Star = 1 | 2 | 3 | 4 | 5;
+export type Rating = { [star in Star]: number };
 
 export enum RevieweeModel {
   PRODUCT = "Product",
@@ -22,7 +17,7 @@ export interface Review {
   revieweeId: Types.ObjectId;
   subject: string;
   comment: string;
-  rating: number;
+  rating: Star;
   createdAt: Date;
   updatedAt: Date;
 }

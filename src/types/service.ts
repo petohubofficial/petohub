@@ -4,6 +4,7 @@ import { Directory } from "types/directory";
 import { Pet } from "types/pet";
 
 export interface Service {
+  _previousServiceImages: string[];
   _id: Types.ObjectId;
   name: string;
   alias: string[];

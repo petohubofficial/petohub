@@ -1,7 +1,7 @@
 import type { BrandResponse } from "types/brand";
 import type { CategoryResponse } from "types/category";
 import type { PetResponse } from "types/pet";
-import type { GetProductsFilters, GetProductsResponse } from "types/product";
+import type { GetProductsFilters, ProductsResponse } from "types/product";
 import { api } from "./api.service";
 
 export enum Tags {
@@ -27,7 +27,7 @@ export const publicApi = api
         query: () => "brand",
         providesTags: [Tags.BRANDS],
       }),
-      getProducts: builder.query<GetProductsResponse, GetProductsFilters>({
+      getProducts: builder.query<ProductsResponse, GetProductsFilters>({
         query: (params) => ({ url: "product", params }),
       }),
     }),

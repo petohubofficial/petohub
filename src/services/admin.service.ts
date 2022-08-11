@@ -1,9 +1,4 @@
-import type {
-  ApproveProductResponse,
-  GetProductResponse,
-  GetProductsFilters,
-  GetProductsResponse,
-} from "types/product";
+import type { GetProductsFilters, ProductResponse, ProductsResponse } from "types/product";
 import { GetUserResponse, GetUsersFilters, GetUsersResponse, VerifyUserResponse } from "types/user";
 import { api } from "./api.service";
 
@@ -14,7 +9,7 @@ export enum Tags {
 
 export const adminApi = api.enhanceEndpoints({ addTagTypes: Object.values(Tags) }).injectEndpoints({
   endpoints: (builder) => ({
-    getAdminProducts: builder.query<GetProductsResponse, GetProductsFilters>({
+    getAdminProducts: builder.query<ProductsResponse, GetProductsFilters>({
       query: (params) => ({ url: "admin/product", params }),
       providesTags: (result) =>
         result
@@ -27,11 +22,11 @@ export const adminApi = api.enhanceEndpoints({ addTagTypes: Object.values(Tags) 
             ]
           : [{ type: Tags.PRODUCTS, id: "LIST" }],
     }),
-    getAdminProduct: builder.query<GetProductResponse, string>({
+    getAdminProduct: builder.query<ProductResponse, string>({
       query: (id) => ({ url: `admin/product`, params: { id } }),
       providesTags: (_result, _error, id) => [{ type: Tags.PRODUCTS, id }],
     }),
-    approveProduct: builder.mutation<ApproveProductResponse, string>({
+    approveProduct: builder.mutation<ProductResponse, string>({
       query: (id) => ({ url: `admin/product/approve`, params: { id }, method: "POST" }),
       invalidatesTags: (result) =>
         result

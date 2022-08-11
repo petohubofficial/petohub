@@ -1,7 +1,7 @@
 import fs from "fs";
 import { model, models, Schema, Types } from "mongoose";
 import path from "path";
-import { AffiliateProvider, FoodClassification, Product } from "types/product";
+import { AffiliateProvider, FoodClassification, Product, VariationBasis } from "types/product";
 import type { Rating } from "types/review";
 
 require("models/Directory.model");
@@ -65,42 +65,78 @@ const ProductSchema = new Schema<Product>(
       minlength: [8, "Description is too short"],
       maxlength: [1024, "Description is too long"],
     },
-    weight: {
-      type: Number,
-      default: 0,
-      min: [0, "Product should have a positive weight"],
-    },
-    size: {
-      length: {
-        type: Number,
-        default: 0,
-        min: [0, "Product length cannot be less than 0 meter"],
-      },
-      width: {
-        type: Number,
-        default: 0,
-        min: [0, "Product width cannot be less than 0 meter"],
-      },
-      height: {
-        type: Number,
-        default: 0,
-        min: [0, "Product height cannot be less than 0 meter"],
-      },
+    variations: {
       _id: false,
-    },
-    countInStock: {
-      type: Number,
-      default: 0,
-      min: [0, "There should be a positive amount of stock"],
-    },
-    price: {
-      type: Number,
-      default: 0,
-      min: [0, "Price can't be lower than 0"],
+      sku: {
+        type: String,
+        required: [true, "Please provide a product SKU"],
+        default: "",
+      },
+      price: {
+        type: Number,
+        default: 0,
+        min: [0, "Price can't be lower than 0"],
+        required: [true, "Please provide a product price"],
+      },
+      onOffer: {
+        type: Boolean,
+        default: false,
+      },
+      offerPrice: {
+        type: Number,
+        default: 0,
+        min: [0, "Offer price can't be lower than 0"],
+      },
+      countInStock: {
+        type: Number,
+        default: 0,
+        min: [0, "There should be a positive amount of stock"],
+        required: [true, "Please provide a product stock"],
+      },
+      basis: {
+        type: String,
+        enum: VariationBasis,
+        required: false,
+      },
+      attributes: {
+        color: {
+          type: String,
+          default: "",
+          required: false,
+        },
+        weight: {
+          type: Number,
+          default: 0,
+          min: [0, "Product should have a positive weight"],
+          required: false,
+        },
+        size: {
+          length: {
+            type: Number,
+            default: 0,
+            min: [0, "Product length cannot be less than 0 meter"],
+            required: false,
+          },
+          width: {
+            type: Number,
+            default: 0,
+            min: [0, "Product width cannot be less than 0 meter"],
+            required: false,
+          },
+          height: {
+            type: Number,
+            default: 0,
+            min: [0, "Product height cannot be less than 0 meter"],
+            required: false,
+          },
+          _id: false,
+          required: false,
+        },
+      },
     },
     foodClassification: {
       type: String,
-      enum: Object.values(FoodClassification),
+      enum: FoodClassification,
       default: FoodClassification.NOT_APPLICABLE,
     },
     ageRange: {
@@ -116,14 +152,6 @@ const ProductSchema = new Schema<Product>(
       },
       _id: false,
     },
-    productImages: {
-      type: [String],
-      set: function (productImages: string[]): string[] {
-        // @ts-ignore
-        this._previousProductImages = this.productImages;
-        return productImages;
-      },
-    },
     link: {
       type: String,
       default: "",
@@ -136,11 +164,20 @@ const ProductSchema = new Schema<Product>(
           link: String,
           provider: {
             type: String,
-            enum: Object.values(AffiliateProvider),
+            enum: AffiliateProvider,
           },
           price: Number,
         },
       ],
+      default: [],
+    },
+    productImages: {
+      type: [String],
+      set: function (productImages: string[]) {
+        const doc: Product = this as unknown as Product;
+        doc._previousProductImages = doc.productImages;
+        return productImages;
+      },
       default: [],
     },
     edits: {
@@ -215,26 +252,22 @@ ProductSchema.virtual("reviews", {
 });
 
 ProductSchema.virtual("rating").get(function (): Rating {
-  // @ts-ignore
   this.populate("reviews");
   let rating: Rating = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-  // @ts-ignore
   if (!this.reviews) return rating;
-  // @ts-ignore
   this.reviews.forEach((review) => rating[review.rating]++);
   return rating;
 });
 
 ProductSchema.virtual("averageRating").get(function (): number {
-  // @ts-ignore
   this.populate("reviews");
-  // @ts-ignore
   if (!this.reviews || this.reviews.length === 0) return 0;
   let total = 0;
-  // @ts-ignore
-  for (const num in this.rating) total += num * this.rating[num];
-  // @ts-ignore
-  return (total / this.reviews.length).toFixed(1);
+
+  Object.entries(this.rating).forEach(([key, value]) => {
+    total += parseInt(key) * value;
+  });
+  return total / this.reviews.length;
 });
 
 export default models.Product || model<Product>("Product", ProductSchema);

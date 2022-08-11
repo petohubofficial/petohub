@@ -2,7 +2,7 @@ import multer from "multer";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export interface MulterNextApiRequest extends NextApiRequest {
-  files: any[];
+  files: Express.Multer.File[];
 }
 
 // Configuring disk storage engine

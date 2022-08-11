@@ -4,7 +4,8 @@ import withRoles from "middlewares/withRoles";
 import Directory from "models/Directory.model";
 import User from "models/User.model";
 import { NextApiResponse } from "next";
-import { GetUsersResponse, PaginatedResponse, Role } from "types/user";
+import { PaginatedResponse } from "types/common";
+import { GetUsersResponse, Role, User as IUser } from "types/user";
 import connect from "utils/connectDb";
 import errorHandler from "utils/errorHandler";
 
@@ -38,7 +39,7 @@ const handler = async (
         usersQuery.skip(startIndex).limit(limit);
 
         const users = await usersQuery;
-        const results: PaginatedResponse = {
+        const results: PaginatedResponse<IUser> = {
           total: 0,
           pages: 0,
           results: [],
@@ -48,7 +49,7 @@ const handler = async (
 
         results.total = await User.countDocuments();
         results.pages = Math.ceil(results.total / limit);
-        results.results = users;
+        results.results = users as IUser[];
 
         if (endIndex < results.total) results.next = { page: page + 1, limit: limit };
         if (startIndex > 0) results.prev = { page: page - 1, limit: limit };

@@ -102,12 +102,12 @@ export const darkTheme: ThemeOptions = {
         },
         "*::-webkit-scrollbar": {
           background: "transparent",
-          width: "7px",
+          width: "5px",
         },
         "*::-webkit-scrollbar-thumb": {
           background: "#B94F94",
           borderRadius: "2px",
-          width: "7px",
+          width: "5px",
         },
       },
     },

@@ -18,8 +18,8 @@ export default function parseFormData(obj: { [key: string]: any }, config?: Conf
 
   keys.forEach((key) => {
     const value = obj[key];
-    if (config?.exclude && config?.exclude.includes(key)) return;
-    if (config?.include && !config?.include.includes(key)) return;
+    if (config?.exclude?.includes(key)) return;
+    if (config?.include?.includes(key)) return;
 
     if (config?.files && config?.files.includes(key)) {
       data[key] = value;

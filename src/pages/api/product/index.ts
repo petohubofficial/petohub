@@ -1,6 +1,7 @@
 import Product from "models/Product.model";
 import { NextApiRequest, NextApiResponse } from "next";
-import { PaginatedResponse } from "types/product";
+import { PaginatedResponse } from "types/common";
+import { Product as IProduct } from "types/product";
 import connect from "utils/connectDb";
 import errorHandler from "utils/errorHandler";
 
@@ -72,7 +73,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const products = await productQuery;
 
     // Making the results object along with some metadata
-    const results: PaginatedResponse = {
+    const results: PaginatedResponse<IProduct> = {
       total: 0,
       pages: 0,
       results: [],

@@ -4,7 +4,8 @@ import withRoles from "middlewares/withRoles";
 import Edit from "models/Edit.model";
 import Product from "models/Product.model";
 import { NextApiResponse } from "next";
-import { AddProductResponse, GetProductsResponse, PaginatedResponse } from "types/product";
+import { PaginatedResponse, Response } from "types/common";
+import { Product as IProduct, ProductResponse, ProductsResponse } from "types/product";
 import { Role } from "types/user";
 import connect from "utils/connectDb";
 import errorHandler from "utils/errorHandler";
@@ -12,7 +13,7 @@ import parseFormData from "utils/parseFormData";
 
 const handler = async (
   req: ProtectedNextApiRequest & MulterNextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ProductsResponse | ProductResponse | Response>
 ) => {
   const allowed = ["GET", "POST", "PUT", "DELETE"];
   if (!allowed.includes(req.method as string))
@@ -44,7 +45,7 @@ const handler = async (
       // Executing the query
       const products = await productQuery;
       // Making the results object along with some metadata
-      const results: PaginatedResponse = {
+      const results: PaginatedResponse<IProduct> = {
         total: 0,
         pages: 0,
         results: [],
@@ -59,15 +60,20 @@ const handler = async (
       if (endIndex < results.total) results.next = { page: page + 1, limit: limit };
       if (startIndex > 0) results.prev = { page: page - 1, limit: limit };
 
-      return (res as NextApiResponse<GetProductsResponse>)
-        .status(200)
-        .json({ success: true, data: results });
+      return res.status(200).json({ success: true, data: results });
     }
 
     // Adding a new product
     else if (req.method === "POST") {
       const request = parseFormData(req.body, {
-        objects: ["affiliateLinks", "productImages", "size", "ageRange", "petType", "keywords"],
+        objects: [
+          "affiliateLinks",
+          "productImages",
+          "petType",
+          "keywords",
+          "variants",
+          "baseVariant",
+        ],
       });
       const product = await Product.create(request);
 
@@ -90,9 +96,7 @@ const handler = async (
       product.edits.unshift(edit._id);
       await product.save();
 
-      return (res as NextApiResponse<AddProductResponse>)
-        .status(200)
-        .json({ success: true, product });
+      return res.status(200).json({ success: true, product });
     }
 
     // Updating product
@@ -111,7 +115,14 @@ const handler = async (
 
       // Updating the product
       const request = parseFormData(req.body, {
-        objects: ["affiliateLinks", "productImages", "size", "ageRange", "petType", "keywords"],
+        objects: [
+          "affiliateLinks",
+          "productImages",
+          "petType",
+          "keywords",
+          "variants",
+          "baseVariant",
+        ],
       });
       await Product.findByIdAndUpdate(req.query.id, request, { new: true, runValidators: true });
 

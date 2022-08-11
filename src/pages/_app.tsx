@@ -32,7 +32,7 @@ type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
-type EnhancedAppProps = AppProps & {
+type EnhancedAppProps = Omit<AppProps, "Component"> & {
   Component: NextPageWithLayout;
   emotionCache: EmotionCache;
 };
@@ -60,6 +60,7 @@ const App: FC<EnhancedAppProps> = (props) => {
                       !auth.isInitialized ? (
                         <SplashScreen />
                       ) : (
+                        // @ts-ignore
                         getLayout(<Component {...pageProps} />)
                       )
                     }

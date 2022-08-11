@@ -116,6 +116,7 @@ export const baseTheme: ThemeOptions = {
           flexDirection: "column",
           minHeight: "100%",
           width: "100%",
+          overflowY: "overlay",
         },
         "#__next": {
           display: "flex",

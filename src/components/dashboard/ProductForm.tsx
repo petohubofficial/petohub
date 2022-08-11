@@ -1,32 +1,50 @@
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CollectionsIcon from "@mui/icons-material/Collections";
+import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import PublishIcon from "@mui/icons-material/Publish";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import {
-  Autocomplete,
   Box,
   Button,
+  Checkbox,
   CircularProgress,
+  FormControlLabel,
   IconButton,
   InputAdornment,
-  TextField,
   Typography,
 } from "@mui/material";
-import { FormikErrors, FormikHelpers, FormikTouched, useFormik } from "formik";
+import Autocomplete from "components/formik/Autocomplete";
+import TextField from "components/formik/TextField";
+import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import { useAuth } from "hooks/auth";
-import { SyntheticEvent } from "react";
+import React from "react";
 import { useGetBrandsQuery, useGetCategoriesQuery, useGetPetsQuery } from "services/public.service";
 import { CategoryType } from "types/category";
 import {
-  AffiliateLink,
   AffiliateProvider,
   FoodClassification,
   Product,
   ProductRequest,
+  Variation,
+  VariationBasis,
 } from "types/product";
+import generateSKU from "utils/generateSKU";
 import * as Yup from "yup";
+
+enum Step {
+  General = 0,
+  Affiliate = 1,
+  Variations = 2,
+  Photos = 3,
+}
+
+const firstStep = Step.General;
+const lastStep = Step.Photos;
 
 interface ProductFormProps {
   product?: Product;
@@ -43,24 +61,18 @@ export default function ProductForm(props: ProductFormProps) {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
   const { data: petsData, isLoading: isPetsLoading } = useGetPetsQuery();
 
+  const [step, setStep] = React.useState<Step>(Step.General);
+
   const formik = useFormik<ProductRequest>({
     initialValues: product || {
       seller: user?.directory?._id || null,
       name: "",
-      brand: "",
-      category: "",
+      brand: null,
+      category: null,
       petType: [],
       keywords: [],
       breedType: "",
       description: "",
-      weight: 0,
-      size: {
-        length: 0,
-        width: 0,
-        height: 0,
-      },
-      countInStock: 0,
-      price: 0,
       foodClassification: FoodClassification.NOT_APPLICABLE,
       ageRange: {
         min: 0,
@@ -68,609 +80,663 @@ export default function ProductForm(props: ProductFormProps) {
       },
       affiliateLinks: [],
       productImages: [],
+      baseVariant: {
+        price: 0,
+        countInStock: 0,
+        onOffer: false,
+        offerPrice: 0,
+        sku: generateSKU(),
+        attributes: {
+          color: "",
+          size: {
+            length: 0,
+            height: 0,
+            width: 0,
+          },
+          weight: 0,
+        },
+      },
+      variations: [],
     },
-    validationSchema: Yup.object().shape({
-      name: Yup.string().required("Name is required"),
-      brand: Yup.string().required("Brand is required"),
-      category: Yup.string().required("Category is required"),
-      petType: Yup.array().required("Pet type is required"),
-      keywords: Yup.array().required("Keywords is required"),
-      breedType: Yup.string().required("Breed type is required"),
-      description: Yup.string().required("Description is required"),
-      weight: Yup.number().required("Weight is required"),
-      size: Yup.object()
-        .shape({
-          length: Yup.number().required("Length is required"),
-          width: Yup.number().required("Width is required"),
-          height: Yup.number().required("Height is required"),
-        })
-        .required("Size is required"),
-      countInStock: Yup.number().required("Count in stock is required"),
-      price: Yup.number().required("Price is required"),
-      foodClassification: Yup.string().required("Food classification is required"),
-      ageRange: Yup.object()
-        .shape({
-          min: Yup.number().required("Min age is required"),
-          max: Yup.number().required("Max age is required"),
-        })
-        .required("Age range is required"),
-      affiliateLinks: Yup.array().of(
-        Yup.object().shape({
-          id: Yup.string().required("Product id is required"),
-          link: Yup.string().required("Product link is required"),
-          provider: Yup.string().oneOf(
-            Object.values(AffiliateProvider),
-            "Product provider is required"
-          ),
-          price: Yup.number().required("Product price is required"),
-        })
-      ),
-      productImages: Yup.array().of(Yup.string().required("Product image link is required")),
-    }),
-    onSubmit,
+    validationSchema:
+      step === Step.General
+        ? Yup.object().shape({
+            name: Yup.string().required("Name is required"),
+            brand: Yup.string().typeError("Brand is required").required("Brand is required"),
+            category: Yup.string()
+              .typeError("Category is required")
+              .required("Category is required"),
+            petType: Yup.array().required("Pet type is required"),
+            keywords: Yup.array().required("Keywords is required"),
+            breedType: Yup.string().required("Breed type is required"),
+            description: Yup.string().required("Description is required"),
+            foodClassification: Yup.string().required("Food classification is required"),
+            ageRange: Yup.object()
+              .shape({
+                min: Yup.number().required("Min age is required"),
+                max: Yup.number().required("Max age is required"),
+              })
+              .required("Age range is required"),
+          })
+        : step === Step.Photos
+        ? Yup.object().shape({
+            productImages: Yup.array().of(Yup.string().required("Product image link is required")),
+          })
+        : step === Step.Affiliate
+        ? Yup.object().shape({
+            affiliateLinks: Yup.array().of(
+              Yup.object().shape({
+                id: Yup.string().required("Product id is required"),
+                link: Yup.string().required("Product link is required"),
+                provider: Yup.string()
+                  .typeError("Product provider is required")
+                  .oneOf(Object.values(AffiliateProvider), "Product provider is required"),
+                price: Yup.number().required("Product price is required"),
+              })
+            ),
+          })
+        : step === Step.Variations
+        ? Yup.object().shape({
+            baseVariant: Yup.object().shape({
+              countInStock: Yup.number().required("Count in stock is required"),
+              price: Yup.number().required("Price is required"),
+              sku: Yup.string().required("SKU is required"),
+              offerPrice: Yup.number(),
+              onOffer: Yup.boolean(),
+              attributes: Yup.object().shape({
+                color: Yup.string(),
+                weight: Yup.number(),
+                size: Yup.object().shape({
+                  length: Yup.number(),
+                  width: Yup.number(),
+                  height: Yup.number(),
+                }),
+              }),
+            }),
+            variants: Yup.array().of(
+              Yup.object().shape({
+                countInStock: Yup.number().required("Count in stock is required"),
+                price: Yup.number().required("Price is required"),
+                sku: Yup.string().required("SKU is required"),
+                basis: Yup.string()
+                  .typeError("Variation basis is required")
+                  .oneOf(Object.values(VariationBasis), "Variation basis is required"),
+                offerPrice: Yup.number(),
+                onOffer: Yup.boolean(),
+                attributes: Yup.object().shape({
+                  color: Yup.string(),
+                  weight: Yup.number(),
+                  size: Yup.object().shape({
+                    length: Yup.number(),
+                    width: Yup.number(),
+                    height: Yup.number(),
+                  }),
+                }),
+              })
+            ),
+          })
+        : Yup.object().shape({}),
+    onSubmit: (values, helpers) => {
+      if (step !== lastStep) setStep((prevStep) => prevStep + 1);
+      else onSubmit(values, helpers);
+      helpers.setSubmitting(false);
+    },
   });
 
   return (
-    <Box>
+    <FormikProvider value={formik}>
       <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-        <TextField
-          fullWidth
-          size="small"
-          label="Product Name"
-          name="name"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.name}
-          error={Boolean(formik.touched.name && formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-          sx={{ my: 1 }}
-        />
-        <TextField
-          fullWidth
-          multiline
-          size="small"
-          label="Description"
-          name="description"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.description}
-          error={Boolean(formik.touched.description && formik.errors.description)}
-          helperText={formik.touched.description && formik.errors.description}
-          sx={{ my: 1 }}
-        />
-        <Box display={{ xs: "block", md: "flex" }} gap={1}>
-          {isCategoriesLoading ? (
-            <Box display="flex" gap={2}>
-              <CircularProgress size={20} />
-              <Typography>Loading categories...</Typography>
-            </Box>
-          ) : (
-            <Autocomplete
-              fullWidth
-              options={
-                categoriesData?.categories
-                  ?.filter((category) => category.type === CategoryType.PRODUCT)
-                  ?.map((category) => category.name) || []
-              }
-              onChange={(event: SyntheticEvent<Element, Event>, value: string | null) => {
-                formik.setFieldValue("category", value);
-              }}
-              value={formik.values.category}
-              filterSelectedOptions
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Category"
-                  size="small"
-                  name="category"
-                  onBlur={formik.handleBlur}
-                  error={Boolean(formik.touched.category && formik.errors.category)}
-                  helperText={formik.touched.category && formik.errors.category}
-                  sx={{ my: 1 }}
-                />
-              )}
-            />
-          )}
-          {isBrandsLoading ? (
-            <Box display="flex" gap={2}>
-              <CircularProgress size={20} />
-              <Typography>Loading brands...</Typography>
-            </Box>
-          ) : (
-            <Autocomplete
-              fullWidth
-              options={brandsData?.brands?.map((brand) => brand.name) || []}
-              onChange={(event: SyntheticEvent<Element, Event>, value: string | null) => {
-                formik.setFieldValue("brand", value);
-              }}
-              value={formik.values.brand}
-              filterSelectedOptions
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Brand"
-                  size="small"
-                  name="brand"
-                  onBlur={formik.handleBlur}
-                  error={Boolean(formik.touched.brand && formik.errors.brand)}
-                  helperText={formik.touched.brand && formik.errors.brand}
-                  sx={{ my: 1 }}
-                />
-              )}
-            />
-          )}
-          {isPetsLoading ? (
-            <Box display="flex" gap={2}>
-              <CircularProgress size={20} />
-              <Typography>Loading pets...</Typography>
-            </Box>
-          ) : (
-            <Autocomplete
-              multiple
-              fullWidth
-              options={petsData?.pets?.map((pet) => pet.name) || []}
-              onChange={(event: SyntheticEvent<Element, Event>, value: string[]) => {
-                formik.setFieldValue("petType", value);
-              }}
-              value={formik.values.petType}
-              filterSelectedOptions
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Pet Type"
-                  size="small"
-                  name="petType"
-                  onBlur={formik.handleBlur}
-                  error={Boolean(formik.touched.petType && formik.errors.petType)}
-                  helperText={formik.touched.petType && formik.errors.petType}
-                  sx={{ my: 1 }}
-                />
-              )}
-            />
-          )}
-        </Box>
-        <Box display={{ xs: "block", md: "flex" }} gap={1}>
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            label="Price"
-            name="price"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.price}
-            error={Boolean(formik.touched.price && formik.errors.price)}
-            helperText={formik.touched.price && formik.errors.price}
-            sx={{ my: 1 }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Typography>₹</Typography>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            label="Count in stock"
-            name="countInStock"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.countInStock}
-            error={Boolean(formik.touched.countInStock && formik.errors.countInStock)}
-            helperText={formik.touched.countInStock && formik.errors.countInStock}
-            sx={{ my: 1 }}
-          />
-        </Box>
-        <Autocomplete
-          multiple
-          freeSolo
-          options={[]}
-          onChange={(event: SyntheticEvent<Element, Event>, value: any[]) => {
-            console.log(value);
-            formik.setFieldValue("keywords", value);
-          }}
-          value={formik.values.keywords}
-          isOptionEqualToValue={() => false}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Keywords"
-              size="small"
-              name="keywords"
-              onBlur={formik.handleBlur}
-              error={Boolean(formik.touched.keywords && formik.errors.keywords)}
-              helperText={formik.touched.keywords && formik.errors.keywords}
-              sx={{ my: 1 }}
-            />
-          )}
-        />
-        <TextField
-          fullWidth
-          size="small"
-          label="Breed Type"
-          name="breedType"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.breedType}
-          error={Boolean(formik.touched.breedType && formik.errors.breedType)}
-          helperText={formik.touched.breedType && formik.errors.breedType}
-          sx={{ my: 1 }}
-        />
-        <Box display={{ xs: "block", md: "flex" }} gap={1}>
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            label="Length"
-            name="size.length"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.size.length}
-            error={Boolean(formik.touched.size?.length && formik.errors.size?.length)}
-            helperText={formik.touched.size?.length && formik.errors.size?.length}
-            sx={{ my: 1 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography>cms</Typography>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            label="Height"
-            name="size.height"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.size.height}
-            error={Boolean(formik.touched.size?.height && formik.errors.size?.height)}
-            helperText={formik.touched.size?.height && formik.errors.size?.height}
-            sx={{ my: 1 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography>cms</Typography>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            label="Width"
-            name="size.width"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.size.width}
-            error={Boolean(formik.touched.size?.width && formik.errors.size?.width)}
-            helperText={formik.touched.size?.width && formik.errors.size?.width}
-            sx={{ my: 1 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography>cms</Typography>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
-        <Box display={{ xs: "block", md: "flex" }} gap={1}>
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            label="Weight"
-            name="weight"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.weight}
-            error={Boolean(formik.touched.weight && formik.errors.weight)}
-            helperText={formik.touched.weight && formik.errors.weight}
-            sx={{ my: 1 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography>grams</Typography>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            label="Minimum Age"
-            name="ageRange.min"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.ageRange?.min}
-            error={Boolean(formik.touched.ageRange?.min && formik.errors.ageRange?.min)}
-            helperText={formik.touched.ageRange?.min && formik.errors.ageRange?.min}
-            sx={{ my: 1 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography>months</Typography>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            label="Maximum Age"
-            name="ageRange.max"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.ageRange?.max}
-            error={Boolean(formik.touched.ageRange?.max && formik.errors.ageRange?.max)}
-            helperText={formik.touched.ageRange?.max && formik.errors.ageRange?.max}
-            sx={{ my: 1 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography>months</Typography>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
-        <Autocomplete
-          fullWidth
-          options={Object.values(FoodClassification)}
-          onChange={(event: SyntheticEvent<Element, Event>, value: FoodClassification | null) => {
-            formik.setFieldValue("foodClassification", value);
-          }}
-          value={formik.values.foodClassification}
-          filterSelectedOptions
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Food Classification"
-              size="small"
-              name="foodClassification"
-              onBlur={formik.handleBlur}
-              error={Boolean(formik.touched.foodClassification && formik.errors.foodClassification)}
-              helperText={formik.touched.foodClassification && formik.errors.foodClassification}
-              sx={{ my: 1 }}
-            />
-          )}
-        />
-        <Box display="flex" justifyContent="space-between" sx={{ mt: 2, px: 1 }}>
-          <Box display="flex" sx={{ color: "secondary.main" }} gap={1}>
-            <StorefrontIcon color="inherit" />
-            <Typography variant="h6">Affiliate Links</Typography>
-          </Box>
-          <Button
-            variant="outlined"
-            color="secondary"
-            size="small"
-            startIcon={<AddBusinessIcon />}
-            onClick={() =>
-              formik.setFieldValue("affiliateLinks", [
-                ...formik.values.affiliateLinks,
-                { id: "", link: "", price: "", provider: "" },
-              ])
-            }
-          >
-            Add
-          </Button>
-        </Box>
-        {formik.values.affiliateLinks.length === 0 ? (
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ my: 1 }}>
-            <Typography color="text.secondary">
-              No affiliate links added to this product!
-            </Typography>
-          </Box>
-        ) : (
-          formik.values.affiliateLinks.map((affiliateLink, index) => (
-            <Box
-              key={index}
-              display="flex"
-              flexDirection={{ xs: "column", sm: "row" }}
-              alignItems={{ xs: "center", md: "start" }}
-              gap={1}
-            >
-              <Box display="flex" width="100%" flexDirection={{ xs: "column", md: "row" }} gap={1}>
-                <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={1}>
-                  <Autocomplete
-                    fullWidth
-                    options={Object.values(AffiliateProvider)}
-                    onChange={(
-                      event: SyntheticEvent<Element, Event>,
-                      value: AffiliateProvider | null
-                    ) => {
-                      formik.setFieldValue(`affiliateLinks[${index}].provider`, value || "");
-                    }}
-                    value={affiliateLink.provider}
-                    filterSelectedOptions
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Provider"
-                        size="small"
-                        name={`affiliateLinks[${index}].provider`}
-                        onBlur={formik.handleBlur}
-                        error={Boolean(
-                          formik.touched.affiliateLinks?.[index]?.provider &&
-                            (formik.errors.affiliateLinks as FormikErrors<AffiliateLink>[])?.[index]
-                              ?.provider
-                        )}
-                        helperText={
-                          formik.touched.affiliateLinks?.[index]?.provider &&
-                          (formik.errors.affiliateLinks as FormikErrors<AffiliateLink>[])?.[index]
-                            ?.provider
-                        }
-                        sx={{ my: 1 }}
-                      />
-                    )}
-                  />
-                  <TextField
-                    fullWidth
-                    size="small"
-                    label="Link"
-                    name={`affiliateLinks[${index}].link`}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={affiliateLink.link}
-                    error={Boolean(
-                      formik.touched.affiliateLinks?.[index]?.link &&
-                        (formik.errors.affiliateLinks as FormikErrors<AffiliateLink>[])?.[index]
-                          ?.link
-                    )}
-                    helperText={
-                      formik.touched.affiliateLinks?.[index]?.link &&
-                      (formik.errors.affiliateLinks as FormikErrors<AffiliateLink>[])?.[index]?.link
-                    }
-                    sx={{ my: 1 }}
-                  />
+        <Typography variant="overline" fontSize="large" color="textSecondary">
+          Step {step + 1} of {lastStep + 1}:{" "}
+          <Typography component="span" color="textPrimary" fontSize="inherit" fontWeight="600">
+            {Step[step]}
+          </Typography>
+        </Typography>
+        {step === Step.General ? (
+          <>
+            <TextField label="Product Name" name="name" />
+            <TextField multiline label="Description" name="description" />
+            <Box display={{ xs: "block", md: "flex" }} gap={1}>
+              {isCategoriesLoading ? (
+                <Box display="flex" gap={2}>
+                  <CircularProgress size={20} />
+                  <Typography>Loading categories...</Typography>
                 </Box>
-                <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={1}>
+              ) : (
+                <Autocomplete
+                  filterSelectedOptions
+                  options={
+                    categoriesData?.categories
+                      ?.filter((category) => category.type === CategoryType.PRODUCT)
+                      ?.map((category) => category.name) || []
+                  }
+                  label="Category"
+                  name="category"
+                />
+              )}
+              {isBrandsLoading ? (
+                <Box display="flex" gap={2}>
+                  <CircularProgress size={20} />
+                  <Typography>Loading brands...</Typography>
+                </Box>
+              ) : (
+                <Autocomplete
+                  filterSelectedOptions
+                  options={brandsData?.brands?.map((brand) => brand.name) || []}
+                  label="Brand"
+                  name="brand"
+                />
+              )}
+              {isPetsLoading ? (
+                <Box display="flex" gap={2}>
+                  <CircularProgress size={20} />
+                  <Typography>Loading pets...</Typography>
+                </Box>
+              ) : (
+                <Autocomplete
+                  multiple
+                  filterSelectedOptions
+                  options={petsData?.pets?.map((pet) => pet.name) || []}
+                  label="Pet Type"
+                  name="petType"
+                />
+              )}
+            </Box>
+            <Autocomplete multiple freeSolo options={[]} name="keywords" label="Keywords" />
+            <TextField label="Breed Type" name="breedType" />
+            <Box display={{ xs: "block", md: "flex" }} gap={1}>
+              <TextField
+                type="number"
+                label="Minimum Age"
+                name="ageRange.min"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Typography>months</Typography>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                type="number"
+                label="Maximum Age"
+                name="ageRange.max"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Typography>months</Typography>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+            <Autocomplete
+              fullWidth
+              filterSelectedOptions
+              options={Object.values(FoodClassification)}
+              name="foodClassification"
+              label="Food Classification"
+            />
+          </>
+        ) : step === Step.Affiliate ? (
+          <>
+            <Box display="flex" justifyContent="space-between" sx={{ mt: 2, px: 1 }}>
+              <Box display="flex" sx={{ color: "secondary.main" }} gap={1}>
+                <StorefrontIcon color="inherit" />
+                <Typography variant="h6">Affiliate Links</Typography>
+              </Box>
+              <Button
+                variant="outlined"
+                color="secondary"
+                size="small"
+                startIcon={<AddBusinessIcon />}
+                onClick={() =>
+                  formik.setFieldValue("affiliateLinks", [
+                    ...formik.values.affiliateLinks,
+                    { id: "", link: "", price: "", provider: "" },
+                  ])
+                }
+              >
+                Add
+              </Button>
+            </Box>
+            {formik.values.affiliateLinks.length === 0 ? (
+              <Box display="flex" justifyContent="center" alignItems="center" sx={{ my: 1 }}>
+                <Typography color="text.secondary">
+                  No affiliate links added to this product!
+                </Typography>
+              </Box>
+            ) : (
+              formik.values.affiliateLinks.map((affiliateLink, index) => (
+                <Box
+                  key={index}
+                  display="flex"
+                  flexDirection={{ xs: "column", sm: "row" }}
+                  alignItems={{ xs: "center", md: "start" }}
+                  gap={1}
+                >
+                  <Box
+                    display="flex"
+                    width="100%"
+                    flexDirection={{ xs: "column", md: "row" }}
+                    gap={1}
+                  >
+                    <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={1}>
+                      <Autocomplete
+                        filterSelectedOptions
+                        options={Object.values(AffiliateProvider)}
+                        label="Provider"
+                        name={`affiliateLinks[${index}].provider`}
+                      />
+                      <TextField label="Link" name={`affiliateLinks[${index}].link`} />
+                    </Box>
+                    <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={1}>
+                      <TextField label="ASIN/FSN/ID" name={`affiliateLinks[${index}].id`} />
+                      <TextField
+                        type="number"
+                        label="Price"
+                        name={`affiliateLinks[${index}].price`}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Typography>₹</Typography>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <IconButton
+                    color="error"
+                    sx={{ mt: 1 }}
+                    onClick={() => {
+                      const updated = [...formik.values.affiliateLinks];
+                      updated.splice(index, 1);
+                      formik.setFieldValue("affiliateLinks", updated);
+                    }}
+                  >
+                    <RemoveCircleOutlineIcon fontSize="small" />
+                    <Typography display={{ xs: "block", sm: "none" }}>Remove</Typography>
+                  </IconButton>
+                </Box>
+              ))
+            )}
+          </>
+        ) : step === Step.Variations ? (
+          <>
+            <Box display="flex" justifyContent="space-between" sx={{ my: 1, px: 1 }}>
+              <Box display="flex" sx={{ color: "secondary.main" }} gap={1}>
+                <DynamicFeedIcon color="inherit" />
+                <Typography variant="h6">Base Variant</Typography>
+              </Box>
+            </Box>
+            <Box display={{ xs: "block", md: "flex" }} gap={1}>
+              <TextField name="baseVariant.sku" label="SKU" placeholder="UGG-BB-PUR-06" />
+              <TextField type="number" label="Count in stock" name="baseVariant.countInStock" />
+            </Box>
+            <Typography fontWeight={600} fontSize="large" sx={{ my: 1 }}>
+              Prices
+            </Typography>
+            <Box display={{ xs: "block", md: "flex" }} gap={1}>
+              <TextField
+                type="number"
+                label="Price"
+                name="baseVariant.price"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Typography>₹</Typography>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {formik.values.baseVariant.onOffer && (
+                <TextField
+                  type="number"
+                  label="Offer Price"
+                  name="baseVariant.offerPrice"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Typography>₹</Typography>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
+            </Box>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.baseVariant.onOffer}
+                  onChange={(e) => formik.setFieldValue("baseVariant.onOffer", e.target.checked)}
+                />
+              }
+              label="On Offer"
+            />
+            <Typography fontWeight={600} fontSize="large" sx={{ my: 1 }}>
+              Attributes
+            </Typography>
+            <Box display={{ xs: "block", md: "flex" }} gap={1}>
+              <Autocomplete
+                options={Object.values(VariationBasis)}
+                name="baseVariant.basis"
+                label="Basis"
+              />
+              {formik.values.baseVariant.basis === VariationBasis.SIZE && (
+                <Box display={{ xs: "block", md: "flex" }} gap={1}>
                   <TextField
-                    fullWidth
-                    size="small"
-                    label="ASIN/FSN/ID"
-                    name={`affiliateLinks[${index}].id`}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={affiliateLink.id}
-                    error={Boolean(
-                      formik.touched.affiliateLinks?.[index]?.id &&
-                        (formik.errors.affiliateLinks as FormikErrors<AffiliateLink>[])?.[index]?.id
-                    )}
-                    helperText={
-                      formik.touched.affiliateLinks?.[index]?.id &&
-                      (formik.errors.affiliateLinks as FormikErrors<AffiliateLink>[])?.[index]?.id
-                    }
-                    sx={{ my: 1 }}
+                    type="number"
+                    label="Length"
+                    name="baseVariant.attributes.size.length"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Typography>cms</Typography>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   <TextField
-                    fullWidth
-                    size="small"
                     type="number"
-                    label="Price"
-                    name={`affiliateLinks[${index}].price`}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={affiliateLink.price}
-                    error={Boolean(
-                      formik.touched.affiliateLinks?.[index]?.price &&
-                        (formik.errors.affiliateLinks as FormikErrors<AffiliateLink>[])?.[index]
-                          ?.price
-                    )}
-                    helperText={
-                      formik.touched.affiliateLinks?.[index]?.price &&
-                      (formik.errors.affiliateLinks as FormikErrors<AffiliateLink>[])?.[index]
-                        ?.price
-                    }
+                    label="Height"
+                    name="baseVariant.attributes.size.height"
                     sx={{ my: 1 }}
                     InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Typography>₹</Typography>
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Typography>cms</Typography>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    type="number"
+                    label="Width"
+                    name="baseVariant.attributes.size.width"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Typography>cms</Typography>
                         </InputAdornment>
                       ),
                     }}
                   />
                 </Box>
-              </Box>
-              <IconButton
-                color="error"
-                sx={{ mt: 1 }}
-                onClick={() => {
-                  const updated = [...formik.values.affiliateLinks];
-                  updated.splice(index, 1);
-                  formik.setFieldValue("affiliateLinks", updated);
-                }}
-              >
-                <RemoveCircleOutlineIcon fontSize="small" />
-                <Typography display={{ xs: "block", sm: "none" }}>Remove</Typography>
-              </IconButton>
+              )}
+              {formik.values.baseVariant.basis === VariationBasis.COLOR && (
+                <TextField name="baseVariant.attributes.color" label="Color" placeholder="Black" />
+              )}
+              {formik.values.baseVariant.basis === VariationBasis.WEIGHT && (
+                <TextField
+                  type="number"
+                  label="Weight"
+                  name="baseVariant.attributes.weight"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Typography>grams</Typography>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
             </Box>
-          ))
-        )}
-        <Box display="flex" justifyContent="space-between" sx={{ mt: 2, px: 1 }}>
-          <Box display="flex" sx={{ color: "secondary.main" }} gap={1}>
-            <CollectionsIcon color="inherit" />
-            <Typography variant="h6">Product Images</Typography>
-          </Box>
+            <Box display="flex" justifyContent="space-between" sx={{ mt: 2, px: 1 }}>
+              <Box display="flex" sx={{ color: "secondary.main" }} gap={1}>
+                <DynamicFeedIcon color="inherit" />
+                <Typography variant="h6">Additional Variations</Typography>
+              </Box>
+              <Button
+                variant="outlined"
+                color="secondary"
+                size="small"
+                startIcon={<LibraryAddIcon />}
+                onClick={() =>
+                  formik.setFieldValue("variations", [
+                    ...formik.values.variations,
+                    {
+                      sku: generateSKU(),
+                      price: 0,
+                      countInStock: 0,
+                      attributes: {
+                        color: "",
+                        weight: 0,
+                        size: { length: 0, height: 0, width: 0 },
+                      },
+                      onOffer: false,
+                      offerPrice: 0,
+                    } as Variation,
+                  ])
+                }
+              >
+                Add
+              </Button>
+            </Box>
+            {formik.values.variations.length === 0 ? (
+              <Box display="flex" justifyContent="center" alignItems="center" sx={{ my: 1 }}>
+                <Typography color="text.secondary">
+                  No additional variations added to this product!
+                </Typography>
+              </Box>
+            ) : (
+              formik.values.variations.map((_, index) => (
+                <Box key={index}>
+                  <Box display={{ xs: "block", md: "flex" }} alignItems="start" gap={1}>
+                    <TextField
+                      name={`variations[${index}].sku`}
+                      label="SKU"
+                      placeholder="UGG-BB-PUR-06"
+                    />
+                    <TextField
+                      type="number"
+                      label="Count in stock"
+                      name={`variations[${index}].countInStock`}
+                    />
+                    <IconButton
+                      color="error"
+                      sx={{ mt: 1 }}
+                      onClick={() => {
+                        const updated = [...formik.values.variations];
+                        updated.splice(index, 1);
+                        formik.setFieldValue("variations", updated);
+                      }}
+                    >
+                      <RemoveCircleOutlineIcon fontSize="small" />
+                      <Typography display={{ xs: "block", sm: "none " }}>Remove</Typography>
+                    </IconButton>
+                  </Box>
+                  <Typography fontWeight={600} fontSize="large" sx={{ my: 1 }}>
+                    Prices
+                  </Typography>
+                  <Box display={{ xs: "block", md: "flex" }} gap={1}>
+                    <TextField
+                      type="number"
+                      label="Price"
+                      name={`variations[${index}].price`}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Typography>₹</Typography>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    {formik.values.variations[index].onOffer && (
+                      <TextField
+                        type="number"
+                        label="Offer Price"
+                        name={`variations[${index}].offerPrice`}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Typography>₹</Typography>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    )}
+                  </Box>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={formik.values.variations[index].onOffer}
+                        onChange={(e) =>
+                          formik.setFieldValue(`variations[${index}].onOffer`, e.target.checked)
+                        }
+                      />
+                    }
+                    label="On Offer"
+                  />
+                  <Typography fontWeight={600} fontSize="large" sx={{ my: 1 }}>
+                    Attributes
+                  </Typography>
+                  <Box display={{ xs: "block", md: "flex" }} gap={1}>
+                    <Autocomplete
+                      options={Object.values(VariationBasis)}
+                      name={`variations[${index}].basis`}
+                      label="Basis"
+                    />
+                    {formik.values.variations[index].basis === VariationBasis.SIZE && (
+                      <Box display={{ xs: "block", md: "flex" }} gap={1}>
+                        <TextField
+                          type="number"
+                          label="Length"
+                          name={`variations[${index}].attributes.size.length`}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <Typography>cms</Typography>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                        <TextField
+                          type="number"
+                          label="Height"
+                          name={`variations[${index}].attributes.size.height`}
+                          sx={{ my: 1 }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <Typography>cms</Typography>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                        <TextField
+                          type="number"
+                          label="Width"
+                          name={`variations[${index}].attributes.size.width`}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <Typography>cms</Typography>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Box>
+                    )}
+                    {formik.values.variations[index].basis === VariationBasis.COLOR && (
+                      <TextField
+                        name={`variations[${index}].attributes.color`}
+                        label="Color"
+                        placeholder="Black"
+                      />
+                    )}
+                    {formik.values.variations[index].basis === VariationBasis.WEIGHT && (
+                      <TextField
+                        type="number"
+                        label="Weight"
+                        name={`variations[${index}].attributes.weight`}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Typography>grams</Typography>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    )}
+                  </Box>
+                </Box>
+              ))
+            )}
+          </>
+        ) : step === Step.Photos ? (
+          <>
+            <Box display="flex" justifyContent="space-between" sx={{ mt: 2, px: 1 }}>
+              <Box display="flex" sx={{ color: "secondary.main" }} gap={1}>
+                <CollectionsIcon color="inherit" />
+                <Typography variant="h6">Product Images</Typography>
+              </Box>
+              <Button
+                variant="outlined"
+                color="secondary"
+                size="small"
+                startIcon={<AddPhotoAlternateIcon />}
+                onClick={() =>
+                  formik.setFieldValue("productImages", [...formik.values.productImages, ""])
+                }
+              >
+                Add
+              </Button>
+            </Box>
+            {formik.values.productImages.length === 0 ? (
+              <Box display="flex" justifyContent="center" alignItems="center" sx={{ my: 1 }}>
+                <Typography color="text.secondary">No images added to this product!</Typography>
+              </Box>
+            ) : (
+              formik.values.productImages.map((productImage, index) => (
+                <Box
+                  key={index}
+                  display="flex"
+                  flexDirection={{ xs: "column", sm: "row" }}
+                  alignItems={{ xs: "center", md: "start" }}
+                  gap={1}
+                >
+                  <TextField label={`Image ${index + 1}`} name={`productImages[${index}]`} />
+                  <IconButton
+                    color="error"
+                    sx={{ mt: 1 }}
+                    onClick={() => {
+                      const updated = [...formik.values.productImages];
+                      updated.splice(index, 1);
+                      formik.setFieldValue("productImages", updated);
+                    }}
+                  >
+                    <RemoveCircleOutlineIcon fontSize="small" />
+                    <Typography display={{ xs: "block", sm: "none" }}>Remove</Typography>
+                  </IconButton>
+                </Box>
+              ))
+            )}
+          </>
+        ) : null}
+        <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={2} sx={{ mt: 2 }}>
+          {step !== firstStep && (
+            <Button
+              fullWidth
+              disabled={formik.isSubmitting}
+              variant="text"
+              startIcon={<ArrowBackIcon />}
+              onClick={() => setStep((prev) => prev - 1)}
+            >
+              Previous
+            </Button>
+          )}
           <Button
+            fullWidth
+            disabled={formik.isSubmitting}
             variant="outlined"
-            color="secondary"
-            size="small"
-            startIcon={<AddPhotoAlternateIcon />}
-            onClick={() =>
-              formik.setFieldValue("productImages", [...formik.values.productImages, ""])
-            }
+            startIcon={step !== lastStep ? <ArrowForwardIcon /> : <PublishIcon />}
+            type="submit"
           >
-            Add
+            {formik.isSubmitting ? "Submitting..." : step !== lastStep ? "Next" : "Submit"}
           </Button>
         </Box>
-        {formik.values.productImages.length === 0 ? (
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ my: 1 }}>
-            <Typography color="text.secondary">No images added to this product!</Typography>
-          </Box>
-        ) : (
-          formik.values.productImages.map((productImage, index) => (
-            <Box
-              key={index}
-              display="flex"
-              flexDirection={{ xs: "column", sm: "row" }}
-              alignItems={{ xs: "center", md: "start" }}
-              gap={1}
-            >
-              <TextField
-                fullWidth
-                size="small"
-                label={`Image ${index + 1}`}
-                name={`productImages[${index}]`}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={productImage}
-                error={Boolean(
-                  (formik.touched.productImages as unknown as FormikTouched<string[]>)?.[index] &&
-                    (formik.errors.productImages as FormikErrors<string>[])?.[index]
-                )}
-                helperText={
-                  (formik.touched.productImages as unknown as FormikTouched<string[]>)?.[index] &&
-                  (formik.errors.productImages as FormikErrors<string>[])?.[index]
-                }
-                sx={{ my: 1 }}
-              />
-              <IconButton
-                color="error"
-                sx={{ mt: 1 }}
-                onClick={() => {
-                  const updated = [...formik.values.productImages];
-                  updated.splice(index, 1);
-                  formik.setFieldValue("productImages", updated);
-                }}
-              >
-                <RemoveCircleOutlineIcon fontSize="small" />
-                <Typography display={{ xs: "block", sm: "none" }}>Remove</Typography>
-              </IconButton>
-            </Box>
-          ))
-        )}
-        <Button
-          fullWidth
-          disabled={formik.isSubmitting}
-          variant="outlined"
-          startIcon={<PublishIcon />}
-          type="submit"
-          sx={{ mt: 3 }}
-        >
-          {formik.isSubmitting ? "Submitting..." : "Submit"}
-        </Button>
       </form>
-    </Box>
+    </FormikProvider>
   );
 }

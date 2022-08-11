@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { Response } from "types/common";
+import { PaginatedResponse, Response } from "types/common";
 import { Directory } from "types/directory";
 import { Edit } from "types/edit";
 import { Question } from "types/question";
@@ -28,7 +28,39 @@ export enum FoodClassification {
   NOT_APPLICABLE = "Not Applicable",
 }
 
+export type Size = {
+  length: number;
+  width: number;
+  height: number;
+};
+
+export type AgeRange = {
+  min: number;
+  max: number;
+};
+
+export enum VariationBasis {
+  COLOR = "Color",
+  SIZE = "Size",
+  WEIGHT = "Weight",
+}
+
+export interface Variation {
+  sku: string;
+  price: number;
+  countInStock: number;
+  onOffer?: boolean;
+  offerPrice?: number;
+  basis?: VariationBasis;
+  attributes: Partial<{
+    color: string;
+    size: Size;
+    weight: number;
+  }>;
+}
+
 export interface Product {
+  _previousProductImages: string[];
   _id: Types.ObjectId;
   name: string;
   alias: string[];
@@ -39,19 +71,10 @@ export interface Product {
   petType: string[];
   breedType: string;
   description: string;
-  weight: number;
-  size: {
-    length: number;
-    width: number;
-    height: number;
-  };
-  countInStock: number;
-  price: number;
+  baseVariant: Variation;
+  variations: Variation[];
   foodClassification: FoodClassification;
-  ageRange: {
-    min: number;
-    max: number;
-  };
+  ageRange: AgeRange;
   productImages: string[];
   link: string;
   affiliateLinks: AffiliateLink[];
@@ -78,60 +101,25 @@ export interface GetProductsFilters {
   min?: number;
   max?: number;
 }
-export interface ProductRequest {
-  seller: Types.ObjectId | Directory | null;
-  name: string;
-  brand: string;
-  category: string;
-  petType: string[];
-  keywords: string[];
-  breedType: string;
-  description: string;
-  weight: number;
-  size: {
-    length: number;
-    width: number;
-    height: number;
-  };
-  countInStock: number;
-  price: number;
-  foodClassification: FoodClassification;
-  ageRange: {
-    min: number;
-    max: number;
-  };
-  affiliateLinks: AffiliateLink[];
-  productImages: string[];
-}
 
-export interface PaginatedResponse {
-  total: number;
-  pages: number;
-  results: Product[];
-  next: { page: number; limit: number };
-  prev: { page: number; limit: number };
-}
+export type ProductRequest = Pick<
+  Product,
+  | "seller"
+  | "name"
+  | "petType"
+  | "keywords"
+  | "breedType"
+  | "description"
+  | "baseVariant"
+  | "variations"
+  | "ageRange"
+  | "productImages"
+  | "foodClassification"
+  | "affiliateLinks"
+> & {
+  brand: Product["brand"] | null;
+  category: Product["category"] | null;
+};
 
-export interface GetProductsResponse extends Response {
-  data: PaginatedResponse;
-}
-
-export interface AddProductResponse extends Response {
-  product: Product;
-}
-
-export interface EditProductResponse extends Response {
-  product: Product;
-}
-
-export interface DeleteProductResponse extends Response {
-  product: Product;
-}
-
-export interface GetProductResponse extends Response {
-  product: Product;
-}
-
-export interface ApproveProductResponse extends Response {
-  product: Product;
-}
+export type ProductResponse = Response & { product: Product };
+export type ProductsResponse = Omit<Response, "data"> & { data: PaginatedResponse<Product> };

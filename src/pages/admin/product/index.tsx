@@ -164,7 +164,7 @@ const ProductRow = (props: { product: Product; index: number }) => {
         </Tooltip>
       </TableCell>
       <TableCell>
-        <Typography>₹{product.price}</Typography>
+        <Typography>₹{product.baseVariant.price}</Typography>
       </TableCell>
       <TableCell>
         <Typography>{product.category}</Typography>
