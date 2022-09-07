@@ -1,4 +1,5 @@
 import Directory from "models/Directory.model";
+import KYC from "models/KYC.model";
 import User from "models/User.model";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Role } from "types/user";
@@ -9,16 +10,16 @@ import sendEmail from "utils/sendEmail";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
     return res.status(405).json({ success: false, error: "Method not allowed" });
+
+  // Taking the credentials and verifying
+  const { name, email, password } = req.body;
+  if (!name || !email || !password)
+    return res
+      .status(400)
+      .json({ success: false, error: "Please provide email, name and password" });
+
   await connect();
-
   try {
-    // Taking the credentials and verifying
-    const { name, email, password } = req.body;
-    if (!name || !email || !password)
-      return res
-        .status(400)
-        .json({ success: false, error: "Please provide email, name and password" });
-
     // Checking if the user already exists
     if (await User.findOne({ email }))
       return res.status(400).json({ success: false, error: "User already exists" });
@@ -36,6 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         state: req.body?.state,
         pincode: req.body?.pincode,
       });
+      const kyc = await KYC.create({});
       // Creating new user profile along with directory id
       user = await User.create({
         name,
@@ -45,9 +47,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         role: req.body.role,
         directory: directory._id,
       });
-      // Adding user object ref to directory object
+      // Adding user object ref to directory object and kyc object
       directory.user = user._id;
-      directory.save();
+      await directory.save();
+      kyc.user = user._id;
+      await kyc.save();
     }
     // Customer registration
     else user = await User.create({ name, email, password });
