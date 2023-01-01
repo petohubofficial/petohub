@@ -2,6 +2,8 @@ import { Types } from "mongoose";
 import { Category } from "types/category";
 import { Rating, Review } from "types/review";
 import { User } from "types/user";
+import { PaginatedResponse, Response } from "./common";
+import { Product } from "./product";
 
 export interface Location {
   lat: number;
@@ -54,3 +56,18 @@ export interface Directory {
   rating: Rating;
   averageRating: number;
 }
+
+export interface GetDirectoriesFilters {
+  page: number;
+  limit: number;
+  q?: string;
+  sort?: string;
+  category?: string;
+  pet?: string;
+  brand?: string;
+  min?: number;
+  max?: number;
+}
+
+export type DirectoryResponse = Response<{ directory: Directory; products?: Product[] }>;
+export type DirectoriesResponse = Response<PaginatedResponse<Directory>>;

@@ -4,6 +4,8 @@ import withRoles from "middlewares/withRoles";
 import Directory from "models/Directory.model";
 import User from "models/User.model";
 import { NextApiResponse } from "next";
+import { PaginatedResponse } from "types/common";
+import { Directory as IDirectory } from "types/directory";
 import { Role } from "types/user";
 import connect from "utils/connectDb";
 import errorHandler from "utils/errorHandler";
@@ -29,8 +31,69 @@ const handler = async (
       }
       // Get all directories
       else {
-        const directories = await Directory.find().select("+user").populate("user");
-        return res.status(200).json({ success: true, directories });
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = Math.min(parseInt(req.query.limit as string) || 20, 20);
+        const query = (req.query.q as string) || "";
+        const sort = (req.query.sort as string) || "";
+        const category = (req.query.category as string) || "";
+        const pet = (req.query.pet as string) || "";
+        const brand = (req.query.brand as string) || "";
+        const min = parseInt(req.query.min as string) || 0;
+        const max = parseInt(req.query.max as string) || Number.MAX_SAFE_INTEGER;
+
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        // Building the query
+        const directoryQuery = Directory.find({
+          $and: [
+            { name: { $regex: query, $options: "i" } },
+            { category: { $regex: category, $options: "i" } },
+            { brand: { $regex: brand, $options: "i" } },
+            { petType: { $regex: pet, $options: "i" } },
+            { description: { $regex: query, $options: "i" } },
+            { price: { $gte: min, $lte: max } },
+          ],
+        });
+
+        // Populating reviews and users
+        directoryQuery
+          .select("+user")
+          .populate("user")
+          .populate({
+            path: "reviews",
+            populate: { path: "reviewer", select: "name profileImage _id" },
+          });
+
+        // Sorting the query
+        if (sort === "rating") directoryQuery.sort({ averageRating: 1 });
+        if (sort === "-rating") directoryQuery.sort({ averageRating: -1 });
+        if (sort === "newest") directoryQuery.sort({ createdAt: -1 });
+        if (sort === "oldest") directoryQuery.sort({ createdAt: 1 });
+
+        // Pagination
+        directoryQuery.skip(startIndex).limit(limit);
+
+        // Executing the query
+        const directories = await directoryQuery;
+
+        // Making the results object along with some metadata
+        const results: PaginatedResponse<IDirectory> = {
+          total: 0,
+          pages: 0,
+          results: [],
+          next: { page: 0, limit: 0 },
+          prev: { page: 0, limit: 0 },
+        };
+        results.total = directories.length;
+        results.pages = Math.ceil(results.total / limit);
+        results.results = directories;
+
+        // Metadata for next and prev pages
+        if (endIndex < results.total) results.next = { page: page + 1, limit: limit };
+        if (startIndex > 0) results.prev = { page: page - 1, limit: limit };
+
+        return res.status(200).json({ success: true, data: results });
       }
     }
 

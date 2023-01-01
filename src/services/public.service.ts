@@ -1,5 +1,6 @@
 import type { BrandResponse } from "types/brand";
 import type { CategoryResponse } from "types/category";
+import { DirectoriesResponse, GetDirectoriesFilters } from "types/directory";
 import type { PetResponse } from "types/pet";
 import type { GetProductsFilters, ProductsResponse } from "types/product";
 import { api } from "./api.service";
@@ -9,6 +10,7 @@ export enum Tags {
   PETS = "pets",
   BRANDS = "brands",
   PRODUCTS = "products",
+  DIRECTORIES = "directories",
 }
 
 export const publicApi = api
@@ -29,9 +31,19 @@ export const publicApi = api
       }),
       getProducts: builder.query<ProductsResponse, GetProductsFilters>({
         query: (params) => ({ url: "product", params }),
+        providesTags: [Tags.PRODUCTS],
+      }),
+      getDirectories: builder.query<DirectoriesResponse, GetDirectoriesFilters>({
+        query: (params) => ({ url: "directory", params }),
+        providesTags: [Tags.DIRECTORIES],
       }),
     }),
   });
 
-export const { useGetCategoriesQuery, useGetPetsQuery, useGetBrandsQuery, useGetProductsQuery } =
-  publicApi;
+export const {
+  useGetCategoriesQuery,
+  useGetPetsQuery,
+  useGetBrandsQuery,
+  useGetProductsQuery,
+  useGetDirectoriesQuery,
+} = publicApi;

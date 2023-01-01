@@ -1,3 +1,4 @@
+import { SplashScreen } from "components/SplashScreen";
 import { useAuth } from "hooks/auth";
 import { useRouter } from "next/router";
 import type { FC, ReactNode } from "react";
@@ -23,6 +24,6 @@ export const GuestGuard: FC<GuestGuardProps> = (props) => {
     [router.isReady]
   );
 
-  if (!checked) return null;
+  if (!checked) return <SplashScreen />;
   return <>{children}</>;
 };

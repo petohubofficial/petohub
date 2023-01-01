@@ -1,12 +1,13 @@
 import User from "models/User.model";
 import { NextApiRequest, NextApiResponse } from "next";
+import { LoginResponse } from "types/auth";
 import connect from "utils/connectDb";
 import errorHandler from "utils/errorHandler";
 import setCookie from "utils/setCookie";
 
 const NODE_ENV = process.env.NODE_ENV as string;
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<LoginResponse>) => {
   if (req.method !== "POST")
     return res.status(405).json({ success: false, error: "Method not allowed" });
   await connect();
@@ -33,9 +34,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!isMatched)
       return res.status(400).json({ success: false, error: "Your email or password is incorrect" });
 
-    // Removing password
-    const _user = user.toJSON();
-    delete _user.password;
+    // Picking fields to send
+    if (user.directory) user.populate("directory");
+    const { directory, name, role } = user.toJSON();
 
     // Setting the Access Token in the cookie
     setCookie(res, "at", user.generateAccessToken(), {
@@ -45,8 +46,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       secure: NODE_ENV === "production",
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
+
     // Success response
-    return res.status(200).json({ success: true, rt: user.generateRefreshToken(), user: _user });
+    return res.status(200).json({ success: true, data: { directory, email, name, role } });
   } catch (error) {
     errorHandler(error, res);
   }

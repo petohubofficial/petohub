@@ -6,9 +6,7 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse extends Response {
-  user: User;
-}
+export type LoginResponse = Response<Partial<User>>;
 
 export interface RegisterRequest {
   name: string;

@@ -9,20 +9,20 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import Directories from "components/directory/Directories";
+import Filters from "components/directory/Filters";
 import PublicLayout from "components/layouts/PublicLayout";
-import Filters from "components/shop/Filters";
-import Products from "components/shop/Products";
-import { initialFilters, ProductProvider } from "contexts/product";
+import { DirectoryProvider, initialFilters } from "contexts/directory";
 import Head from "next/head";
 import { ReactElement, useEffect, useState } from "react";
-import { GetProductsFilters } from "types/product";
+import { GetDirectoriesFilters } from "types/directory";
 
-const Shop = () => {
+const DirectoriesPage = () => {
   const theme = useTheme();
   const smUp = useMediaQuery(theme.breakpoints.up("sm"));
 
-  const [filters, setFilters] = useState<GetProductsFilters>(initialFilters);
-  const [appliedFilters, setAppliedFilters] = useState<GetProductsFilters>(initialFilters);
+  const [filters, setFilters] = useState<GetDirectoriesFilters>(initialFilters);
+  const [appliedFilters, setAppliedFilters] = useState<GetDirectoriesFilters>(initialFilters);
   const [isFilterModified, setIsFilterModified] = useState<boolean>(false);
   const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
 
@@ -55,7 +55,7 @@ const Shop = () => {
   }, [smUp]);
 
   return (
-    <ProductProvider value={{ filters, appliedFilters, setFilters, setAppliedFilters }}>
+    <DirectoryProvider value={{ filters, appliedFilters, setFilters, setAppliedFilters }}>
       {isFilterModified && (
         <AppBar
           position="fixed"
@@ -108,7 +108,7 @@ const Shop = () => {
           >
             <ShoppingCartOutlined color="primary" fontSize="large" />
             <Typography color="primary.main" variant="h4">
-              Browse Shop
+              Browse Directories
             </Typography>
           </Box>
           {!smUp && (
@@ -120,21 +120,21 @@ const Shop = () => {
           )}
           <Box display="flex" flexDirection={{ xs: "column", sm: "row" }}>
             {filtersOpen && <Filters />}
-            <Products />
+            <Directories />
           </Box>
         </Box>
       </Container>
-    </ProductProvider>
+    </DirectoryProvider>
   );
 };
 
-Shop.getLayout = (page: ReactElement) => (
+DirectoriesPage.getLayout = (page: ReactElement) => (
   <PublicLayout>
     <Head>
-      <title>Shop at Petohub</title>
+      <title>Browse directories at Petohub</title>
     </Head>
     {page}
   </PublicLayout>
 );
 
-export default Shop;
+export default DirectoriesPage;

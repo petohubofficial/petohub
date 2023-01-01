@@ -114,22 +114,21 @@ const HeaderNavLink = ({ href, text, ...other }: HeaderNavLinkProps) => {
   const router = useRouter();
   const isActive = router.pathname === href;
   return (
-    <Link href={href} passHref {...other}>
-      <Typography
-        component="a"
-        color={isActive ? "primary.main" : "text.secondary"}
-        sx={{
-          "&:hover": { color: "primary.main" },
-          py: 1,
-          borderBottom: "2px solid transparent",
-          ...(isActive && { borderColor: "primary.main" }),
-          textDecoration: "none",
-        }}
-        variant="subtitle2"
-      >
-        {text}
-      </Typography>
-    </Link>
+    <Typography
+      component={Link}
+      href={href}
+      color={isActive ? "primary.main" : "text.secondary"}
+      sx={{
+        py: 1,
+        "&:hover": { color: "primary.main" },
+        borderBottom: "2px solid transparent",
+        ...(isActive && { borderColor: "primary.main" }),
+        textDecoration: "none",
+      }}
+      variant="subtitle2"
+    >
+      {text}
+    </Typography>
   );
 };
 
@@ -145,7 +144,10 @@ const HeaderNav = () => {
         sx={{ mt: 1 }}
       >
         <HeaderNavLink href="/" text="Home" />
-        <HeaderNavLink href="/shop" text="Shop" />
+        {/* <HeaderNavLink href="/shop" text="Shop" /> */}
+        <HeaderNavLink href="/directories" text="Browse" />
+        {user?.role === Role.ADMIN && <HeaderNavLink href="/admin" text="Dashboard" />}
+        {user?.role === Role.CLIENT && <HeaderNavLink href="/dashboard" text="Dashboard" />}
         <HeaderNavLink href="/about" text="About Us" />
         <HeaderNavLink href="/contact" text="Contact" />
       </Box>
