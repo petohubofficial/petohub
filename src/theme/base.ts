@@ -98,7 +98,7 @@ export const baseTheme: ThemeOptions = {
       },
     },
     MuiCssBaseline: {
-      styleOverrides: {
+      styleOverrides: (theme) => ({
         "*": {
           boxSizing: "border-box",
         },
@@ -140,7 +140,7 @@ export const baseTheme: ThemeOptions = {
         ".simplebar-scrollbar.simplebar-visible:before": {
           opacity: 1,
         },
-      },
+      }),
     },
     MuiFormControlLabel: {
       styleOverrides: {

@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useDirectory } from "hooks/directory";
+import Link from "next/link";
 import { FC } from "react";
 import { useGetDirectoriesQuery } from "services/public.service";
 
@@ -36,7 +37,12 @@ const Directories: FC = () => {
                 />
                 <CardContent>
                   <Box display="flex" justifyContent="space-between">
-                    <Typography variant="body1" fontWeight={600}>
+                    <Typography
+                      component={Link}
+                      href={`/directories/${directory.username}`}
+                      variant="body1"
+                      fontWeight={600}
+                    >
                       {directory.storeName}
                     </Typography>
                     <Tooltip title="Add to favorites" arrow>

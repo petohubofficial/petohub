@@ -96,6 +96,13 @@ export const lightTheme: ThemeOptions = {
     },
     MuiCssBaseline: {
       styleOverrides: {
+        a: {
+          textDecoration: "none",
+          color: "#121828",
+          "&:hover": {
+            textDecoration: "underline",
+          },
+        },
         ".simplebar-scrollbar:before": {
           background: "#B94F94",
         },

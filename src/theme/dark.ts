@@ -97,6 +97,13 @@ export const darkTheme: ThemeOptions = {
     },
     MuiCssBaseline: {
       styleOverrides: {
+        a: {
+          textDecoration: "none",
+          color: "#EDF2F7",
+          "&:hover": {
+            textDecoration: "underline",
+          },
+        },
         ".simplebar-scrollbar:before": {
           background: "#B94F94",
         },
