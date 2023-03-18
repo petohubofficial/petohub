@@ -4,12 +4,12 @@
  * @return an array of string representing each star
  */
 
-export default function convertStars(num = 0) {
+export default function convertStars(num: number = 0) {
   // Rounding the number to the nearest half or .5th
   let n = Math.round(num * 2) / 2;
 
   // Making an array of stars
-  const array = [];
+  const array: ("HALF" | "FULL" | "NONE")[] = [];
   while (n-- > 0) {
     if (n >= 0) array.push("FULL");
     else array.push("HALF");

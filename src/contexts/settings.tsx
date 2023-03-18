@@ -21,7 +21,7 @@ const initialSettings: Settings = {
 };
 
 export const restoreSettings = (): Settings | null => {
-  let settings = null;
+  let settings: Settings | null = null;
 
   try {
     const storedData: string | null = globalThis.localStorage.getItem("settings");

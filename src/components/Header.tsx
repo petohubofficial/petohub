@@ -112,7 +112,7 @@ interface HeaderNavLinkProps {
 
 const HeaderNavLink = ({ href, text, ...other }: HeaderNavLinkProps) => {
   const router = useRouter();
-  const isActive = router.pathname === href;
+  const isActive = href === "/" ? router.pathname === "/" : router.pathname.startsWith(href);
   return (
     <Typography
       component={Link}
@@ -214,6 +214,7 @@ export const Header: FC = () => {
           backgroundColor: "background.paper",
           color: "text.secondary",
           zIndex: "appBar",
+          top: -1,
         }}
       >
         <Container maxWidth="lg">

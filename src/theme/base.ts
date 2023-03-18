@@ -102,6 +102,9 @@ export const baseTheme: ThemeOptions = {
         "*": {
           boxSizing: "border-box",
         },
+        ":root": {
+          colorScheme: theme.palette.mode,
+        },
         html: {
           MozOsxFontSmoothing: "grayscale",
           WebkitFontSmoothing: "antialiased",
@@ -118,6 +121,22 @@ export const baseTheme: ThemeOptions = {
           width: "100%",
           overflowY: "overlay",
         },
+        a: {
+          all: "unset",
+          cursor: "pointer",
+        },
+        ".simplebar-scrollbar:before": {
+          background: "#B94F94",
+        },
+        // "*::-webkit-scrollbar": {
+        //   background: "transparent",
+        //   width: "5px",
+        // },
+        // "*::-webkit-scrollbar-thumb": {
+        //   background: "#B94F94",
+        //   borderRadius: "2px",
+        //   width: "5px",
+        // },
         "#__next": {
           display: "flex",
           flex: "1 1 auto",

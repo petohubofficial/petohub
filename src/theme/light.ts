@@ -94,29 +94,6 @@ export const lightTheme: ThemeOptions = {
         },
       },
     },
-    MuiCssBaseline: {
-      styleOverrides: {
-        a: {
-          textDecoration: "none",
-          color: "#121828",
-          "&:hover": {
-            textDecoration: "underline",
-          },
-        },
-        ".simplebar-scrollbar:before": {
-          background: "#B94F94",
-        },
-        "*::-webkit-scrollbar": {
-          background: "transparent",
-          width: "5px",
-        },
-        "*::-webkit-scrollbar-thumb": {
-          background: "#B94F94",
-          borderRadius: "2px",
-          width: "5px",
-        },
-      },
-    },
     MuiInputBase: {
       styleOverrides: {
         input: {
