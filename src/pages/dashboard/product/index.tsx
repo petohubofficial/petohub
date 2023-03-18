@@ -61,7 +61,7 @@ const ClientProductDashboard = () => {
         <Typography color="textSecondary">No products found!</Typography>
         <Typography>
           You can start adding products by clicking{" "}
-          <Link href="/dashboard/products/new" passHref>
+          <Link href="/dashboard/product/new" passHref>
             <Typography component="span" variant="link">
               here
             </Typography>

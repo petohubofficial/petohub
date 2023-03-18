@@ -25,7 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await user.save();
 
     // Generating a reset password url and the email message
-    const resetUrl = `${process.env.SITE_URL}/resetpassword?token=${token}`;
+    const resetUrl = `${process.env.SITE_URL}/reset-password?token=${token}`;
     const message = `
             <h1>You have requested to reset your password</h1>
             <p>Please go to this link to reset</p>

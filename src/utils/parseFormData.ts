@@ -5,13 +5,13 @@
   @param include - Array of keys that should be included in the parsing.
 */
 interface Config {
-  objects?: string[];
-  files?: string[];
-  exclude?: string[];
-  include?: string[];
+  objects: string[];
+  files: string[];
+  exclude: string[];
+  include: string[];
 }
 
-export default function parseFormData(obj: { [key: string]: any }, config?: Config) {
+export default function parseFormData(obj: Record<string, any>, config?: Partial<Config>) {
   const data = JSON.parse(JSON.stringify(obj));
   const keys = Object.keys(data);
   if (keys.length === 0) return data;

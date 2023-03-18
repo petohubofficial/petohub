@@ -1,3 +1,4 @@
+import { DirectoriesResponse, DirectoryResponse, GetDirectoriesFilters } from "types/directory";
 import type { GetProductsFilters, ProductResponse, ProductsResponse } from "types/product";
 import { GetUserResponse, GetUsersFilters, GetUsersResponse, VerifyUserResponse } from "types/user";
 import { api } from "./api.service";
@@ -5,6 +6,7 @@ import { api } from "./api.service";
 export enum Tags {
   PRODUCTS = "admin/product",
   USERS = "admin/user",
+  DIRECTORIES = "admin/directories",
 }
 
 export const adminApi = api.enhanceEndpoints({ addTagTypes: Object.values(Tags) }).injectEndpoints({
@@ -57,6 +59,23 @@ export const adminApi = api.enhanceEndpoints({ addTagTypes: Object.values(Tags) 
           ? [{ type: Tags.USERS, id: result.user._id.toString() }]
           : [{ type: Tags.USERS, id: "LIST" }],
     }),
+    getAdminDirectories: builder.query<DirectoriesResponse, GetDirectoriesFilters>({
+      query: (params) => ({ url: "admin/directory", params }),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.results.map(({ _id }) => ({
+                type: Tags.DIRECTORIES as const,
+                id: _id.toString(),
+              })),
+              { type: Tags.DIRECTORIES, id: "LIST" },
+            ]
+          : [{ type: Tags.DIRECTORIES, id: "LIST" }],
+    }),
+    getAdminDirectory: builder.query<DirectoryResponse, string>({
+      query: (id) => ({ url: "admin/directory", params: { id } }),
+      providesTags: (_result, _error, id) => [{ type: Tags.DIRECTORIES, id }],
+    }),
   }),
 });
 
@@ -65,4 +84,5 @@ export const {
   useApproveProductMutation,
   useGetAdminUsersQuery,
   useVerifyUserMutation,
+  useGetAdminDirectoriesQuery,
 } = adminApi;

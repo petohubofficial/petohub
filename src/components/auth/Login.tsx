@@ -110,7 +110,7 @@ const Login = () => {
                   }}
                 />
                 <Typography variant="body2" textAlign="right" color="text.secondary" sx={{ pt: 1 }}>
-                  <Link href="/forgotpassword" passHref>
+                  <Link href="/forgot-password" passHref>
                     <Typography
                       component="a"
                       fontWeight="bold"

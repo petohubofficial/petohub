@@ -1,3 +1,4 @@
+import { SplashScreen } from "components/SplashScreen";
 import { useAuth } from "hooks/auth";
 import { useRouter } from "next/router";
 import type { FC, ReactNode } from "react";
@@ -39,7 +40,7 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
     [router.isReady]
   );
 
-  if (!checked) return null;
+  if (!checked) return <SplashScreen />;
   return <>{children}</>;
 };
 

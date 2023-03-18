@@ -1,8 +1,6 @@
-interface IllustrationProps {
-  [key: string]: any;
-}
+import { SVGProps } from "react";
 
-export default function Illustration(props: IllustrationProps) {
+export default function Illustration(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

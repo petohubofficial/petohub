@@ -65,7 +65,7 @@ class AuthService {
 
   async forgotPassword(request: ForgotPasswordRequest): Promise<ForgotPasswordRespose> {
     try {
-      const { data } = await axios.post("/api/auth/forgotpassword", request);
+      const { data } = await axios.post("/api/auth/forgot-password", request);
       return data;
     } catch (error: any) {
       toast.error(error?.response?.data?.error || "Error");
@@ -78,7 +78,7 @@ class AuthService {
     request: ResetPasswordRequest
   ): Promise<ResetPasswordResponse> {
     try {
-      const { data } = await axios.post(`/api/auth/resetpassword?token=${token}`, request);
+      const { data } = await axios.post(`/api/auth/reset-password?token=${token}`, request);
       return data;
     } catch (error: any) {
       toast.error(error?.response?.data?.error || "Error");

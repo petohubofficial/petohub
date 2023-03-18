@@ -1,23 +1,19 @@
+import type { EmotionCache } from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { AuthProvider } from "contexts/auth";
+import { SettingsConsumer, SettingsProvider } from "contexts/settings";
+import type { NextPage } from "next";
+import type { AppProps } from "next/app";
 import Head from "next/head";
 import Router from "next/router";
 import nProgress from "nprogress";
+import type { FC, ReactElement, ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
-
-import type { EmotionCache } from "@emotion/cache";
-import type { NextPage } from "next";
-import type { AppProps } from "next/app";
-import type { FC, ReactElement, ReactNode } from "react";
-
-import { SplashScreen } from "components/SplashScreen";
-import { AuthConsumer, AuthProvider } from "contexts/auth";
-import { SettingsConsumer, SettingsProvider } from "contexts/settings";
 import { store } from "store";
 import { createTheme } from "theme";
 import { createEmotionCache } from "utils/createEmotionCache";
-
 import "../../node_modules/swiper/modules/navigation/navigation.scss";
 import "../../node_modules/swiper/modules/pagination/pagination.scss";
 import "../../node_modules/swiper/swiper.scss";
@@ -52,19 +48,11 @@ const App: FC<EnhancedAppProps> = (props) => {
           <SettingsProvider>
             <SettingsConsumer>
               {({ settings }) => (
-                <ThemeProvider theme={createTheme({ ...settings })}>
+                <ThemeProvider theme={createTheme(settings)}>
                   <CssBaseline />
                   <Toaster position="top-center" />
-                  <AuthConsumer>
-                    {(auth) =>
-                      !auth.isInitialized ? (
-                        <SplashScreen />
-                      ) : (
-                        // @ts-ignore
-                        getLayout(<Component {...pageProps} />)
-                      )
-                    }
-                  </AuthConsumer>
+                  {/* @ts-ignore */}
+                  {getLayout(<Component {...pageProps} />)}
                 </ThemeProvider>
               )}
             </SettingsConsumer>

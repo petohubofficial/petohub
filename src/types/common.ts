@@ -1,6 +1,6 @@
-export interface Response {
+export interface Response<T = any> {
   success: boolean;
-  data?: any;
+  data?: T;
   error?: string;
 }
 

@@ -20,7 +20,7 @@ import type { User } from "types/user";
 interface State {
   isInitialized: boolean;
   isAuthenticated: boolean;
-  user: User | null;
+  user?: Partial<User>;
 }
 
 export interface AuthContextValue extends State {
@@ -53,7 +53,7 @@ type InitializeAction = {
   type: ActionType.INITIALIZE;
   payload: {
     isAuthenticated: boolean;
-    user: User | null;
+    user?: Partial<User>;
   };
 };
 
@@ -119,12 +119,12 @@ const handlers: Record<ActionType, Handler> = {
   LOGIN: (state: State, action: LoginAction): State => ({
     ...state,
     isAuthenticated: true,
-    user: action.payload.user,
+    user: action.payload.data,
   }),
   LOGOUT: (state: State): State => ({
     ...state,
     isAuthenticated: false,
-    user: null,
+    user: undefined,
   }),
   REGISTER: (state: State): State => state,
   VERIFY: (state: State): State => state,
@@ -179,7 +179,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
             type: ActionType.INITIALIZE,
             payload: {
               isAuthenticated: false,
-              user: null,
+              user: undefined,
             },
           });
           dispatch({ type: ActionType.LOGOUT });
@@ -189,7 +189,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
           type: ActionType.INITIALIZE,
           payload: {
             isAuthenticated: false,
-            user: null,
+            user: undefined,
           },
         });
       }

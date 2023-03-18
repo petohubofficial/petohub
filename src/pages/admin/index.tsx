@@ -1,3 +1,4 @@
+import { Pages } from "@mui/icons-material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PeopleIcon from "@mui/icons-material/People";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
@@ -51,7 +52,7 @@ const AdminDashboard = () => {
                   )}
                 </Box>
                 <Link href="/admin/user" passHref>
-                  <Button color="primary" endIcon={<ArrowForwardIcon />}>
+                  <Button color="primary" component="a" endIcon={<ArrowForwardIcon />}>
                     View Users
                   </Button>
                 </Link>
@@ -76,7 +77,32 @@ const AdminDashboard = () => {
                   )}
                 </Box>
                 <Link href="/admin/product" passHref>
-                  <Button color="primary" endIcon={<ArrowForwardIcon />}>
+                  <Button color="primary" component="a" endIcon={<ArrowForwardIcon />}>
+                    View Products
+                  </Button>
+                </Link>
+              </Box>
+            </CardContent>
+          </Card>
+          <Card sx={{ mt: 2, flex: 1 }}>
+            <CardContent>
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="h5">Directories</Typography>
+                <Avatar sx={{ bgcolor: "info.main" }}>
+                  <Pages />
+                </Avatar>
+              </Box>
+              <Box display="flex" justifyContent="space-between" alignItems="end">
+                <Box>
+                  <Typography variant="h6">Total Directories</Typography>
+                  {productsIsFetching ? (
+                    <Skeleton />
+                  ) : (
+                    <Typography variant="h2">{productsData?.data?.total}</Typography>
+                  )}
+                </Box>
+                <Link href="/admin/product" passHref>
+                  <Button color="primary" component="a" endIcon={<ArrowForwardIcon />}>
                     View Products
                   </Button>
                 </Link>
