@@ -1,6 +1,7 @@
 import type { BrandResponse } from "types/brand";
 import type { CategoryResponse } from "types/category";
 import { DirectoriesResponse, DirectoryResponse, GetDirectoriesFilters } from "types/directory";
+import { AddInquiry, AddInquiryResponse } from "types/inquiry";
 import type { PetResponse } from "types/pet";
 import type { GetProductsFilters, ProductsResponse } from "types/product";
 import { api } from "./api.service";
@@ -42,6 +43,10 @@ export const publicApi = api
         query: (username) => ({ url: "directory", params: { username } }),
         providesTags: [Tags.DIRECTORY],
       }),
+      postInquiry: builder.mutation<AddInquiryResponse, AddInquiry>({
+        query: (body) => ({ url: "inquiry", method: "POST", body }),
+        invalidatesTags: [Tags.DIRECTORY],
+      }),
     }),
   });
 
@@ -52,4 +57,5 @@ export const {
   useGetProductsQuery,
   useGetDirectoriesQuery,
   useGetDirectoryQuery,
+  usePostInquiryMutation,
 } = publicApi;

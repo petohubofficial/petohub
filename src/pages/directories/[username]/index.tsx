@@ -7,18 +7,33 @@ import {
   Mail,
   Phone,
   Pin,
-  WhatsApp,
+  WhatsApp
 } from "@mui/icons-material";
-import { Box, Container, Stack, styled, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  List,
+  ListItem,
+  Stack,
+  styled,
+  TextField,
+  Typography
+} from "@mui/material";
 import PublicLayout from "components/layouts/PublicLayout";
 import Ratings from "components/Ratings";
+import { Form, FormikProvider, useFormik } from "formik";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useGetDirectoryQuery } from "services/public.service";
+import { toast } from "react-hot-toast";
+import { useGetDirectoryQuery, usePostInquiryMutation } from "services/public.service";
 import { Autoplay, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Directory } from "types/directory";
+import { AddInquiry } from "types/inquiry";
+import { getErrorProps } from "utils/errorProps";
+import * as Yup from "yup";
 
 interface BannerProps {
   directory?: Directory;
@@ -40,7 +55,7 @@ const BannerInfo = ({ directory }: BannerProps) => {
       }}
     >
       <Typography variant="h4">{directory?.storeName}</Typography>
-      <Ratings rating={directory?.averageRating} size="medium" />
+      <Ratings theme="dark" rating={directory?.averageRating} size="medium" />
       <Typography sx={{ pt: 2 }}>
         <LocationCity /> {directory?.address}, {directory?.state}, {directory?.pincode}
       </Typography>
@@ -53,11 +68,26 @@ const BannerInfo = ({ directory }: BannerProps) => {
 };
 
 const StyledButton = styled(Box)(({ theme }) => ({
-  backgroundColor: "primary.main",
+  backgroundColor: "transparent",
   transition: "all 0.2s linear",
-  color: "neutral.100",
   borderRadius: "50%",
   boxShadow: "1px 2px 4px black",
+  width: 28,
+  height: 28,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  "& a": {
+    height: 18,
+    width: 18,
+  },
+  "&:hover": {
+    backgroundColor: theme.palette.primary.main,
+    "& .MuiSvgIcon-root path": {
+      transition: "all 0.2s linear",
+      fill: theme.palette.primary.contrastText,
+    },
+  },
 }));
 
 const BannerButtons = ({ directory }: BannerProps) => {
@@ -69,6 +99,7 @@ const BannerButtons = ({ directory }: BannerProps) => {
         left: 10,
         zIndex: 10,
         display: "flex",
+        gap: 1,
       }}
     >
       <StyledButton>
@@ -77,22 +108,22 @@ const BannerButtons = ({ directory }: BannerProps) => {
           rel="noreferrer"
           href={`http://maps.google.com/maps?z=12&t=m&q=loc:${directory?.location?.lat}+${directory?.location?.lng}`}
         >
-          <Google />
+          <Google sx={{ height: 18, width: 18 }} />
         </a>
       </StyledButton>
       <StyledButton>
         <a href={`tel:${directory?.number}`}>
-          <Phone />
+          <Phone sx={{ height: 18, width: 18 }} />
         </a>
       </StyledButton>
       <StyledButton>
         <a href={`mailto:${directory?.email}`}>
-          <Mail />
+          <Mail sx={{ height: 18, width: 18 }} />
         </a>
       </StyledButton>
       <StyledButton>
         <a href={`https://api.whatsapp.com/send?phone=${directory?.number}`}>
-          <WhatsApp />
+          <WhatsApp sx={{ height: 18, width: 18 }} />
         </a>
       </StyledButton>
     </Box>
@@ -132,6 +163,7 @@ const InfoItem = ({ label, Icon, href = "" }) => {
 
 export default function DirectoryPage() {
   const router = useRouter();
+  const [postInquiry, { isSuccess }] = usePostInquiryMutation();
 
   const { data, isLoading, isError, error } = useGetDirectoryQuery(
     router.query.username as string,
@@ -139,6 +171,45 @@ export default function DirectoryPage() {
       skip: !router.query.username,
     }
   );
+
+  const formik = useFormik<AddInquiry>({
+    initialValues: {
+      directory: data?.data?.directory?._id?.toString() || "",
+      email: "",
+      message: "",
+      name: "",
+      number: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .required("Please provide your name")
+        .min(3, "Name is too short")
+        .max(64, "Name is too long"),
+      email: Yup.string().email("Please provide a valid email"),
+      number: Yup.string()
+        .matches(
+          /((\+*)((0[ -]*)*|((91 )*))((\d{12})+|(\d{10})+))|\d{5}([- ]*)\d{6}/g,
+          "Please provide a valid phone number"
+        )
+        .required("Please provide your phone number"),
+      message: Yup.string()
+        .required("Please enter your inquiry message")
+        .min(4, "Message is too short")
+        .max(1024, "Message is too long"),
+    }),
+    async onSubmit(values, helpers) {
+      helpers.setSubmitting(true);
+      try {
+        const response = await postInquiry(values).unwrap();
+        toast.success("Inquiry posted succesfully");
+      } catch (error: any) {
+        toast.error(error.response?.data?.error || error?.message || "Internal Error");
+      } finally {
+        helpers.setSubmitting(false);
+      }
+    },
+    enableReinitialize: true,
+  });
 
   return (
     <PublicLayout>
@@ -203,7 +274,7 @@ export default function DirectoryPage() {
             <Box sx={{ display: "flex", flexWrap: "wrap", py: 2, gap: 2 }}>
               {data?.data?.directory?.gallery?.map((image, index) => (
                 <Box width="30%" key={index}>
-                  <a href={image}>
+                  <a href={image} target="_blank" rel="noreferrer">
                     <img
                       src={image}
                       alt={`Gallery for ${data?.data?.directory?.storeName} #${index}`}
@@ -254,75 +325,98 @@ export default function DirectoryPage() {
             )}
           </Box>
         </Box>
-        {/* <Row className="pt-4">
-          <Col md="6" sm="12">
-            <div>
-              <h3>Product Details</h3>
-              <p>
-                <strong>{directory.storeName}</strong> offers you the following products:
-              </p>
-              {directory.products?.length === 0 && <p>No products available at this moment.</p>}
-              <ul>
-                {directory.products?.map((product, index) => (
-                  <li key={index}>{product}</li>
+        <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
+          <Box sx={{ flex: 1 }}>
+            <Box>
+              <Typography variant="h5" mb={1}>
+                Product Details
+              </Typography>
+              <Typography>
+                <Typography component="strong" variant="subtitle1">
+                  {data?.data?.directory?.storeName}
+                </Typography>{" "}
+                offers you the following products:
+              </Typography>
+              {data?.data?.directory?.products?.length === 0 && (
+                <Typography>No products available at this moment.</Typography>
+              )}
+              <List>
+                {data?.data?.directory?.products?.map((product, index) => (
+                  <ListItem key={index}>{product}</ListItem>
                 ))}
-              </ul>
-            </div>
-            <div className="pt-3">
-              <h3>Service Details</h3>
-              <p>
-                <strong>{directory.storeName}</strong> offers you the following services:
-              </p>
-              {directory.services?.length === 0 && <p>No services available at this moment.</p>}
-              <ul>
-                {directory.services?.map((service, index) => (
-                  <li key={index}>{service}</li>
+              </List>
+            </Box>
+            <Box>
+              <Typography variant="h5" my={1}>
+                Service Details
+              </Typography>
+              <Typography>
+                <Typography component="strong">{data?.data?.directory?.storeName}</Typography>{" "}
+                offers you the following services:
+              </Typography>
+              {data?.data?.directory?.services?.length === 0 && (
+                <Typography>No services available at this moment.</Typography>
+              )}
+              <List>
+                {data?.data?.directory?.services?.map((service, index) => (
+                  <ListItem key={index}>{service}</ListItem>
                 ))}
-              </ul>
-            </div>
-          </Col>
-          <Col md="6" sm="12">
-            <div className="dir-inquiry-form p-3">
-              <div>
-                <h3>Send an inquiry to {directory.storeName}</h3>
-              </div>
-              <Formik
-                initialValues={inquiryInitialValues}
-                validationSchema={inquiryValidationSchema}
-                onSubmit={(values) => {
-                  const data = { ...values, directory: directory._id };
-                  dispatch(addInquiry(data));
-                }}
-              >
-                {({ handleSubmit }) => (
-                  <Form onSubmit={handleSubmit}>
-                    <fieldset disabled={success}>
-                      <TextField name="name" label="Name*" placeholder="Enter your name here" />
-                      <TextField name="number" label="Phone Number*" placeholder="9876543210" />
-                      <TextField name="email" label="Email" placeholder="email@example.com" />
-                      <TextField
-                        name="message"
-                        label="Your message*"
-                        placeholder="Enter your detailed message here"
-                        as="textarea"
-                        rows={5}
-                      />
-                    </fieldset>
+              </List>
+            </Box>
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <Box>
+              <Typography variant="h6" mb={1}>
+                Send an inquiry to {data?.data?.directory?.storeName}
+              </Typography>
+              <FormikProvider value={formik}>
+                <Form>
+                  <Stack gap={2}>
+                    <TextField
+                      {...formik.getFieldProps("name")}
+                      {...getErrorProps(formik, "name")}
+                      fullWidth
+                      label="Name*"
+                      placeholder="Enter your name here"
+                    />
+                    <TextField
+                      {...formik.getFieldProps("number")}
+                      {...getErrorProps(formik, "number")}
+                      fullWidth
+                      label="Phone Number*"
+                      placeholder="9876543210"
+                    />
+                    <TextField
+                      {...formik.getFieldProps("email")}
+                      {...getErrorProps(formik, "email")}
+                      fullWidth
+                      label="Email"
+                      placeholder="email@example.com"
+                    />
+                    <TextField
+                      {...formik.getFieldProps("message")}
+                      {...getErrorProps(formik, "message")}
+                      fullWidth
+                      label="Your message*"
+                      placeholder="Enter your detailed message here"
+                      multiline
+                      minRows={3}
+                    />
                     <Button
                       type="submit"
-                      size="lg"
-                      variant={success ? "success" : "primary"}
-                      disabled={inquiryLoading || success}
+                      variant="contained"
+                      color={isSuccess ? "success" : "primary"}
+                      disabled={formik.isSubmitting || isSuccess}
                     >
-                      {inquiryLoading ? "Sending" : success ? "Sent" : "Send"}
+                      {formik.isSubmitting ? "Sending..." : isSuccess ? "Sent" : "Send"}
                     </Button>
-                  </Form>
-                )}
-              </Formik>
-            </div>
-          </Col>
-        </Row>
-        {products.length > 0 && (
+                  </Stack>
+                </Form>
+              </FormikProvider>
+            </Box>
+          </Box>
+        </Box>
+        {/* {products.length > 0 && (
           <section className="dir-products py-4">
             <h3>Products showcase</h3>
             <Swiper
@@ -346,8 +440,8 @@ export default function DirectoryPage() {
               ))}
             </Swiper>
           </section>
-        )}
-        {services.length > 0 && (
+        )} */}
+        {/* {services.length > 0 && (
           <section className="dir-services py-4">
             <h3>Services showcase</h3>
             <Swiper
@@ -371,8 +465,8 @@ export default function DirectoryPage() {
               ))}
             </Swiper>
           </section>
-        )}
-        <section id="dir-reviews" className="dir-reviews pt-3">
+        )} */}
+        {/* <section id="dir-reviews" className="dir-reviews pt-3">
           <Tabs defaultActiveKey="read" className="mb-3">
             <Tab
               eventKey="write"

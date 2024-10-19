@@ -7,7 +7,7 @@ import {
   CircularProgress,
   Grid,
   Tooltip,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useDirectory } from "hooks/directory";
 import Link from "next/link";
@@ -19,9 +19,9 @@ const Directories: FC = () => {
   const { data: directoriesResponse, isLoading } = useGetDirectoriesQuery(appliedFilters);
 
   return (
-    <Box>
+    <Box width="100%">
       {isLoading ? (
-        <Box width="100%" display="flex" justifyContent="center">
+        <Box width="100%" display="flex" justifyContent="center" alignItems="center">
           <CircularProgress />
         </Box>
       ) : (

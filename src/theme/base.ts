@@ -200,6 +200,23 @@ export const baseTheme: ThemeOptions = {
         underline: "hover",
       },
     },
+    MuiList: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+        },
+      },
+    },
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+          "&:before": {
+            content: "'• '",
+          },
+        },
+      },
+    },
     MuiListItemIcon: {
       styleOverrides: {
         root: {
